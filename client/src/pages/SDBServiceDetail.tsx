@@ -4,10 +4,11 @@ import { Users, DollarSign, Clock, CreditCard, FileText, Languages } from 'lucid
 import { Header } from '../components/sdb/Header';
 import { FamilyFinancingBanner } from '../components/sdb/FamilyFinancingBanner';
 import { ProductDetailsTabs } from '../components/sdb/ProductDetailsTabs';
-import { ArabicFeatureList } from '../components/sdb/ArabicFeatureList';
 import { SDBAccordionItem } from '../components/sdb/SDBAccordionItem';
 import { ProductInfoCard } from '../components/sdb/ProductInfoCard';
 import { ServiceTimelineCard } from '../components/sdb/ServiceTimelineCard';
+import { RTLList } from '../components/sdb/RTLList';
+import { Breadcrumb } from '../components/sdb/Breadcrumb';
 
 export default function SDBServiceDetail() {
   const navigate = useNavigate();
@@ -20,16 +21,23 @@ export default function SDBServiceDetail() {
   return (
     <div className="min-h-screen bg-[#f9fafb]" dir="rtl" style={{ fontFamily: 'saudiriyal, IBMPlexSansArabic, serif' }}>
       <Header />
-      <FamilyFinancingBanner 
-        title="تمويل الأسرة"
-        description="تمويل مخصص للأسر ذات الدخل المحدود بهدف مساعدتها على تغطية احتياجاتها الأساسية وتحقيق الاستقرار المعيشي. يتم التقديم على المنتج إلكترونيًا بالكامل، دون الحاجة لزيارة فروع البنك."
-        buttonText="تقديم الطلب"
-        onButtonClick={handleApply}
-        links={[
-          { text: 'اتفاقية مستوى الخدمة', href: '#' },
-          { text: 'فيديو المنتج', href: '#' }
-        ]}
-      />
+      
+      <div style={{ backgroundColor: 'rgb(247, 253, 249)' }}>
+        <div className="container mx-auto px-4 max-w-[1486px]">
+          <div className="py-4">
+            <Breadcrumb 
+              items={[
+                { label: 'الرئيسية', href: '/sdb' },
+                { label: 'تمويل الأفراد', href: '/sdb' },
+                { label: 'تمويل الأسرة' }
+              ]}
+            />
+          </div>
+          <FamilyFinancingBanner 
+            onButtonClick={handleApply}
+          />
+        </div>
+      </div>
 
       <div className="container mx-auto px-4 py-8 max-w-[1486px]">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -43,22 +51,14 @@ export default function SDBServiceDetail() {
             {activeTab === 'product' && (
               <div className="bg-white rounded-lg p-8">
                 <h2 className="text-2xl font-bold text-[#222222] mb-6">تعرف على المنتج</h2>
-                <ArabicFeatureList 
-                  items={[
-                    'تمويل يبدأ من 18 ألف ويصل إلى 100 ألف ريال (عند عدم الاستفادة من أحد منتجات التمويل الاجتماعي سابقًا).',
-                    'فترة السداد تصل إلى 4 سنوات.',
-                    'يتم السداد بشكل شهري.',
-                    'بدون رسوم إدارية.',
-                    'يكون الإعفاء في حالة الوفاة لا سمح الله.'
-                  ]}
-                />
+                <RTLList />
               </div>
             )}
 
             {activeTab === 'terms' && (
               <div className="bg-white rounded-lg p-8">
                 <h2 className="text-2xl font-bold text-[#222222] mb-6">الشروط</h2>
-                <ul className="list-disc list-inside space-y-3 text-gray-800">
+                <ul className="list-disc list-inside space-y-3 text-gray-800 pr-4">
                   <li>أن يكون المتقدم سعودي الجنسية</li>
                   <li>العمر من 18 إلى 60 سنة</li>
                   <li>أن يكون من الأسر ذات الدخل المحدود</li>
