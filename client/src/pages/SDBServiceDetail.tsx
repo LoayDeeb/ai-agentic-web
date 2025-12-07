@@ -19,6 +19,27 @@ export default function SDBServiceDetail() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('product');
 
+  // Listen for agent tool events
+  React.useEffect(() => {
+    const handler = (e: Event) => {
+      const { tool, args } = (e as CustomEvent).detail
+      
+      if (tool === 'scrollToTab') {
+        if (['product', 'terms', 'requirements'].includes(args.tabId)) {
+          setActiveTab(args.tabId)
+          // Scroll to the tabs container
+          setTimeout(() => {
+            const tabsContainer = document.querySelector('[role="tablist"]')
+            tabsContainer?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }, 100)
+        }
+      }
+    }
+    
+    window.addEventListener('agentTool', handler)
+    return () => window.removeEventListener('agentTool', handler)
+  }, [])
+
   const handleApply = () => {
     navigate('/sdb/submit');
   };
@@ -54,7 +75,9 @@ export default function SDBServiceDetail() {
             />
 
             {activeTab === 'product' && (
-              <div className="bg-white rounded-lg p-8 shadow-sm">
+              <div className="bg-white rounded-lg p-8 shadow-sm" style={{
+                fontFamily: 'saudiriyal, IBMPlexSansArabic, serif'
+              }}>
                 <h2 className="text-2xl font-bold text-[#222222] mb-6">تعرف على المنتج</h2>
                 <RTLList />
               </div>
