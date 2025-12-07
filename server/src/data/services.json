@@ -1,0 +1,200 @@
+{
+  "services": [
+    {
+      "id": "svc-installment-plan",
+      "slug": "request-installment-plan",
+      "category": "Zakat Services",
+      "title": "Request an Installment Plan",
+      "summary": "An e-service that allows you to request installment payments in cases where you face difficulties in paying the full amount due.",
+      "badges": ["Zakat"],
+      "steps": [
+        "Log into ZATCA website",
+        "Go to \"Indirect Tax - Value Added Tax\"",
+        "Click \"VAT Installment Plan\"",
+        "Select \"Create New Request\", fill in the request form, and complete the steps to submit the request",
+        "Once approved, a notification of your installment plan will be sent to you"
+      ],
+      "eligibility": [
+        "Submit a request using the portal",
+        "Prepayment of the installment request",
+        "Bank statement for the last 3 months",
+        "Explain the justification for the installment request",
+        "Submit all due returns",
+        "Pay all other due amounts"
+      ],
+      "requiredDocuments": [
+        "No Documents"
+      ],
+      "meta": {
+        "audience": "Taxpayers Registered in Zakat / CIT",
+        "duration": "20 Business days",
+        "cost": "No Fees",
+        "channels": ["Website"],
+        "languages": ["Arabic"],
+        "releaseDate": "2019-04-16",
+        "sms": "Not Available",
+        "paymentChannels": ["mada", "mada debit", "VISA"]
+      }
+    },
+    {
+      "id": "svc-zakat-return",
+      "slug": "zakat-return",
+      "category": "Zakat Services",
+      "title": "Zakat Return",
+      "summary": "This e-service allows users to submit Zakat declarations (returns) for a specific financial period (including amendments).",
+      "badges": ["Proactive Services", "Zakat"],
+      "steps": [
+        "Log in to the taxpayer portal.",
+        "Select Zakat Return from Zakat services.",
+        "Fill in the return details for the financial period.",
+        "Submit and receive confirmation."
+      ],
+      "eligibility": [
+        "Registered taxpayer in Zakat",
+        "Required to file Zakat returns"
+      ],
+      "requiredDocuments": [
+        "Financial statements",
+        "Supporting documents as required"
+      ],
+      "meta": {
+        "audience": "Taxpayers Registered in Zakat",
+        "duration": "Immediate",
+        "cost": "No Fees",
+        "channels": ["Website"],
+        "languages": ["Arabic", "English"],
+        "releaseDate": "2018-01-01",
+        "sms": "Available",
+        "paymentChannels": []
+      }
+    },
+    {
+      "id": "svc-zakat-return-amendment",
+      "slug": "request-zakat-return-amendment",
+      "category": "Zakat Services",
+      "title": "Request for Zakat Return Amendment",
+      "summary": "This e-service allows you to submit a request to amend Zakat returns after submitting them.",
+      "badges": ["Zakat"],
+      "steps": [
+        "Log in to the taxpayer portal.",
+        "Navigate to Zakat services.",
+        "Select Request for Zakat Return Amendment.",
+        "Provide the amendment details and submit."
+      ],
+      "eligibility": [
+        "Previously submitted Zakat return",
+        "Registered taxpayer in Zakat"
+      ],
+      "requiredDocuments": [
+        "Original return reference",
+        "Supporting documents for amendments"
+      ],
+      "meta": {
+        "audience": "Taxpayers Registered in Zakat",
+        "duration": "15 Business days",
+        "cost": "No Fees",
+        "channels": ["Website"],
+        "languages": ["Arabic"],
+        "releaseDate": "2019-06-01",
+        "sms": "Not Available",
+        "paymentChannels": []
+      }
+    },
+    {
+      "id": "svc-zakat-payment",
+      "slug": "zakat-payment",
+      "category": "Zakat Services",
+      "title": "Zakat Payment",
+      "summary": "It is an e-service that enables you to pay your dues through a SADAD bill, either via online banking services or ATM machines.",
+      "badges": ["Zakat"],
+      "steps": [
+        "Log in to the taxpayer portal.",
+        "Select Zakat Payment from services.",
+        "View your outstanding dues.",
+        "Generate SADAD bill and pay via online banking or ATM."
+      ],
+      "eligibility": [
+        "Registered taxpayer with outstanding Zakat dues"
+      ],
+      "requiredDocuments": [],
+      "meta": {
+        "audience": "Taxpayers with Zakat dues",
+        "duration": "Immediate",
+        "cost": "No Fees",
+        "channels": ["Website", "ATM", "Online Banking"],
+        "languages": ["Arabic", "English"],
+        "releaseDate": "2017-03-01",
+        "sms": "Available",
+        "paymentChannels": ["SADAD", "mada", "VISA", "Mastercard"]
+      }
+    },
+    {
+      "id": "svc-holding-deregistration",
+      "slug": "holding-company-deregistration",
+      "category": "Zakat Services",
+      "title": "Holding Company Deregistration",
+      "summary": "Through this e-service, you are allowed to deregister one or multiple holding companies along with its subsidiaries.",
+      "badges": ["Zakat"],
+      "steps": [
+        "Log in to the taxpayer portal.",
+        "Navigate to Zakat services.",
+        "Select Holding Company Deregistration.",
+        "Provide company details and submit request."
+      ],
+      "eligibility": [
+        "Registered holding company",
+        "All subsidiaries must be eligible for deregistration"
+      ],
+      "requiredDocuments": [
+        "Company registration documents",
+        "Board resolution for deregistration",
+        "Final financial statements"
+      ],
+      "meta": {
+        "audience": "Holding Companies",
+        "duration": "30 Business days",
+        "cost": "No Fees",
+        "channels": ["Website"],
+        "languages": ["Arabic", "English"],
+        "releaseDate": "2020-02-01",
+        "sms": "Not Available",
+        "paymentChannels": []
+      }
+    },
+    {
+      "id": "svc-holding-registration",
+      "slug": "registering-holding-company",
+      "category": "Zakat Services",
+      "title": "Registering Holding Company",
+      "summary": "Through this e-service, you are allowed to register one or multiple holding companies along with its subsidiaries.",
+      "badges": ["Zakat"],
+      "steps": [
+        "Log in to the taxpayer portal.",
+        "Navigate to Zakat services.",
+        "Select Registering Holding Company.",
+        "Fill in company and subsidiaries details.",
+        "Submit and receive registration confirmation."
+      ],
+      "eligibility": [
+        "Eligible holding company structure",
+        "All subsidiaries must meet registration criteria"
+      ],
+      "requiredDocuments": [
+        "Company registration certificate",
+        "Organizational structure",
+        "Subsidiary company details",
+        "Financial statements"
+      ],
+      "meta": {
+        "audience": "Holding Companies",
+        "duration": "30 Business days",
+        "cost": "No Fees",
+        "channels": ["Website"],
+        "languages": ["Arabic", "English"],
+        "releaseDate": "2020-02-01",
+        "sms": "Not Available",
+        "paymentChannels": []
+      }
+    }
+  ]
+}

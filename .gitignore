@@ -1,0 +1,20 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log
+.pnpm-store/
+.turbo/
+dist/
+build/
+.DS_Store
+
+# Env
+.env
+server/.env
+client/.env
+
+# Editor
+.idea/
+.vscode/
+
+
