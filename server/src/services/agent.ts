@@ -255,6 +255,12 @@ FAMILY FINANCING KNOWLEDGE BASE:
 - Repayment Frequency: Monthly.
 - Fees: No administrative fees.
 - Exemption: In case of death (God forbid).
+- Conditions:
+  - Applicant must be a Saudi citizen.
+  - Age between 18 and 60 years.
+  - Must be from a low-income family.
+  - No defaulted debts.
+  - Submission of all required documents.
 
 CRITICAL RULES FOR SMOOTH, NATURAL UX:
 
