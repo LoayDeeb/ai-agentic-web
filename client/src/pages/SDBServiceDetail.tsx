@@ -7,6 +7,11 @@ import { ProductDetailsTabs } from '../components/sdb/ProductDetailsTabs';
 import { SDBAccordionItem } from '../components/sdb/SDBAccordionItem';
 import { ProductInfoCard } from '../components/sdb/ProductInfoCard';
 import { ServiceTimelineCard } from '../components/sdb/ServiceTimelineCard';
+import { FAQSection } from '../components/sdb/FAQSection';
+import { ContactCard } from '../components/sdb/ContactCard';
+import { ContactInfoCard } from '../components/sdb/ContactInfoCard';
+import { DocumentButton } from '../components/sdb/DocumentButton';
+import { RTLActionButton } from '../components/sdb/RTLActionButton';
 import { RTLList } from '../components/sdb/RTLList';
 import { Breadcrumb } from '../components/sdb/Breadcrumb';
 
@@ -49,14 +54,14 @@ export default function SDBServiceDetail() {
             />
 
             {activeTab === 'product' && (
-              <div className="bg-white rounded-lg p-8">
+              <div className="bg-white rounded-lg p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-[#222222] mb-6">تعرف على المنتج</h2>
                 <RTLList />
               </div>
             )}
 
             {activeTab === 'terms' && (
-              <div className="bg-white rounded-lg p-8">
+              <div className="bg-white rounded-lg p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-[#222222] mb-6">الشروط</h2>
                 <ul className="list-disc list-inside space-y-3 text-gray-800 pr-4">
                   <li>أن يكون المتقدم سعودي الجنسية</li>
@@ -69,7 +74,7 @@ export default function SDBServiceDetail() {
             )}
 
             {activeTab === 'requirements' && (
-              <div className="bg-white rounded-lg p-8">
+              <div className="bg-white rounded-lg p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-[#222222] mb-6">المتطلبات</h2>
                 
                 <SDBAccordionItem 
@@ -107,83 +112,76 @@ export default function SDBServiceDetail() {
                 />
               </div>
             )}
-
-            <div className="mt-12 bg-white rounded-lg p-8">
-              <h2 className="text-2xl font-bold text-[#222222] mb-6">الأسئلة الشائعة</h2>
-              <div className="mb-4">
-                <p className="text-gray-800 cursor-pointer hover:text-[#1b8354] transition-colors">اضغط هنا</p>
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <p className="font-bold text-gray-900 mb-2 text-lg">920008002</p>
-                  <p className="text-[#1b8354] text-lg">920008002</p>
-                </div>
-                <div>
-                  <p className="font-bold text-gray-900 mb-2 text-lg">care@sdb.gov.sa</p>
-                  <p className="text-[#1b8354] text-lg">care@sdb.gov.sa</p>
-                </div>
-                <div className="flex gap-4 mt-6">
-                  <button className="px-6 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 hover:bg-gray-50 transition-colors font-medium">
-                    تمويل الأسرة - دليل المستخدم
-                  </button>
-                  <button className="px-6 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 hover:bg-gray-50 transition-colors font-medium">
-                    لإنشاء حساب إلكتروني
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Sidebar (Left Side) */}
           <div className="w-full lg:w-[350px] flex-shrink-0 order-1 lg:order-2">
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 sticky top-4 space-y-0 divide-y divide-gray-100">
-              <ProductInfoCard 
-                icon={<Users className="w-6 h-6" />}
-                title="الفئة المستهدفة"
-                content="المواطنين والمواطنات"
-              />
-              
-              <ProductInfoCard 
-                icon={<Users className="w-6 h-6" />}
-                title="عدد المستفيدين"
-                content="1,2 مليون"
-              />
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100 sticky top-4 overflow-hidden">
+              {/* Service Info Section */}
+              <div className="p-6 space-y-0 divide-y divide-gray-100">
+                <ProductInfoCard 
+                  icon={<Users className="w-6 h-6" />}
+                  title="الفئة المستهدفة"
+                  content="المواطنين والمواطنات"
+                />
+                
+                <ProductInfoCard 
+                  icon={<Users className="w-6 h-6" />}
+                  title="عدد المستفيدين"
+                  content="1,2 مليون"
+                />
 
-              <ProductInfoCard 
-                icon={<DollarSign className="w-6 h-6" />}
-                title="رسوم الخدمة"
-                content="مجانية"
-              />
+                <ProductInfoCard 
+                  icon={<DollarSign className="w-6 h-6" />}
+                  title="رسوم الخدمة"
+                  content="مجانية"
+                />
 
-              <ProductInfoCard 
-                icon={<CreditCard className="w-6 h-6" />}
-                title="قنوات الدفع"
-                content="مجانية"
-              />
+                <ProductInfoCard 
+                  icon={<CreditCard className="w-6 h-6" />}
+                  title="قنوات الدفع"
+                  content="مجانية"
+                />
 
-              <ProductInfoCard 
-                icon={<Clock className="w-6 h-6" />}
-                title="توافر الخدمة"
-                content="24/7"
-              />
+                <ProductInfoCard 
+                  icon={<Clock className="w-6 h-6" />}
+                  title="توافر الخدمة"
+                  content="24/7"
+                />
 
-              <ProductInfoCard 
-                icon={<FileText className="w-6 h-6" />}
-                title="اتفاقية مستوى الخدمة"
-                content="30 يوم عمل"
-              />
+                <ProductInfoCard 
+                  icon={<FileText className="w-6 h-6" />}
+                  title="اتفاقية مستوى الخدمة"
+                  content="30 يوم عمل"
+                />
 
-              <ServiceTimelineCard 
-                title="بدء تقديم الخدمة"
-                desktopYear="2011"
-                mobileYear="2021"
-              />
+                <ServiceTimelineCard 
+                  title="بدء تقديم الخدمة"
+                  desktopYear="2011"
+                  mobileYear="2021"
+                />
 
-              <ProductInfoCard 
-                icon={<Languages className="w-6 h-6" />}
-                title="لغة التقديم"
-                content="العربية"
-              />
+                <ProductInfoCard 
+                  icon={<Languages className="w-6 h-6" />}
+                  title="لغة التقديم"
+                  content="العربية"
+                />
+              </div>
+
+              {/* Separator Line */}
+              <div className="h-px bg-gray-200 mx-6" />
+
+              {/* FAQ Section */}
+              <div className="p-6">
+                <FAQSection />
+                <ContactCard phoneNumber="920008002" />
+                <ContactInfoCard email="care@sdb.gov.sa" />
+                
+                <div className="mt-6 space-y-3">
+                  <DocumentButton text="تمويل الاسرة - دليل المستخدم" />
+                  <RTLActionButton text="لإنشاء حساب إلكتروني" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
