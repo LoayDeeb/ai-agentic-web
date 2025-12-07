@@ -1,5 +1,5 @@
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js'
-import { logger } from '../logger'
+import { logger } from '../logger.js'
 
 const client = new ElevenLabsClient({
 	apiKey: process.env.ELEVENLABS_API_KEY || ''

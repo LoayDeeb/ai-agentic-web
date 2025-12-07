@@ -1,8 +1,8 @@
 import { WebSocketServer, WebSocket } from 'ws'
 import { Server } from 'http'
-import { logger } from '../logger'
-import { streamAgentResponse, AgentMessage } from '../services/agent'
-import { streamTTS } from '../services/tts'
+import { logger } from '../logger.js'
+import { streamAgentResponse, AgentMessage } from '../services/agent.js'
+import { streamTTS } from '../services/tts.js'
 
 export function setupVoiceWebSocket(server: Server) {
 	const wss = new WebSocketServer({ server, path: '/voice' })

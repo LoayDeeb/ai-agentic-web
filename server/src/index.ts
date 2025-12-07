@@ -2,10 +2,10 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
-import { httpLogger, logger } from './logger'
-import servicesRouter from './routes/services'
-import agentRouter from './routes/agent'
-import { setupVoiceWebSocket } from './routes/voice'
+import { httpLogger, logger } from './logger.js'
+import servicesRouter from './routes/services.js'
+import agentRouter from './routes/agent.js'
+import { setupVoiceWebSocket } from './routes/voice.js'
 
 const app = express()
 app.use(cors())
