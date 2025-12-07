@@ -16,5 +16,9 @@ services:
         value: gpt-4o
       - key: ELEVENLABS_API_KEY
         sync: false
+      - key: ELEVENLABS_VOICE_ID
+        value: ezeqby7Ck33LS4GJCDPu
+      - key: ELEVENLABS_MODEL
+        value: eleven_flash_v2_5
     healthCheckPath: /api/health
 
