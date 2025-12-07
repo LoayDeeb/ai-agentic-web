@@ -5,6 +5,7 @@ import { ArabicTabs } from '../components/sdb/ArabicTabs';
 import { FinanceCard } from '../components/sdb/FinanceCard';
 import { FinancialServicesCard } from '../components/sdb/FinancialServicesCard';
 import { CarouselNavigation } from '../components/sdb/CarouselNavigation';
+import { BannerCarousel } from '../components/sdb/BannerCarousel';
 
 export default function SDBServices() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function SDBServices() {
   return (
     <div className="min-h-screen bg-[#f9fafb]" dir="rtl" style={{ fontFamily: 'saudiriyal, IBMPlexSansArabic, serif' }}>
       <Header />
+      <BannerCarousel />
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-[#161616] mb-8 text-center">
           برنامج تمويل رواد الأعمال
