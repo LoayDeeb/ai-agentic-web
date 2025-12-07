@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CheckCircle, User, Briefcase } from 'lucide-react'
+import { Header } from '../components/sdb/Header'
 import { FormField, TextInput, SelectInput, TextArea } from '../components/FormField'
 import { useFormStore } from '../store/formStore'
 import { highlight } from '../features/agent/spotlight'
@@ -99,6 +100,7 @@ export default function SDBSubmitRequest() {
 	if (submitted) {
 		return (
 			<div className="min-h-screen bg-[#f9fafb]" dir="rtl" style={{ fontFamily: 'saudiriyal, IBMPlexSansArabic, serif' }}>
+				<Header />
 				<div className="container mx-auto px-4 py-12 text-center">
 					<div className="max-w-2xl mx-auto bg-white rounded-2xl p-10 shadow-sm">
 						<CheckCircle className="w-20 h-20 text-[#1B8354] mx-auto mb-6" />
@@ -122,6 +124,7 @@ export default function SDBSubmitRequest() {
 
 	return (
 		<div className="min-h-screen bg-[#f9fafb]" dir="rtl" style={{ fontFamily: 'saudiriyal, IBMPlexSansArabic, serif' }}>
+			<Header />
 			<div className="container mx-auto px-4 py-8 max-w-4xl">
 				<h1 className="text-3xl font-bold text-[#161616] mb-8">
 					طلب تمويل الأسرة

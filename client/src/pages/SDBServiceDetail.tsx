@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, DollarSign, Clock, CreditCard } from 'lucide-react';
+import { Header } from '../components/sdb/Header';
 import { FamilyFinancingBanner } from '../components/sdb/FamilyFinancingBanner';
 import { ProductDetailsTabs } from '../components/sdb/ProductDetailsTabs';
 import { ArabicFeatureList } from '../components/sdb/ArabicFeatureList';
@@ -17,6 +18,7 @@ export default function SDBServiceDetail() {
 
   return (
     <div className="min-h-screen bg-[#f9fafb]" dir="rtl" style={{ fontFamily: 'saudiriyal, IBMPlexSansArabic, serif' }}>
+      <Header />
       <FamilyFinancingBanner 
         title="تمويل الأسرة"
         description="تمويل مخصص للأسر ذات الدخل المحدود بهدف مساعدتها على تغطية احتياجاتها الأساسية وتحقيق الاستقرار المعيشي. يتم التقديم على المنتج إلكترونيًا بالكامل، دون الحاجة لزيارة فروع البنك."
