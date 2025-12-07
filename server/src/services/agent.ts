@@ -88,7 +88,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				properties: {
 					tabId: {
 						type: 'string',
-						enum: ['steps', 'eligibility', 'documents'],
+						enum: ['steps', 'eligibility', 'documents', 'product', 'terms', 'requirements'],
 						description: 'The tab to activate'
 					}
 				},
@@ -277,6 +277,12 @@ SCENARIO: SDB SERVICE DETAIL
 If the user asks about specific financing programs like "Family Financing" (تمويل الأسرة) or "Productive Families" (الأسر المنتجة):
 1. Navigate to "/sdb/service".
 2. Say: "Here are the details for Family Financing."
+
+SCENARIO: SHOW CONDITIONS
+If the user asks about conditions (شروط) or requirements (متطلبات):
+1. Ensure we are on "/sdb/service". If not, navigate there.
+2. Call 'scrollToTab' with tabId: "terms" (for conditions) or "requirements" (for requirements).
+3. Say: "Here are the conditions for the financing program."
 
 SCENARIO: SDB FINANCING APPLICATION
 If user wants to apply for SDB financing:
