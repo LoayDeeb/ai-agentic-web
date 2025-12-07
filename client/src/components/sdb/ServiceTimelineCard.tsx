@@ -14,25 +14,30 @@ export const ServiceTimelineCard = ({
   mobileYear = '2021'
 }: ServiceTimelineCardProps) => {
   // @return
-  return <div className="w-full max-w-md p-2.5" style={{
-    fontFamily: 'system-ui, -apple-system, sans-serif'
+  return <div className="w-full p-2.5" style={{
+    fontFamily: 'saudiriyal, IBMPlexSansArabic, serif'
   }}>
       <div className="flex items-center gap-1.5 mb-2.5">
-        <Calendar className="w-6 h-6 text-[#1b8354]" strokeWidth={2} />
-        <span className="text-base font-bold text-gray-900">{title}</span>
+        <span className="w-6 h-6 flex items-center justify-center text-[#1b8354]">
+          <Calendar className="w-6 h-6" />
+        </span>
+        <span className="text-base font-bold text-[#161616]">{title}</span>
       </div>
       
-      <div className="ml-[30px] mr-[30px] space-y-0">
+      <div className="mr-[30px] space-y-1">
         <div className="flex items-center gap-2">
-          <Monitor className="w-6 h-6 text-[#1b8354]" strokeWidth={2} />
-          <span className="text-base font-normal text-gray-900">{desktopYear}</span>
+          <span className="w-6 h-6 flex items-center justify-center text-[#1b8354]">
+            <Monitor className="w-6 h-6" />
+          </span>
+          <span className="text-base font-normal text-[#161616]">{desktopYear}</span>
         </div>
         
         <div className="flex items-center gap-2">
-          <Smartphone className="w-6 h-6 text-[#1b8354]" strokeWidth={2} />
-          <span className="text-base font-normal text-gray-900">{mobileYear}</span>
+          <span className="w-6 h-6 flex items-center justify-center text-[#1b8354]">
+            <Smartphone className="w-6 h-6" />
+          </span>
+          <span className="text-base font-normal text-[#161616]">{mobileYear}</span>
         </div>
       </div>
     </div>;
 };
-

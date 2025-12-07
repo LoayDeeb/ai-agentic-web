@@ -136,55 +136,48 @@ export default function SDBServiceDetail() {
 
           {/* Sidebar (Left Side) */}
           <div className="w-full lg:w-[350px] flex-shrink-0 order-1 lg:order-2">
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 sticky top-4 space-y-2">
+            <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 sticky top-4 space-y-0 divide-y divide-gray-100">
               <ProductInfoCard 
                 icon={<Users className="w-6 h-6" />}
                 title="الفئة المستهدفة"
                 content="المواطنين والمواطنات"
               />
-              <div className="h-px bg-gray-100 my-2" />
               
               <ProductInfoCard 
                 icon={<Users className="w-6 h-6" />}
                 title="عدد المستفيدين"
                 content="1,2 مليون"
               />
-              <div className="h-px bg-gray-100 my-2" />
 
               <ProductInfoCard 
                 icon={<DollarSign className="w-6 h-6" />}
                 title="رسوم الخدمة"
                 content="مجانية"
               />
-              <div className="h-px bg-gray-100 my-2" />
 
               <ProductInfoCard 
                 icon={<CreditCard className="w-6 h-6" />}
                 title="قنوات الدفع"
                 content="مجانية"
               />
-              <div className="h-px bg-gray-100 my-2" />
 
               <ProductInfoCard 
                 icon={<Clock className="w-6 h-6" />}
                 title="توافر الخدمة"
                 content="24/7"
               />
-              <div className="h-px bg-gray-100 my-2" />
 
               <ProductInfoCard 
                 icon={<FileText className="w-6 h-6" />}
                 title="اتفاقية مستوى الخدمة"
                 content="30 يوم عمل"
               />
-              <div className="h-px bg-gray-100 my-2" />
 
               <ServiceTimelineCard 
                 title="بدء تقديم الخدمة"
                 desktopYear="2011"
                 mobileYear="2021"
               />
-              <div className="h-px bg-gray-100 my-2" />
 
               <ProductInfoCard 
                 icon={<Languages className="w-6 h-6" />}
