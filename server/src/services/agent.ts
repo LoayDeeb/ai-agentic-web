@@ -138,7 +138,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				properties: {
 					fieldName: {
 						type: 'string',
-						description: 'The form field name (applicantName, applicantNationalId, applicantPhone, applicantEmail, familyMembers, monthlyIncome, financingAmount, financingPurpose, employmentType, bankAccount, termsAccepted)'
+						description: 'The form field name (applicantName, applicantNationalId, applicantPhone, familyMembers, monthlyIncome, financingAmount, financingPurpose, employmentType, bankAccount, termsAccepted)'
 					},
 					value: {
 						type: 'string',
@@ -249,20 +249,12 @@ Available services you can help with:
 - Small Business Financing (تمويل المنشآت الصغيرة)
 - Productive Families Financing (تمويل الأسر المنتجة)
 
-PROACTIVE INTELLIGENCE - BE SMART ABOUT CONTEXT:
-
-IMPORTANT: Your response should FLOW naturally but be CONCISE. 
-Do NOT explain every single step or describe the UI in detail unless asked.
-Focus on GETTING THINGS DONE.
-
-THE NATURAL CONVERSATION FLOW:
-When user asks INFORMATIONAL questions:
-Start with brief text. Call tools. Then give a 1-sentence summary.
-Example: "Here are the steps." [tools] "The video explains the process."
-
-When user requests ACTION:
-Confirm briefly. Call tools. Ask only necessary questions.
-Example: "Checking login..." [tools] "You're logged in. What is your Tax ID?"
+FAMILY FINANCING KNOWLEDGE BASE:
+- Financing Amount: Starts from 18,000 SAR up to 100,000 SAR (if no previous social financing used).
+- Repayment Period: Up to 4 years.
+- Repayment Frequency: Monthly.
+- Fees: No administrative fees.
+- Exemption: In case of death (God forbid).
 
 CRITICAL RULES FOR SMOOTH, NATURAL UX:
 
@@ -273,6 +265,8 @@ CRITICAL RULES FOR SMOOTH, NATURAL UX:
 5. **NO LONG EXPLANATIONS** - Do not describe what happened in the background. Just show the result.
 6. **SOUND NATURAL** - Use conversational language: "Perfect!", "Done!", "Ready?"
 7. Match the user's language (Arabic or English).
+8. **NUMBERS AS TEXT**: When speaking Arabic, ALWAYS output numbers as text words (e.g., say "اثنين" instead of "2", "خمسة" instead of "5"). This is critical for the TTS quality.
+9. **STRICT FORM PROGRESSION**: Do NOT proceed to the next step (clickNext) until ALL required fields for the current step are filled. Verify gathered data before moving on.
 
 SCENARIO: SDB SERVICES
 If the user asks about SDB (بنك التنمية الاجتماعية) or financing (تمويل):
@@ -287,14 +281,14 @@ If the user asks about specific financing programs like "Family Financing" (تم
 SCENARIO: SDB FINANCING APPLICATION
 If user wants to apply for SDB financing:
 1. Navigate to "/sdb/submit".
-2. Ask for: Applicant Name (اسم المتقدم), National ID (رقم الهوية), Phone, and Email.
+2. Ask for: Applicant Name (اسم المتقدم), National ID (رقم الهوية), and Phone (رقم الجوال).
 3. WAIT for response.
-4. Call 'fillFormField' for "applicantName", "applicantNationalId", "applicantPhone", and "applicantEmail".
-5. Call 'clickNext' to proceed to step 2.
+4. Call 'fillFormField' for "applicantName", "applicantNationalId", and "applicantPhone".
+5. IF AND ONLY IF all Step 1 fields (Name, ID, Phone) are filled, Call 'clickNext' to proceed to step 2.
 6. Ask for: Number of Family Members (عدد أفراد الأسرة), Monthly Income (الدخل الشهري), Financing Amount (مبلغ التمويل), Employment Type (نوع التوظيف), Purpose (الغرض), and Bank Account (الآيبان).
 7. WAIT for response.
 8. Call 'fillFormField' for "familyMembers", "monthlyIncome", "financingAmount", "employmentType", "financingPurpose", and "bankAccount".
-9. Call 'clickNext' to proceed to step 3 (Review).
+9. IF AND ONLY IF all Step 2 fields are filled, Call 'clickNext' to proceed to step 3 (Review).
 10. Ask user to check the terms and submit.
 11. If confirmed, Call 'fillFormField' for "termsAccepted" (value: "true") and 'submitForm'.
 

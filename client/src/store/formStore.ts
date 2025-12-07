@@ -22,7 +22,7 @@ export type FormData = {
 	applicantName: string
 	applicantNationalId: string
 	applicantPhone: string
-	applicantEmail: string
+	// applicantEmail: string // Removed as per user request
 	familyMembers: string
 	monthlyIncome: string
 	financingAmount: string
@@ -64,7 +64,7 @@ const initialFormData: FormData = {
 	applicantName: '',
 	applicantNationalId: '',
 	applicantPhone: '',
-	applicantEmail: '',
+	// applicantEmail: '', // Removed
 	familyMembers: '',
 	monthlyIncome: '',
 	financingAmount: '',

@@ -62,7 +62,6 @@ export default function SDBSubmitRequest() {
 			if (!formData.applicantName) newErrors.applicantName = 'اسم المتقدم مطلوب'
 			if (!formData.applicantNationalId) newErrors.applicantNationalId = 'رقم الهوية مطلوب'
 			if (!formData.applicantPhone) newErrors.applicantPhone = 'رقم الجوال مطلوب'
-			if (!formData.applicantEmail) newErrors.applicantEmail = 'البريد الإلكتروني مطلوب'
 		} else if (step === 2) {
 			if (!formData.familyMembers) newErrors.familyMembers = 'عدد أفراد الأسرة مطلوب'
 			if (!formData.monthlyIncome) newErrors.monthlyIncome = 'الدخل الشهري مطلوب'
@@ -189,16 +188,6 @@ export default function SDBSubmitRequest() {
 										placeholder="05xxxxxxxx"
 									/>
 								</FormField>
-
-								<FormField label="البريد الإلكتروني" required error={errors.applicantEmail}>
-									<TextInput
-										name="applicantEmail"
-										type="email"
-										value={formData.applicantEmail}
-										onChange={(val) => setField('applicantEmail', val)}
-										placeholder="example@email.com"
-									/>
-								</FormField>
 							</div>
 						</div>
 					)}
@@ -303,10 +292,6 @@ export default function SDBSubmitRequest() {
 									<div>
 										<p className="text-gray-500 text-sm">رقم الجوال</p>
 										<p className="font-medium text-[#161616]">{formData.applicantPhone}</p>
-									</div>
-									<div>
-										<p className="text-gray-500 text-sm">البريد الإلكتروني</p>
-										<p className="font-medium text-[#161616]">{formData.applicantEmail}</p>
 									</div>
 									<div>
 										<p className="text-gray-500 text-sm">عدد أفراد الأسرة</p>
