@@ -28,7 +28,8 @@ export function createSpeechRecognition(
 	}
 
 	const recognition = new SpeechRecognition()
-	recognition.lang = config.lang
+	// Force Arabic language always
+	recognition.lang = 'ar-SA'
 	recognition.continuous = config.continuous ?? true
 	recognition.interimResults = config.interimResults ?? true
 	recognition.maxAlternatives = 1

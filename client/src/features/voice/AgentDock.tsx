@@ -167,8 +167,8 @@ export function AgentDock() {
 		if (!success) return
 
 		try {
-			// Start speech recognition
-			const lang = locale === 'ar' ? 'ar-SA' : 'en-US'
+			// Start speech recognition - forcing Arabic language
+			const lang = 'ar-SA'
 			recognitionRef.current = createSpeechRecognition({
 				lang,
 				continuous: true,
@@ -245,7 +245,7 @@ export function AgentDock() {
 		setTextInput('')
 		setTranscript(prev => [...prev, `You: ${text}`])
 		
-		const lang = locale === 'ar' ? 'ar-SA' : 'en-US'
+		const lang = 'ar-SA'
 		socketRef.current?.send({
 			type: 'transcript',
 			text,
