@@ -82,3 +82,4 @@ export const ArabicTabs = ({
     </ul>;
 };
 
+

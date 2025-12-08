@@ -238,8 +238,19 @@ export function AgentDock() {
 	const handleSend = async () => {
 		if (!textInput.trim()) return
 		
+		// Ensure session is initialized
 		const success = await initializeSession()
 		if (!success) return
+
+		// Wait for socket to be OPEN
+		if (socketRef.current && socketRef.current.readyState !== WebSocket.OPEN) {
+			console.log('[AgentDock] Waiting for socket to open...')
+			let attempts = 0
+			while (socketRef.current.readyState !== WebSocket.OPEN && attempts < 10) {
+				await new Promise(r => setTimeout(r, 200))
+				attempts++
+			}
+		}
 
 		const text = textInput
 		setTextInput('')
