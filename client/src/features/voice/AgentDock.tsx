@@ -385,7 +385,7 @@ export function AgentDock() {
 						<p className="text-xs text-gray-500 text-center shrink-0">
 							{isListening
 								? 'Speak naturally. I will respond when you pause.'
-								: 'Try: "How can I submit to Zakat service?"'}
+								: 'Try asking about financing services...'}
 						</p>
 					</div>
 				</div>
