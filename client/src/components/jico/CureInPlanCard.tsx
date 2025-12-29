@@ -30,9 +30,9 @@ const defaultFeatures = [
 
 // @component: CureInPlanCard
 export const CureInPlanCard = ({
-  title = ""كيور ان"",
+  title = "كيور إن",
   subtitle = "",
-  description = 'تأمين "كيور " خيار يناسب احتياجاتك ومتطلباتك داخل المستشفى فقط ويشمل تغطيات وميزات رئيسية منها:',
+  description = "تأمين كيور خيار يناسب احتياجاتك ومتطلباتك داخل المستشفى فقط ويشمل تغطيات وميزات رئيسية منها:",
   features = defaultFeatures,
   primaryButtonText = "لمعرفة المزيد، قم بتنزيل بروشور كيور إن…",
   secondaryButtonText = "احصل على استشارة مجانية الآن!",

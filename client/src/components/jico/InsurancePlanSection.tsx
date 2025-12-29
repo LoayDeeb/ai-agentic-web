@@ -26,8 +26,8 @@ interface InsurancePlanSectionProps {
 export const InsurancePlanSection = ({
   imageSrc = "https://jico.jo/wp-content/uploads/2025/10/Jordan-Best-health-insurance.jpg",
   imageAlt = "Jordan Best Health Insurance",
-  title = ""كيور 50:50"",
-  description = 'تأمين "كيور 50:50 " يوازن بين التغطيات الأساسية وتكاليفه المناسبة ويشمل تغطيات وميزات عديدة منها:',
+  title = "كيور 50:50",
+  description = "تأمين كيور 50:50 يوازن بين التغطيات الأساسية وتكاليفه المناسبة ويشمل تغطيات وميزات عديدة منها:",
   features = [
     "سقف سنوي 500,000 دينار أردني.",
     "تغطية 50% داخل المستشفى.",
