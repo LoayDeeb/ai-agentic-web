@@ -16,6 +16,8 @@ const MawhibaInstallmentRequest = React.lazy(() => import('./pages/MawhibaInstal
 const SDBServices = React.lazy(() => import('./pages/SDBServices'))
 const SDBServiceDetail = React.lazy(() => import('./pages/SDBServiceDetail'))
 const SDBSubmitRequest = React.lazy(() => import('./pages/SDBSubmitRequest'))
+const JicoServices = React.lazy(() => import('./pages/JicoServices'))
+const JicoMedicalInsurance = React.lazy(() => import('./pages/JicoMedicalInsurance'))
 
 export default function App() {
 	const NavSetter = () => {
@@ -51,6 +53,10 @@ export default function App() {
 					<Route path="/sdb" element={<SDBServices />} />
 					<Route path="/sdb/service" element={<SDBServiceDetail />} />
 					<Route path="/sdb/submit" element={<SDBSubmitRequest />} />
+					
+					{/* JICO Routes */}
+					<Route path="/jico" element={<JicoServices />} />
+					<Route path="/jico/medical" element={<JicoMedicalInsurance />} />
 					
 					<Route
 						path="*"

@@ -45,6 +45,15 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			navigateTo('/sdb/service')
 			return { success: true, navigatedTo: '/sdb/service' }
 
+		// JICO (Jerusalem Insurance) Tools
+		case 'openJicoServices':
+			navigateTo('/jico')
+			return { success: true, navigatedTo: '/jico' }
+
+		case 'openJicoMedical':
+			navigateTo('/jico/medical')
+			return { success: true, navigatedTo: '/jico/medical' }
+
 		case 'highlight':
 			highlight(args.selector, args.seconds)
 			return { success: true, highlighted: args.selector }
