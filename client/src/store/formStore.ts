@@ -29,6 +29,19 @@ export type FormData = {
 	financingPurpose: string
 	employmentType: string
 	bankAccount: string
+	// JICO Insurance Fields
+	insuranceFullName: string
+	insuranceNationalId: string
+	insuranceDateOfBirth: string
+	insurancePhone: string
+	insuranceEmail: string
+	insuranceAddress: string
+	insurancePlanType: string // cure, cure5050, cureIn
+	insuranceCoverageClass: string // private, first, second
+	insuranceFamilyMembers: string
+	insurancePreExisting: string
+	insuranceOccupation: string
+	insuranceInsuranceTerms: boolean
 }
 
 type FormStore = {
@@ -70,7 +83,20 @@ const initialFormData: FormData = {
 	financingAmount: '',
 	financingPurpose: '',
 	employmentType: '',
-	bankAccount: ''
+	bankAccount: '',
+	// JICO Insurance Fields
+	insuranceFullName: '',
+	insuranceNationalId: '',
+	insuranceDateOfBirth: '',
+	insurancePhone: '',
+	insuranceEmail: '',
+	insuranceAddress: '',
+	insurancePlanType: '',
+	insuranceCoverageClass: '',
+	insuranceFamilyMembers: '',
+	insurancePreExisting: '',
+	insuranceOccupation: '',
+	insuranceInsuranceTerms: false
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({

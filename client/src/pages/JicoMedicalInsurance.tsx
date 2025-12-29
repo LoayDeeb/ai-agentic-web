@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { HealthcareHeaderNav } from '../components/jico/HealthcareHeaderNav';
 import { HealthcareBanner } from '../components/jico/HealthcareBanner';
 import { MedicalInsuranceHero } from '../components/jico/MedicalInsuranceHero';
@@ -15,6 +17,12 @@ import { WhyAlQudsInsurance } from '../components/jico/WhyAlQudsInsurance';
  * for Jerusalem Insurance (JICO) showcasing various health insurance plans.
  */
 export default function JicoMedicalInsurance() {
+  const navigate = useNavigate();
+
+  const handleApplyNow = () => {
+    navigate('/jico/submit');
+  };
+
   return (
     <div
       className="min-h-screen bg-white"
@@ -31,7 +39,7 @@ export default function JicoMedicalInsurance() {
       <MedicalInsuranceHero />
 
       {/* Health Insurance Introduction Card */}
-      <HealthInsuranceCard />
+      <HealthInsuranceCard onButtonClick={handleApplyNow} />
 
       {/* Arabic Hero Heading - "We are the bandage and the backup plan" */}
       <ArabicHeroHeading />
@@ -51,7 +59,24 @@ export default function JicoMedicalInsurance() {
       {/* Why Al Quds Insurance Section */}
       <WhyAlQudsInsurance />
 
-      {/* Footer can be added here in the future */}
+      {/* Call to Action Section */}
+      <section className="bg-[#CD9E51] py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            جاهز للحصول على تأمينك الصحي؟
+          </h2>
+          <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
+            قدم طلبك الآن واحصل على تغطية صحية شاملة لك ولعائلتك مع القدس للتأمين
+          </p>
+          <button
+            onClick={handleApplyNow}
+            className="inline-flex items-center gap-3 bg-white text-[#CD9E51] px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            قدم طلبك الآن
+          </button>
+        </div>
+      </section>
     </div>
   );
 }

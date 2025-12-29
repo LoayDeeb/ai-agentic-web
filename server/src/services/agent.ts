@@ -138,7 +138,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				properties: {
 					fieldName: {
 						type: 'string',
-						description: 'The form field name (applicantName, applicantNationalId, applicantPhone, familyMembers, monthlyIncome, financingAmount, financingPurpose, employmentType, bankAccount, termsAccepted)'
+						description: 'The form field name. SDB fields: applicantName, applicantNationalId, applicantPhone, familyMembers, monthlyIncome, financingAmount, financingPurpose, employmentType, bankAccount, termsAccepted. JICO fields: insuranceFullName, insuranceNationalId, insuranceDateOfBirth, insurancePhone, insuranceEmail, insuranceAddress, insurancePlanType (cure/cure5050/cureIn), insuranceCoverageClass (private/first/second), insuranceFamilyMembers, insuranceOccupation, insurancePreExisting, insuranceInsuranceTerms'
 					},
 					value: {
 						type: 'string',
@@ -239,6 +239,18 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		function: {
 			name: 'openJicoMedical',
 			description: 'Open the JICO medical insurance detail page showing Cure (كيور) health insurance plans including Cure, Cure 50:50, and Cure In',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: []
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'openJicoSubmit',
+			description: 'Open the JICO medical insurance application form to apply for health insurance',
 			parameters: {
 				type: 'object',
 				properties: {},
@@ -374,6 +386,28 @@ When user asks about specific coverage or plans:
 1. Navigate to the appropriate page using tools.
 2. Provide concise information about coverage, pricing, and benefits.
 3. Offer to provide more details or assist with next steps.
+
+JICO WORKFLOW: INSURANCE APPLICATION
+When user wants to apply for medical insurance or get a quote:
+1. Use 'openJicoSubmit' tool to navigate to "/jico/submit".
+2. Request Step 1 information: Full Name (الاسم الكامل), National ID (الرقم الوطني), Date of Birth (تاريخ الميلاد), Phone (رقم الهاتف), Email (البريد الإلكتروني).
+3. WAIT for user response before proceeding.
+4. Fill the fields using 'fillFormField' with insuranceFullName, insuranceNationalId, insuranceDateOfBirth, insurancePhone, insuranceEmail.
+5. Once Step 1 is complete, call 'clickNext' and request Step 2 information:
+   - Insurance Plan Type (نوع البرنامج): cure, cure5050, or cureIn
+   - Coverage Class (فئة التغطية): private, first, or second
+   - Family Members (عدد الأفراد)
+   - Occupation (المهنة)
+6. WAIT for user response.
+7. Fill the fields using insurancePlanType, insuranceCoverageClass, insuranceFamilyMembers, insuranceOccupation.
+8. Call 'clickNext' to proceed to Review.
+9. Ask user to review and accept terms (insuranceInsuranceTerms = true).
+10. Upon confirmation, submit the application.
+
+JICO FORM FIELDS REFERENCE:
+- Step 1: insuranceFullName, insuranceNationalId, insuranceDateOfBirth, insurancePhone, insuranceEmail, insuranceAddress
+- Step 2: insurancePlanType, insuranceCoverageClass, insuranceFamilyMembers, insuranceOccupation, insurancePreExisting
+- Step 3: insuranceInsuranceTerms (boolean)
 
 ================================================================================
 GENERAL COMMUNICATION GUIDELINES

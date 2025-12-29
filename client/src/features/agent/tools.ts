@@ -54,6 +54,10 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			navigateTo('/jico/medical')
 			return { success: true, navigatedTo: '/jico/medical' }
 
+		case 'openJicoSubmit':
+			navigateTo('/jico/submit')
+			return { success: true, navigatedTo: '/jico/submit' }
+
 		case 'highlight':
 			highlight(args.selector, args.seconds)
 			return { success: true, highlighted: args.selector }
