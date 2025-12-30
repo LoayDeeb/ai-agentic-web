@@ -257,6 +257,24 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				required: []
 			}
 		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'scrollToJicoSection',
+			description: 'Scroll to a specific insurance plan section on the JICO medical insurance page. Use this when the user asks for more details about a specific plan.',
+			parameters: {
+				type: 'object',
+				properties: {
+					section: {
+						type: 'string',
+						enum: ['cure', 'cure5050', 'curein', 'cancer'],
+						description: 'The section to scroll to: cure (كيور - comprehensive), cure5050 (كيور 50:50 - balanced), curein (كيور إن - hospital only), cancer (تأمين السرطان - cancer insurance)'
+					}
+				},
+				required: ['section']
+			}
+		}
 	}
 ]
 
@@ -377,9 +395,24 @@ When user asks about JICO, insurance, or تأمين:
 
 JICO WORKFLOW: MEDICAL INSURANCE DETAILS
 When user asks about medical insurance, health insurance, Cure plans, التأمين الطبي, or كيور:
-1. Use 'openJicoMedical' tool.
-2. Confirm: "Here are the medical insurance plans. We offer Cure, Cure 50:50, and Cure In programs."
-3. Explain the relevant plan details based on user's question.
+1. Use 'openJicoMedical' tool to navigate to the medical insurance page.
+2. BRIEFLY introduce the available plans in 1-2 sentences:
+   - "كيور" (Cure) - تغطية شاملة ابتداءً من 250 دينار
+   - "كيور 50:50" - تغطية متوازنة ابتداءً من 130 دينار
+   - "كيور إن" (Cure In) - داخل المستشفى فقط ابتداءً من 65 دينار
+   - تأمين السرطان (رعاية) - بالشراكة مع مؤسسة الحسين للسرطان
+3. ASK the user: "هل تريد معرفة المزيد عن برنامج معين؟" (Do you want to know more about a specific program?)
+4. WAIT for user response.
+
+JICO WORKFLOW: SCROLLING TO PLAN DETAILS
+When user asks for more details about a specific plan after the introduction:
+1. Use 'scrollToJicoSection' tool with the appropriate section:
+   - For كيور/Cure: section = 'cure'
+   - For كيور 50:50/Cure 50:50: section = 'cure5050'
+   - For كيور إن/Cure In: section = 'curein'
+   - For تأمين السرطان/رعاية/Cancer: section = 'cancer'
+2. After scrolling, provide a brief summary of that plan's key benefits.
+3. Ask if the user would like to apply or learn about another plan.
 
 JICO WORKFLOW: INSURANCE INQUIRY
 When user asks about specific coverage or plans:

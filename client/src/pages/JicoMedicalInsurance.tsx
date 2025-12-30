@@ -45,16 +45,24 @@ export default function JicoMedicalInsurance() {
       <ArabicHeroHeading />
 
       {/* Cure Insurance Plan Card */}
-      <InsurancePlanCard />
+      <div id="cure-section">
+        <InsurancePlanCard />
+      </div>
 
       {/* Cure 50:50 Plan Section */}
-      <InsurancePlanSection />
+      <div id="cure5050-section">
+        <InsurancePlanSection />
+      </div>
 
       {/* Cure In Plan Card - Hospital only coverage */}
-      <CureInPlanCard />
+      <div id="curein-section">
+        <CureInPlanCard />
+      </div>
 
       {/* Cancer Insurance Section */}
-      <InsuranceSection />
+      <div id="cancer-section">
+        <InsuranceSection />
+      </div>
 
       {/* Why Al Quds Insurance Section */}
       <WhyAlQudsInsurance />

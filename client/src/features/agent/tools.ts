@@ -151,6 +151,27 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: true, nextStep }
 		}
 
+		case 'scrollToJicoSection': {
+			const sectionId = args.section
+			const sectionMap: Record<string, string> = {
+				'cure': 'cure-section',
+				'cure5050': 'cure5050-section',
+				'curein': 'curein-section',
+				'cancer': 'cancer-section'
+			}
+			const elementId = sectionMap[sectionId]
+			if (elementId) {
+				const element = document.getElementById(elementId)
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+					highlight(`#${elementId}`, 3)
+					return { success: true, scrolledTo: sectionId }
+				}
+				return { success: false, error: `Section element not found: ${elementId}` }
+			}
+			return { success: false, error: `Unknown section: ${sectionId}` }
+		}
+
 		default:
 			console.warn('[AgentTools] Unknown tool:', tool)
 			return { success: false, error: 'Unknown tool' }
