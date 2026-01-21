@@ -22,6 +22,9 @@ const JicoSubmitRequest = React.lazy(() => import('./pages/JicoSubmitRequest'))
 const EFPrograms = React.lazy(() => import('./pages/EFPrograms'))
 const EFProgramDetail = React.lazy(() => import('./pages/EFProgramDetail'))
 const EFSubmitApplication = React.lazy(() => import('./pages/EFSubmitApplication'))
+const EFProgramsAr = React.lazy(() => import('./pages/EFProgramsAr'))
+const EFProgramDetailAr = React.lazy(() => import('./pages/EFProgramDetailAr'))
+const EFSubmitApplicationAr = React.lazy(() => import('./pages/EFSubmitApplicationAr'))
 
 export default function App() {
 	const NavSetter = () => {
@@ -67,6 +70,11 @@ export default function App() {
 					<Route path="/ef" element={<EFPrograms />} />
 					<Route path="/ef/program/:id" element={<EFProgramDetail />} />
 					<Route path="/ef/apply/:id" element={<EFSubmitApplication />} />
+					
+					{/* EF Arabic Routes */}
+					<Route path="/ef-ar" element={<EFProgramsAr />} />
+					<Route path="/ef-ar/program/:id" element={<EFProgramDetailAr />} />
+					<Route path="/ef-ar/apply/:id" element={<EFSubmitApplicationAr />} />
 					
 					<Route
 						path="*"

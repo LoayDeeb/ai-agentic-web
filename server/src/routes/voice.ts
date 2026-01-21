@@ -3,10 +3,15 @@ import { Server } from 'http'
 import { logger } from '../logger.js'
 import { streamAgentResponse, AgentMessage } from '../services/agent.js'
 import { streamEFAgentResponse } from '../services/efAgent.js'
+import { streamEFAgentArResponse } from '../services/efAgentAr.js'
 import { streamTTS } from '../services/tts.js'
 
 // Helper to select the appropriate agent based on current URL
 function selectAgentStream(url: string | undefined) {
+	if (url?.startsWith('/ef-ar')) {
+		logger.info({ url }, 'Using EF Arabic Agent')
+		return streamEFAgentArResponse
+	}
 	if (url?.startsWith('/ef')) {
 		logger.info({ url }, 'Using EF Agent')
 		return streamEFAgentResponse
