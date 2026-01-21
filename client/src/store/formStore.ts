@@ -42,6 +42,20 @@ export type FormData = {
 	insurancePreExisting: string
 	insuranceOccupation: string
 	insuranceInsuranceTerms: boolean
+	// EF (Environment Fund) Fields
+	efOrganizationName: string
+	efRegistrationNumber: string
+	efOrganizationType: string
+	efContactPerson: string
+	efContactEmail: string
+	efContactPhone: string
+	efProjectTitle: string
+	efProjectDescription: string
+	efRequestedAmount: string
+	efProjectDuration: string
+	efEnvironmentalSector: string
+	efExpectedImpact: string
+	efTermsAccepted: boolean
 }
 
 type FormStore = {
@@ -96,7 +110,21 @@ const initialFormData: FormData = {
 	insuranceFamilyMembers: '',
 	insurancePreExisting: '',
 	insuranceOccupation: '',
-	insuranceInsuranceTerms: false
+	insuranceInsuranceTerms: false,
+	// EF (Environment Fund) Fields
+	efOrganizationName: '',
+	efRegistrationNumber: '',
+	efOrganizationType: '',
+	efContactPerson: '',
+	efContactEmail: '',
+	efContactPhone: '',
+	efProjectTitle: '',
+	efProjectDescription: '',
+	efRequestedAmount: '',
+	efProjectDuration: '',
+	efEnvironmentalSector: '',
+	efExpectedImpact: '',
+	efTermsAccepted: false
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({

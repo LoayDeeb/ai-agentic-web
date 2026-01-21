@@ -19,6 +19,9 @@ const SDBSubmitRequest = React.lazy(() => import('./pages/SDBSubmitRequest'))
 const JicoServices = React.lazy(() => import('./pages/JicoServices'))
 const JicoMedicalInsurance = React.lazy(() => import('./pages/JicoMedicalInsurance'))
 const JicoSubmitRequest = React.lazy(() => import('./pages/JicoSubmitRequest'))
+const EFPrograms = React.lazy(() => import('./pages/EFPrograms'))
+const EFProgramDetail = React.lazy(() => import('./pages/EFProgramDetail'))
+const EFSubmitApplication = React.lazy(() => import('./pages/EFSubmitApplication'))
 
 export default function App() {
 	const NavSetter = () => {
@@ -59,6 +62,11 @@ export default function App() {
 					<Route path="/jico" element={<JicoServices />} />
 					<Route path="/jico/medical" element={<JicoMedicalInsurance />} />
 					<Route path="/jico/submit" element={<JicoSubmitRequest />} />
+					
+					{/* EF (Environment Fund) Routes */}
+					<Route path="/ef" element={<EFPrograms />} />
+					<Route path="/ef/program/:id" element={<EFProgramDetail />} />
+					<Route path="/ef/apply/:id" element={<EFSubmitApplication />} />
 					
 					<Route
 						path="*"

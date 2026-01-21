@@ -2,7 +2,19 @@ import { WebSocketServer, WebSocket } from 'ws'
 import { Server } from 'http'
 import { logger } from '../logger.js'
 import { streamAgentResponse, AgentMessage } from '../services/agent.js'
+import { streamEFAgentResponse } from '../services/efAgent.js'
 import { streamTTS } from '../services/tts.js'
+
+// Helper to select the appropriate agent based on current URL
+function selectAgentStream(url: string | undefined) {
+	if (url?.startsWith('/ef')) {
+		logger.info({ url }, 'Using EF Agent')
+		return streamEFAgentResponse
+	}
+	// Default to JICO/ZATCA agent
+	logger.info({ url }, 'Using default Agent (JICO/ZATCA)')
+	return streamAgentResponse
+}
 
 export function setupVoiceWebSocket(server: Server) {
 	const wss = new WebSocketServer({ server, path: '/voice' })
@@ -268,7 +280,10 @@ export function setupVoiceWebSocket(server: Server) {
 								toolCalls.push(tc)
 							})
 
-							for await (const chunk of streamAgentResponse(conversationHistory)) {
+							// Select appropriate agent based on current URL
+							const agentStream = selectAgentStream(context.currentUrl)
+							
+							for await (const chunk of agentStream(conversationHistory)) {
 								if (currentTurn !== myTurn || myTurn.aborted) break
 
 								if (chunk.type === 'text' && chunk.content) {

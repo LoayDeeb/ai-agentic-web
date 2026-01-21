@@ -58,6 +58,47 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			navigateTo('/jico/submit')
 			return { success: true, navigatedTo: '/jico/submit' }
 
+		// EF (Environment Fund) Tools
+		case 'openEFPrograms':
+			navigateTo('/ef')
+			return { success: true, navigatedTo: '/ef' }
+
+		case 'openEFProgramDetail':
+			navigateTo(`/ef/program/${args.programId}`)
+			return { success: true, navigatedTo: `/ef/program/${args.programId}` }
+
+		case 'openEFApplication':
+			navigateTo(`/ef/apply/${args.programId}`)
+			return { success: true, navigatedTo: `/ef/apply/${args.programId}` }
+
+		case 'filterEFPrograms': {
+			const categoryParam = args.category === 'All' ? '' : `?category=${encodeURIComponent(args.category)}`
+			navigateTo(`/ef${categoryParam}`)
+			return { success: true, filteredBy: args.category }
+		}
+
+		case 'scrollToEFSection': {
+			const sectionId = args.section
+			const sectionMap: Record<string, string> = {
+				'overview': 'ef-program-overview',
+				'eligibility': 'ef-program-eligibility',
+				'steps': 'ef-program-steps',
+				'filters': 'ef-filters',
+				'programs': 'ef-programs-grid'
+			}
+			const elementId = sectionMap[sectionId]
+			if (elementId) {
+				const element = document.getElementById(elementId)
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+					highlight(`#${elementId}`, 3)
+					return { success: true, scrolledTo: sectionId }
+				}
+				return { success: false, error: `Section element not found: ${elementId}` }
+			}
+			return { success: false, error: `Unknown section: ${sectionId}` }
+		}
+
 		case 'highlight':
 			highlight(args.selector, args.seconds)
 			return { success: true, highlighted: args.selector }
