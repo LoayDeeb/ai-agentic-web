@@ -98,6 +98,16 @@ export function AgentDock() {
 
 			// Connect WebSocket
 			socketRef.current = connectVoiceSocket({
+				onOpen: () => {
+					console.log('[AgentDock] WebSocket connected')
+					// Send page state immediately on connection
+					socketRef.current?.send({
+						type: 'page_state',
+						url: window.location.pathname,
+						title: document.title
+					})
+					console.log('[AgentDock] Sent initial page state:', window.location.pathname)
+				},
 				onMessage: (msg) => {
 					if (msg.type === 'text') {
 						// Live transcript from agent
@@ -135,9 +145,6 @@ export function AgentDock() {
 						console.error('[AgentDock] Server error:', msg.message)
 						setTranscript((prev) => [...prev, `Error: ${msg.message}`])
 					}
-				},
-				onOpen: () => {
-					console.log('[AgentDock] WebSocket connected')
 				},
 				onClose: () => {
 					console.warn('[AgentDock] WebSocket closed unexpectedly')
