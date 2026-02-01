@@ -213,6 +213,69 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: false, error: `Unknown section: ${sectionId}` }
 		}
 
+		// Zain Jordan Tools
+		case 'openZainHome':
+			navigateTo('/zain')
+			return { success: true, navigatedTo: '/zain' }
+
+		case 'openZainFiber':
+			navigateTo('/zain/fiber')
+			return { success: true, navigatedTo: '/zain/fiber' }
+
+		case 'openZainSubscribe': {
+			const packageParam = args.packageId ? `?package=${args.packageId}` : ''
+			navigateTo(`/zain/subscribe${packageParam}`)
+			return { success: true, navigatedTo: `/zain/subscribe${packageParam}` }
+		}
+
+		case 'scrollToFiberPackage': {
+			const packageId = args.packageId
+			const elementId = `${packageId}-section`
+			const element = document.getElementById(elementId)
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+				highlight(`#${elementId}`, 3)
+				emitToolEvent('scrollToFiberPackage', args)
+				return { success: true, scrolledTo: packageId }
+			}
+			return { success: false, error: `Package element not found: ${elementId}` }
+		}
+
+		case 'switchFiberTab': {
+			emitToolEvent('switchFiberTab', args)
+			return { success: true, switchedTo: args.tabId }
+		}
+
+		case 'checkFiberCoverage': {
+			// Simulate coverage check - in production this would call an API
+			const coveredAreas = ['عمان', 'إربد', 'الزرقاء', 'العقبة', 'السلط', 'المفرق']
+			const city = args.city || ''
+			const area = args.area || ''
+			const isCovered = coveredAreas.some(c => 
+				city.includes(c) || area.includes(c) || c.includes(city) || c.includes(area)
+			)
+			return { 
+				success: true, 
+				covered: isCovered, 
+				area: area,
+				city: city,
+				message: isCovered 
+					? 'خدمة زين فايبر متوفرة في منطقتك' 
+					: 'نأسف، خدمة الفايبر غير متوفرة حالياً في هذه المنطقة'
+			}
+		}
+
+		case 'selectPackage': {
+			emitToolEvent('selectPackage', args)
+			const elementId = `${args.packageId}-section`
+			const element = document.getElementById(elementId)
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+				highlight(`#${elementId}`, 3)
+			}
+			return { success: true, selectedPackage: args.packageId }
+		}
+
 		default:
 			console.warn('[AgentTools] Unknown tool:', tool)
 			return { success: false, error: 'Unknown tool' }

@@ -26,6 +26,11 @@ const EFProgramsAr = React.lazy(() => import('./pages/EFProgramsAr'))
 const EFProgramDetailAr = React.lazy(() => import('./pages/EFProgramDetailAr'))
 const EFSubmitApplicationAr = React.lazy(() => import('./pages/EFSubmitApplicationAr'))
 
+// Zain Jordan Pages
+const ZainHome = React.lazy(() => import('./pages/ZainHome'))
+const ZainFiber = React.lazy(() => import('./pages/ZainFiber'))
+const ZainSubscribe = React.lazy(() => import('./pages/ZainSubscribe'))
+
 export default function App() {
 	const NavSetter = () => {
 		const navigate = useNavigate()
@@ -75,6 +80,11 @@ export default function App() {
 					<Route path="/ef-ar" element={<EFProgramsAr />} />
 					<Route path="/ef-ar/program/:id" element={<EFProgramDetailAr />} />
 					<Route path="/ef-ar/apply/:id" element={<EFSubmitApplicationAr />} />
+					
+					{/* Zain Jordan Routes */}
+					<Route path="/zain" element={<ZainHome />} />
+					<Route path="/zain/fiber" element={<ZainFiber />} />
+					<Route path="/zain/subscribe" element={<ZainSubscribe />} />
 					
 					<Route
 						path="*"
