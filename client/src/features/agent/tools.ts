@@ -37,9 +37,24 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			navigateTo(`/services/${args.slug}`)
 			return { success: true, navigatedTo: `/services/${args.slug}` }
 
+		case 'openMawhibaServices':
+			navigateTo('/mawhiba')
+			return { success: true, navigatedTo: '/mawhiba' }
+
 		case 'openMawhibaService':
 			navigateTo('/mawhiba/service')
 			return { success: true, navigatedTo: '/mawhiba/service' }
+
+		case 'openMawhibaApplication':
+			navigateTo('/mawhiba/service/submit')
+			return { success: true, navigatedTo: '/mawhiba/service/submit' }
+
+		case 'scrollToMawhibaSection': {
+			const sectionId = args.section
+			// This triggers a tab change in the service detail page
+			emitToolEvent('scrollToMawhibaSection', args)
+			return { success: true, scrolledTo: sectionId }
+		}
 
 		case 'openSDBService':
 			navigateTo('/sdb/service')
