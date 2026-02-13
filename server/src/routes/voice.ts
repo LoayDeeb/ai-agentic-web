@@ -297,8 +297,12 @@ export function setupVoiceWebSocket(server: Server) {
 
 							// Select appropriate agent based on current URL
 							const agentStream = selectAgentStream(context.currentUrl)
-							
-							for await (const chunk of agentStream(conversationHistory)) {
+							const responseStream =
+								agentStream === streamAgentResponse
+									? agentStream(conversationHistory, context.currentUrl)
+									: agentStream(conversationHistory)
+
+							for await (const chunk of responseStream) {
 								if (currentTurn !== myTurn || myTurn.aborted) break
 
 								if (chunk.type === 'text' && chunk.content) {
@@ -505,6 +509,5 @@ export function setupVoiceWebSocket(server: Server) {
 
 	logger.info('Voice WebSocket server initialized on /voice')
 }
-
 
 

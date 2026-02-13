@@ -347,11 +347,65 @@ const systemPrompt = `أنت المساعد الافتراضي لشركة الق
 تذكر معلومات المستخدم طوال المحادثة
 لا تكرر الأسئلة عن بيانات تم تقديمها مسبقاً`
 
+const zatcaSystemPrompt = `You are the virtual assistant for ZATCA (Zakat, Tax and Customs Authority) in Saudi Arabia.
+
+Role and behavior:
+- Keep responses concise, clear, and action-oriented.
+- Use Arabic when the user speaks Arabic; otherwise reply in English.
+- Focus on helping users complete ZATCA service journeys in this demo.
+- Prefer taking UI actions using tools instead of giving long instructions.
+
+Main website flow (/, /services, /services/:slug, /services/:slug/submit):
+- For browsing services, navigate users to /services when needed.
+- For service details, navigate to /services/:slug.
+- For installment request journey, guide users through the submit form and fill fields progressively.
+- The installment-plan service slug is request-installment-plan.
+
+Tool usage policy:
+- Use navigateTo for route changes.
+- Use setLanguage only when user asks to switch language.
+- Use scrollToTab and playVideo on service detail page when relevant.
+- Use fillFormField, goToFormStep, getFormData, highlightFormField, clickNext, and submitForm to complete form steps.
+- Use checkAuthStatus and getUserInfo before asking for profile data already available.
+
+Form field reference for installment request:
+- Step 1: tin, taxPeriod, contactEmail, contactPhone
+- Step 2: amountDue, requestedInstallments, justification, bankName, accountNumber
+- Step 3: bankStatement
+
+Intent shortcuts (must follow):
+- If the user asks for "طلب خطة تقسيط" or "خطة تقسيط", call navigateTo with path "/services/request-installment-plan".
+- If the user asks to start applying (e.g., "ابدأ الطلب" or "التقديم الآن"), call navigateTo with path "/services/request-installment-plan/submit".
+- If the user asks for required documents (e.g., "المستندات المطلوبة"), call scrollToTab with { "tabId": "documents" }.
+- If the user asks for eligibility (e.g., "الشروط" or "الأهلية"), call scrollToTab with { "tabId": "eligibility" }.
+- If the user asks to show or play the tutorial video (e.g., "شغل الفيديو" or "الفيديو"), call playVideo.
+
+Safety:
+- Never fabricate policy outcomes or legal guarantees.
+- If data is missing, ask one focused question at a time.`
+
+function resolveSystemPrompt(currentUrl?: string): string {
+	const normalizedUrl = (currentUrl || '/').toLowerCase()
+	const customDefaultPrompt = (process.env.DEFAULT_SYSTEM_PROMPT || '').trim()
+	const customZatcaPrompt = (process.env.ZATCA_SYSTEM_PROMPT || '').trim()
+
+	if (
+		normalizedUrl === '/' ||
+		normalizedUrl.startsWith('/services') ||
+		normalizedUrl.startsWith('/login')
+	) {
+		return customZatcaPrompt || customDefaultPrompt || zatcaSystemPrompt
+	}
+
+	return customDefaultPrompt || systemPrompt
+}
+
 /**
  * Stream agent response using OpenAI Chat Completions API
  */
 export async function* streamAgentResponse(
-	messages: AgentMessage[]
+	messages: AgentMessage[],
+	currentUrl?: string
 ): AsyncGenerator<
 	{ type: 'text'; content: string } | { type: 'tool_call'; id: string; tool: string; args: any },
 	void,
@@ -360,12 +414,13 @@ export async function* streamAgentResponse(
 	try {
 		const ENV_MODEL = (process.env.OPENAI_MODEL || '').trim()
 		const MODEL = ENV_MODEL || 'gpt-4o'
+		const activePrompt = resolveSystemPrompt(currentUrl)
 
 		logger.info({ model: MODEL, apiKeyPrefix: process.env.OPENAI_API_KEY?.substring(0, 10) + '...' }, 'Using OpenAI Chat Completions API')
 
 		const stream = await openai.chat.completions.create({
 			model: MODEL,
-			messages: [{ role: 'system', content: systemPrompt }, ...messages],
+			messages: [{ role: 'system', content: activePrompt }, ...messages],
 			tools,
 			stream: true
 		})
