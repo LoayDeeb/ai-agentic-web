@@ -28,6 +28,9 @@ const EFSubmitApplicationAr = React.lazy(() => import('./pages/EFSubmitApplicati
 const SasoHome = React.lazy(() => import('./pages/SasoHome'))
 const SasoServices = React.lazy(() => import('./pages/SasoServices'))
 const SasoAppointmentDetail = React.lazy(() => import('./pages/SasoAppointmentDetail'))
+const GascoHome = React.lazy(() => import('./pages/GascoHome'))
+const GascoServices = React.lazy(() => import('./pages/GascoServices'))
+const GascoConnectionDetail = React.lazy(() => import('./pages/GascoConnectionDetail'))
 
 // Zain Jordan Pages
 const ZainHome = React.lazy(() => import('./pages/ZainHome'))
@@ -93,6 +96,11 @@ export default function App() {
 					<Route path="/saso" element={<SasoHome />} />
 					<Route path="/saso/services" element={<SasoServices />} />
 					<Route path="/saso/service/appointment" element={<SasoAppointmentDetail />} />
+
+					{/* GASCO Routes */}
+					<Route path="/gasco" element={<GascoHome />} />
+					<Route path="/gasco/services" element={<GascoServices />} />
+					<Route path="/gasco/service/new-connection" element={<GascoConnectionDetail />} />
 					
 					<Route
 						path="*"
