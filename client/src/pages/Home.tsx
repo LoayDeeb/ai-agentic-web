@@ -26,9 +26,14 @@ export default function Home() {
 				>
 					Browse Services
 				</Link>
+				<Link
+					to="/saso"
+					className="inline-block ms-3 bg-[#065D73] text-white rounded px-4 py-2 hover:bg-[#054b5d]"
+				>
+					SASO Demo
+				</Link>
 			</div>
 		</div>
 	)
 }
-
 
