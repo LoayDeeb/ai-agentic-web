@@ -2,25 +2,25 @@ import React, { useState } from 'react'
 import { CarFront, CalendarDays, ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-const tabs = ['Consumer', 'Trader', 'SME']
+const tabs = ['المستهلك', 'التاجر', 'المنشآت الصغيرة والمتوسطة']
 
 const cards = [
-  { title: 'Book Appointment', icon: CalendarDays, to: '/saso/service/appointment' },
-  { title: 'Check Periodic Inspection Status', icon: CarFront, to: '/saso/service/appointment' },
-  { title: 'Imported Vehicle Inspection', icon: CarFront, to: '/saso/service/appointment' },
-  { title: 'Vehicle Efficiency Inquiry Notice', icon: CarFront, to: '/saso/service/appointment' }
+  { title: 'فحص المركبات المستوردة', icon: CarFront, to: '/saso/service/imported-vehicles' },
+  { title: 'التحقق من حالة الفحص الفني الدوري', icon: CarFront, to: '/saso/service/imported-vehicles' },
+  { title: 'طلب إشعار استعلام كفاءة الطاقة للمركبات', icon: CarFront, to: '/saso/service/imported-vehicles' },
+  { title: 'حجز موعد إلكتروني', icon: CalendarDays, to: '/saso/service/imported-vehicles' }
 ]
 
 export function SasoServicesSection() {
-  const [activeTab, setActiveTab] = useState('Consumer')
+  const [activeTab, setActiveTab] = useState('المستهلك')
   const navigate = useNavigate()
 
   return (
     <section dir="rtl" className="bg-[#F6F7F8] py-16 px-6">
       <div className="mx-auto max-w-[1360px]">
         <header className="text-center mb-12">
-          <h2 className="text-5xl leading-none font-semibold text-[#44484D]">Electronic Services</h2>
-          <p className="text-[#2C2E31] text-3xl mt-4">Explore the most used e-services</p>
+          <h2 className="text-5xl leading-none font-semibold text-[#44484D]">الخدمات الإلكترونية</h2>
+          <p className="text-[#2C2E31] text-3xl mt-4">استكشف الخدمات الإلكترونية الأكثر استخداماً</p>
         </header>
 
         <div className="mx-auto w-full max-w-[980px] border-b border-[#626A71] mb-10">
@@ -58,7 +58,7 @@ export function SasoServicesSection() {
         </div>
 
         <div className="flex justify-center mt-10">
-          <button className="px-16 py-4 rounded-lg border border-[#CCD2D8] bg-white text-2xl text-[#3A3D42]">All Services</button>
+          <button className="px-16 py-4 rounded-lg border border-[#CCD2D8] bg-white text-2xl text-[#3A3D42]">جميع الخدمات</button>
         </div>
       </div>
     </section>

@@ -5,6 +5,7 @@ import { InstallmentHeader } from '../InstallmentHeader'
 import { ServiceDescription } from '../ServiceDescription'
 import { TabNavigation } from '../TabNavigation'
 import { InfoCardItem } from '../InfoCardItem'
+import { useNavigate } from 'react-router-dom'
 
 const tabs = [
   { id: 'requirements', label: 'متطلبات الحصول على الخدمة' },
@@ -14,6 +15,7 @@ const tabs = [
 
 export function SasoAppointmentDetailContent() {
   const [activeTab, setActiveTab] = useState('requirements')
+  const navigate = useNavigate()
 
   return (
     <div className="container mx-auto px-6 py-6" dir="rtl">
@@ -22,20 +24,20 @@ export function SasoAppointmentDetailContent() {
           { label: 'الرئيسية', href: '/saso' },
           { label: 'الخدمات الإلكترونية', href: '/saso/services' }
         ]}
-        pageTitle="حجز موعد إلكتروني"
-        shareTitle="حجز موعد إلكتروني"
+        pageTitle="فحص المركبات المستوردة"
+        shareTitle="فحص المركبات المستوردة"
       />
 
       <div className="flex flex-row-reverse gap-8">
         <div className="flex-1 max-w-[852px]">
           <InstallmentHeader
-            title="حجز موعد إلكتروني"
+            title="فحص المركبات المستوردة"
             buttonText="ابدأ الخدمة"
-            onButtonClick={() => {}}
+            onButtonClick={() => navigate('/saso/service/imported-vehicles/submit')}
           />
 
           <ServiceDescription
-            description="تهدف هذه الخدمة لتنظيم عمليات استقبال المراجعين بطريقة إلكترونية متكاملة وسلسة، مع إتاحة اختيار الفرع والتاريخ المناسب ومتابعة حالة الموعد."
+            description="تمكن هذه الخدمة المستفيد من تقديم طلب فحص المركبات المستوردة إلكترونياً، واستكمال بيانات المركبة والمرفقات اللازمة للحصول على قرار المطابقة الفني."
             maxWidth={852}
             paddingY={12}
             paddingBottom={24}
@@ -50,24 +52,24 @@ export function SasoAppointmentDetailContent() {
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             {activeTab === 'requirements' && (
               <ul className="list-disc pr-5 text-[#384250] leading-8">
-                <li>الدخول عبر منصة النفاذ الوطني الموحد.</li>
-                <li>اختيار الفرع المناسب وفق المنطقة.</li>
-                <li>تحديد التاريخ والوقت المناسبين للزيارة.</li>
-                <li>تأكيد بيانات المستفيد قبل إرسال الطلب.</li>
+                <li>إرفاق رقم الهيكل ورقم اللوحة الجمركية للمركبة.</li>
+                <li>توفير شهادة المطابقة أو المستندات الفنية من بلد المنشأ.</li>
+                <li>إرفاق فاتورة الشراء أو بيان الاستيراد.</li>
+                <li>تأكيد بيانات المستفيد ومعلومات التواصل.</li>
               </ul>
             )}
 
             {activeTab === 'steps' && (
               <ol className="list-decimal pr-5 text-[#384250] leading-8">
                 <li>اختر زر ابدأ الخدمة.</li>
-                <li>سجل الدخول إلى حسابك.</li>
-                <li>حدد نوع الخدمة والفرع والموعد.</li>
-                <li>أكد الطلب واستلم إشعار الموعد.</li>
+                <li>أدخل بيانات المركبة المستوردة.</li>
+                <li>ارفع المستندات المطلوبة وتحقق من اكتمالها.</li>
+                <li>أرسل الطلب واستلم رقم مرجعي للمتابعة.</li>
               </ol>
             )}
 
             {activeTab === 'documents' && (
-              <p className="text-[#384250]">لا توجد مرفقات مطلوبة لهذه الخدمة حالياً.</p>
+              <p className="text-[#384250]">المرفقات المتوقعة: شهادة المطابقة، بيان الاستيراد، وصورة هوية المستفيد.</p>
             )}
           </div>
         </div>
@@ -77,17 +79,17 @@ export function SasoAppointmentDetailContent() {
             <InfoCardItem
               icon={<Users className="w-6 h-6" />}
               title="الفئات المستفيدة"
-              description="الأفراد وقطاع الأعمال"
+              description="الأفراد، الوكلاء، وشركات الاستيراد"
             />
             <InfoCardItem
               icon={<Clock className="w-6 h-6" />}
               title="مدة تنفيذ الخدمة"
-              description="فوري بعد تأكيد الموعد"
+              description="يومان عمل بعد اكتمال المتطلبات"
             />
             <InfoCardItem
               icon={<DollarSign className="w-6 h-6" />}
               title="تكلفة الخدمة"
-              description="بدون رسوم"
+              description="حسب نوع المركبة وإجراءات الفحص"
             />
             <InfoCardItem
               icon={<Monitor className="w-6 h-6" />}
@@ -102,7 +104,7 @@ export function SasoAppointmentDetailContent() {
             <InfoCardItem
               icon={<Phone className="w-6 h-6" />}
               title="خدمة العملاء"
-              description="920000000"
+              description="920033555"
             />
           </div>
         </aside>

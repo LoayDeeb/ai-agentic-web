@@ -28,6 +28,7 @@ const EFSubmitApplicationAr = React.lazy(() => import('./pages/EFSubmitApplicati
 const SasoHome = React.lazy(() => import('./pages/SasoHome'))
 const SasoServices = React.lazy(() => import('./pages/SasoServices'))
 const SasoAppointmentDetail = React.lazy(() => import('./pages/SasoAppointmentDetail'))
+const SasoImportedVehicleSubmit = React.lazy(() => import('./pages/SasoImportedVehicleSubmit'))
 const GascoHome = React.lazy(() => import('./pages/GascoHome'))
 const GascoServices = React.lazy(() => import('./pages/GascoServices'))
 const GascoConnectionDetail = React.lazy(() => import('./pages/GascoConnectionDetail'))
@@ -95,7 +96,8 @@ export default function App() {
 					{/* SASO Routes */}
 					<Route path="/saso" element={<SasoHome />} />
 					<Route path="/saso/services" element={<SasoServices />} />
-					<Route path="/saso/service/appointment" element={<SasoAppointmentDetail />} />
+					<Route path="/saso/service/imported-vehicles" element={<SasoAppointmentDetail />} />
+					<Route path="/saso/service/imported-vehicles/submit" element={<SasoImportedVehicleSubmit />} />
 
 					{/* GASCO Routes */}
 					<Route path="/gasco" element={<GascoHome />} />
