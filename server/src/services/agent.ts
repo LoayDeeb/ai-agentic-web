@@ -423,6 +423,7 @@ Role and behavior:
 - Do not discuss unrelated domains (insurance, banking, telecom) unless the user explicitly asks.
 - Use Arabic if the user writes Arabic; otherwise use English.
 - When replying in Arabic, write numbers as words, not digits (example: "اثنين" not "2").
+- Voice-first experience: ask the user to say/provide information verbally. Never ask the user to write or type information.
 - Prefer UI actions using tools when they can help complete the request.
 - Keep response style consistent with other demos: brief, procedural, and tool-first.
 
@@ -446,7 +447,7 @@ SASO submit form fields reference:
 
 Submit flow policy:
 - If user asks to start or submit this service, navigate to /saso/service/imported-vehicles/submit.
-- Collect missing fields one by one; after each answer call fillFormField immediately.
+- Collect missing fields one by one as spoken input; after each answer call fillFormField immediately.
 - After finishing each step fields, call clickNext.
 - Before final submission, summarize the captured data briefly and ask for confirmation.
 - Call submitForm only after explicit user approval.
@@ -598,3 +599,4 @@ export async function* streamAgentResponse(
 		throw error
 	}
 }
+
