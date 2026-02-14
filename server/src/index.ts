@@ -28,7 +28,30 @@ app.post('/api/logs', (req, res) => {
 
 // In production we can serve the client build from here
 const clientDist = path.resolve(process.cwd(), '..', 'client', 'dist')
-app.use(express.static(clientDist))
+const clientAssets = path.join(clientDist, 'assets')
+
+// Serve versioned assets with long cache and no SPA fallback.
+app.use(
+	'/assets',
+	express.static(clientAssets, {
+		fallthrough: false,
+		maxAge: '1y',
+		immutable: true
+	})
+)
+
+// Serve other static files from dist.
+app.use(
+	express.static(clientDist, {
+		maxAge: 0
+	})
+)
+
+// Avoid serving index.html for favicon when no favicon file exists.
+app.get('/favicon.ico', (req, res) => {
+	res.status(204).end()
+})
+
 app.get('*', (req, res, next) => {
 	if (req.path.startsWith('/api/')) return next()
 	res.sendFile(path.join(clientDist, 'index.html'))
@@ -41,5 +64,4 @@ const server = app.listen(port, () => {
 
 // Setup WebSocket for voice
 setupVoiceWebSocket(server)
-
 
