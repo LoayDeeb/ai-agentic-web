@@ -126,7 +126,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				properties: {
 					fieldName: {
 						type: 'string',
-						description: 'The form field name. JICO fields: insuranceFullName, insuranceNationalId, insuranceDateOfBirth, insurancePhone, insuranceEmail, insuranceAddress, insurancePlanType (cure/cure5050/cureIn), insuranceCoverageClass (private/first/second), insuranceFamilyMembers, insuranceOccupation, insurancePreExisting, insuranceInsuranceTerms'
+						description: 'The form field name. ZATCA fields: tin, taxPeriod, amountDue, requestedInstallments, justification, bankName, accountNumber, contactEmail, contactPhone. SASO fields: sasoApplicantName, sasoNationalId, sasoMobile, sasoChassisNumber, sasoCustomsNumber, sasoVehicleType, sasoTermsAccepted. JICO fields: insuranceFullName, insuranceNationalId, insuranceDateOfBirth, insurancePhone, insuranceEmail, insuranceAddress, insurancePlanType, insuranceCoverageClass, insuranceFamilyMembers, insuranceOccupation, insurancePreExisting, insuranceInsuranceTerms'
 					},
 					value: {
 						type: 'string',
@@ -140,13 +140,13 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function', function: {
 			name: 'goToFormStep',
-			description: 'Navigate to a specific step in the multi-step insurance application form (1-3)',
+			description: 'Navigate to a specific step in the active multi-step form (1-3)',
 			parameters: {
 				type: 'object',
 				properties: {
 					step: {
 						type: 'number',
-						description: 'Step number (1=Personal Info, 2=Insurance Details, 3=Review)',
+						description: 'Step number (1=initial information, 2=details, 3=review)',
 						minimum: 1,
 						maximum: 3
 					}
@@ -424,6 +424,7 @@ Role and behavior:
 - Use Arabic if the user writes Arabic; otherwise use English.
 - When replying in Arabic, write numbers as words, not digits (example: "اثنين" not "2").
 - Prefer UI actions using tools when they can help complete the request.
+- Keep response style consistent with other demos: brief, procedural, and tool-first.
 
 SASO demo flow:
 - /saso: main hero and announcements.
@@ -434,7 +435,25 @@ SASO demo flow:
 Tool usage:
 - Use navigateTo to move between SASO pages.
 - Use highlight to draw attention to requested UI parts.
+- Use getFormData before asking for information already available.
+- Use fillFormField, goToFormStep, highlightFormField, clickNext, and submitForm to complete the submit flow.
 - Do not trigger non-relevant form workflows unless the user explicitly requests them.
+
+SASO submit form fields reference:
+- Step one (applicant): sasoApplicantName, sasoNationalId, sasoMobile
+- Step two (vehicle): sasoChassisNumber, sasoCustomsNumber, sasoVehicleType
+- Step three (review): sasoTermsAccepted
+
+Submit flow policy:
+- If user asks to start or submit this service, navigate to /saso/service/imported-vehicles/submit.
+- Collect missing fields one by one; after each answer call fillFormField immediately.
+- After finishing each step fields, call clickNext.
+- Before final submission, summarize the captured data briefly and ask for confirmation.
+- Call submitForm only after explicit user approval.
+
+Intent shortcuts:
+- If user asks for requirements or documents, navigate to /saso/service/imported-vehicles and keep answer brief.
+- If user asks to apply now, navigate directly to /saso/service/imported-vehicles/submit and start guided filling.
 
 Safety:
 - If information is not available in the current page context, state that briefly and ask one focused follow-up question.`

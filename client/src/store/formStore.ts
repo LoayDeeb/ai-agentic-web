@@ -56,6 +56,14 @@ export type FormData = {
 	efEnvironmentalSector: string
 	efExpectedImpact: string
 	efTermsAccepted: boolean
+	// SASO Imported Vehicle Inspection Fields
+	sasoApplicantName: string
+	sasoNationalId: string
+	sasoMobile: string
+	sasoChassisNumber: string
+	sasoCustomsNumber: string
+	sasoVehicleType: string
+	sasoTermsAccepted: boolean
 }
 
 type FormStore = {
@@ -124,7 +132,15 @@ const initialFormData: FormData = {
 	efProjectDuration: '',
 	efEnvironmentalSector: '',
 	efExpectedImpact: '',
-	efTermsAccepted: false
+	efTermsAccepted: false,
+	// SASO Imported Vehicle Inspection Fields
+	sasoApplicantName: '',
+	sasoNationalId: '',
+	sasoMobile: '',
+	sasoChassisNumber: '',
+	sasoCustomsNumber: '',
+	sasoVehicleType: '',
+	sasoTermsAccepted: false
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({
@@ -151,7 +167,8 @@ export const useFormStore = create<FormStore>((set, get) => ({
 
 	getMissingFields: () => {
 		const data = get().formData
-		const required = [
+		const path = typeof window !== 'undefined' ? window.location.pathname : ''
+		let required = [
 			'tin',
 			'taxPeriod',
 			'amountDue',
@@ -160,6 +177,17 @@ export const useFormStore = create<FormStore>((set, get) => ({
 			'contactEmail',
 			'contactPhone'
 		]
+
+		if (path.startsWith('/saso/service/imported-vehicles')) {
+			required = [
+				'sasoApplicantName',
+				'sasoNationalId',
+				'sasoMobile',
+				'sasoChassisNumber',
+				'sasoCustomsNumber',
+				'sasoVehicleType'
+			]
+		}
 		return required.filter((field) => !data[field as keyof FormData])
 	},
 
@@ -184,7 +212,6 @@ if (typeof window !== 'undefined') {
 		setCurrentStep: (step: number) => useFormStore.getState().setCurrentStep(step)
 	}
 }
-
 
 
 
