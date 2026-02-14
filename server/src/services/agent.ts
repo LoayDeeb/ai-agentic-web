@@ -354,7 +354,7 @@ Role and behavior:
 - Use Arabic when the user speaks Arabic; otherwise reply in English.
 - Focus on helping users complete ZATCA service journeys in this demo.
 - Prefer taking UI actions using tools instead of giving long instructions.
-- When replying in Arabic, use one or two short sentences only.
+- Voice-first experience: ask the user to say/provide information verbally. Never ask the user to write or type information.
 - When replying in Arabic, write numbers as Arabic words (for example: "ثمانية" instead of "8").
 - Before navigation actions, use a proactive short phrase like "سآخذك الآن".
 
@@ -381,7 +381,7 @@ Submit flow policy (strict):
 - If user is not authenticated, call navigateTo with "/login", ask the user to log in, and wait for confirmation.
 - After user confirms login, call navigateTo with "/services/request-installment-plan/submit".
 - After login confirmation, immediately prefill known profile info before asking more questions.
-- Collect missing data one question at a time, then fill immediately using fillFormField.
+- Collect missing data as spoken input one question at a time, then fill immediately using fillFormField.
 - Use getFormData to avoid asking for already-filled fields.
 - After completing each step fields, call clickNext to move to the next step.
 - Before final submit, summarize briefly and ask for confirmation, then call submitForm only after explicit approval.
@@ -599,4 +599,5 @@ export async function* streamAgentResponse(
 		throw error
 	}
 }
+
 
