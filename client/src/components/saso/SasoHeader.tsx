@@ -8,14 +8,14 @@ type SasoHeaderProps = {
 }
 
 const navItems = [
-  { label: 'About SASO' },
-  { label: 'Sectors' },
-  { label: 'Regulations' },
-  { label: 'Consumer Awareness' },
-  { label: 'Media Center' },
-  { label: 'Subsites' },
-  { label: 'E-Services', href: '/saso/services' },
-  { label: 'Join Us' }
+  { label: 'عن الهيئة' },
+  { label: 'قطاعات الهيئة' },
+  { label: 'الأنظمة واللوائح' },
+  { label: 'توعية المستهلك' },
+  { label: 'المركز الإعلامي' },
+  { label: 'المواقع الفرعية' },
+  { label: 'الخدمات الإلكترونية', href: '/saso/services' },
+  { label: 'انضم إلينا' }
 ]
 
 export function SasoHeader({ showBreadcrumb = false, breadcrumb = [] }: SasoHeaderProps) {
@@ -24,8 +24,8 @@ export function SasoHeader({ showBreadcrumb = false, breadcrumb = [] }: SasoHead
       <div className="bg-[#F1F3F4] text-[#1A1A1A] text-sm">
         <div className="mx-auto max-w-[1320px] px-6 py-2 flex items-center justify-end gap-2">
           <span className="inline-flex h-4 w-6 items-center justify-center rounded bg-[#0E8A5B] text-[10px] text-white">SA</span>
-          <span>Official government website of Saudi Arabia</span>
-          <span className="text-[#0E8A5B] inline-flex items-center gap-1">Verify <ChevronDown size={14} /></span>
+          <span>موقع حكومي رسمي تابع لحكومة المملكة العربية السعودية</span>
+          <span className="text-[#0E8A5B] inline-flex items-center gap-1">كيف تتحقق <ChevronDown size={14} /></span>
         </div>
       </div>
 
@@ -39,7 +39,7 @@ export function SasoHeader({ showBreadcrumb = false, breadcrumb = [] }: SasoHead
             ) : (
               <button key={item.label} className="inline-flex items-center gap-1 hover:text-[#0E8A5B] transition-colors">
                 <span>{item.label}</span>
-                {item.label !== 'Join Us' ? <ChevronDown size={14} /> : null}
+                {item.label !== 'انضم إلينا' ? <ChevronDown size={14} /> : null}
               </button>
             )
           )}
@@ -54,7 +54,7 @@ export function SasoHeader({ showBreadcrumb = false, breadcrumb = [] }: SasoHead
             <span className="text-xl">English</span>
           </button>
           <Link to="/saso" className="text-right leading-tight">
-            <div className="text-[#6D6F73] text-sm">Saudi Standards Authority</div>
+            <div className="text-[#6D6F73] text-sm">المواصفات السعودية</div>
             <div className="text-[#2F3134] text-[32px] font-semibold">Saudi Standards</div>
           </Link>
         </div>
