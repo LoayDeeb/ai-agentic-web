@@ -8,7 +8,7 @@ export const gigMenuItems = [
 		path: '/gig'
 	},
 	{
-		label: 'كراؤن عائلتي',
+		label: 'كراون عائلتي',
 		iconSrc: 'https://www.gig.com.jo/DataFiles/menu/1.png',
 		path: '/gig/crown-family'
 	},
@@ -136,9 +136,9 @@ export const gigCostAdjustments = [
 ] as const
 
 export const gigInsightCard = {
-	title: 'كراؤن عائلتي: تغطية صحية عائلية واسعة بمرونة أعلى',
+	title: 'كراون عائلتي: تغطية صحية عائلية واسعة بمرونة أعلى',
 	description:
-		'نسخة GIG في هذا الديمو تركز على برنامج التأمين الطبي الفردي للعائلة مع تغطيات موسعة للحمل والولادة والمواليد الجدد، ومنافع إضافية للأمراض المزمنة والحالات المتقدمة، وربط مباشر مع الصفحة الرسمية للبرنامج.',
+		'تجربة GIG الرقمية تركز على برنامج التأمين الطبي الفردي للعائلة مع تغطيات موسعة للحمل والولادة والمواليد الجدد، ومنافع إضافية للأمراض المزمنة والحالات المتقدمة، وربط مباشر مع الصفحة الرسمية للبرنامج.',
 	image: 'https://www.gig.com.jo/App_Themes/SiteAr/images/blog-landingblog-1-col-img4.jpg',
 	category: 'التأمين الطبي الفردي',
 	author: {

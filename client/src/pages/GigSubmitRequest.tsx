@@ -63,7 +63,7 @@ export default function GigSubmitRequest() {
 
 	useEffect(() => {
 		document.documentElement.dir = 'rtl'
-		document.title = 'GIG Demo | Submit Request'
+		document.title = 'GIG Jordan | Submit Request'
 		setCurrentStep(1)
 	}, [])
 
@@ -157,7 +157,7 @@ export default function GigSubmitRequest() {
 						<CheckCircle2 className="mx-auto mb-6 h-20 w-20 text-[#A52A2A]" />
 						<h1 className="mb-4 text-3xl font-black text-[#1D2146]">تم استلام طلبك بنجاح</h1>
 						<p className="mb-6 text-base leading-8 text-[#5a657d]">
-							تم تسجيل طلب اهتمام ببرنامج كراؤن عائلتي، وسيتم التواصل معك من فريق خدمة
+							تم تسجيل طلب اهتمام ببرنامج كراون عائلتي، وسيتم التواصل معك من فريق خدمة
 							العملاء لمراجعة البيانات وتقديم عرض مناسب.
 						</p>
 						<div className="mb-8 rounded-2xl bg-[#f7f9fc] p-4 text-[#1D2146]">
@@ -198,8 +198,8 @@ export default function GigSubmitRequest() {
 					<div className="flex items-center gap-5">
 						<GigLogoBackground width={140} padding="52px 60px" />
 						<div>
-							<p className="text-sm font-semibold text-[#A52A2A]">GIG Jordan Demo</p>
-							<h1 className="text-3xl font-black text-[#1D2146]">طلب اهتمام ببرنامج كراؤن عائلتي</h1>
+							<p className="text-sm font-semibold text-[#A52A2A]">GIG Jordan</p>
+							<h1 className="text-3xl font-black text-[#1D2146]">طلب اهتمام ببرنامج كراون عائلتي</h1>
 						</div>
 					</div>
 					<nav className="flex flex-wrap justify-end gap-3">
@@ -440,7 +440,7 @@ export default function GigSubmitRequest() {
 									/>
 									<span className="text-sm leading-7 text-[#1D2146]">
 										أقر بصحة البيانات المدخلة وأوافق على استخدامها للتواصل معي بخصوص برنامج
-										كراؤن عائلتي ضمن هذا الديمو.
+										كراون عائلتي.
 									</span>
 								</label>
 								{errors.gigTermsAccepted ? (

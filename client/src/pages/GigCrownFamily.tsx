@@ -31,7 +31,7 @@ export default function GigCrownFamily() {
 	const navigate = useNavigate()
 
 	React.useEffect(() => {
-		document.title = 'GIG Demo | Crown Family Unlimited Coverage'
+		document.title = 'GIG Jordan | Crown Family Unlimited Coverage'
 	}, [])
 
 	React.useEffect(() => {
@@ -57,12 +57,12 @@ export default function GigCrownFamily() {
 					<div className="flex items-center gap-5">
 						<GigLogoBackground width={144} padding="56px 66px" />
 						<div className="space-y-1">
-							<p className="text-sm font-semibold text-[#A52A2A]">GIG Jordan Demo</p>
+							<p className="text-sm font-semibold text-[#A52A2A]">GIG Jordan</p>
 							<h1 className="text-3xl font-bold text-[#1D2146]">برنامج عائلتي بلا حدود</h1>
 							<p className="text-sm text-[#57637f]">
 								نسخة محلية مبنية على صفحة
 								{` `}
-								كراؤن عائلتي (Unlimited coverage)
+								كراون عائلتي (Unlimited coverage)
 							</p>
 						</div>
 					</div>
@@ -133,7 +133,7 @@ export default function GigCrownFamily() {
 								onClick={() => navigate('/gig')}
 								className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-5 py-3 font-bold text-white"
 							>
-								العودة للديمو
+								العودة للرئيسية
 								<ArrowLeft className="h-4 w-4" />
 							</button>
 						</div>

@@ -31,7 +31,7 @@ export default function Home() {
 						to="/gig"
 						className="inline-block rounded border border-[#1B8354] px-4 py-2 text-[#1B8354] hover:bg-[#f4faf7]"
 					>
-						Open GIG Demo
+						Open GIG
 					</Link>
 				</div>
 			</div>

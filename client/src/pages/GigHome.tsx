@@ -39,7 +39,7 @@ export default function GigHome() {
 	const navigate = useNavigate()
 
 	React.useEffect(() => {
-		document.title = 'GIG Demo | Crown Family'
+		document.title = 'GIG Jordan | Crown Family'
 	}, [])
 
 	return (
@@ -56,7 +56,7 @@ export default function GigHome() {
 						<GigLogoBackground width={150} padding="58px 72px" />
 						<div className="text-right">
 							<p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#A52A2A]">
-								GIG Demo
+								GIG Jordan
 							</p>
 							<h1 className="text-2xl font-bold text-[#1D2146]">برنامج عائلتي بلا حدود</h1>
 						</div>
@@ -90,15 +90,15 @@ export default function GigHome() {
 							</div>
 							<div className="space-y-4">
 								<h2 className="text-4xl font-black leading-tight text-[#1D2146] md:text-5xl">
-									نسخة ديمو جديدة لـ GIG مبنية على تصميم الموقع الرسمي ومحتوى برنامج
+									تجربة رقمية من GIG مبنية على تصميم الموقع الرسمي ومحتوى برنامج
 									{` `}
-									<span className="text-[#A52A2A]">كراؤن عائلتي</span>
+									<span className="text-[#A52A2A]">كراون عائلتي</span>
 								</h2>
 								<p className="max-w-2xl text-lg leading-8 text-[#44506b]">
 									الصفحة المحلية تعرض أهم مزايا البرنامج، تفاصيل التغطيات، وفئات الأقساط
 									مع ربط مباشر بالصفحة الرسمية لبرنامج
 									{` `}
-									كراؤن عائلتي (Unlimited coverage)
+									كراون عائلتي (Unlimited coverage)
 									{` `}
 									على موقع GIG الأردن.
 								</p>
@@ -153,7 +153,7 @@ export default function GigHome() {
 								<div className="mb-8 flex items-center justify-between">
 									<div>
 										<p className="text-sm text-white/70">GIG Jordan</p>
-										<h3 className="text-3xl font-bold">كراؤن عائلتي</h3>
+										<h3 className="text-3xl font-bold">كراون عائلتي</h3>
 									</div>
 									<GigLogoBackground
 										width={112}
@@ -205,7 +205,7 @@ export default function GigHome() {
 						<div className="rounded-[32px] border border-[#dce2f0] bg-white p-6 shadow-sm">
 							<div className="mb-5 flex items-center justify-between">
 								<div>
-									<p className="text-sm font-semibold text-[#A52A2A]">ما الذي بداخل الديمو</p>
+									<p className="text-sm font-semibold text-[#A52A2A]">ما الذي ستجده هنا</p>
 									<h3 className="text-2xl font-bold text-[#1D2146]">ملخص المنتج والتفاصيل</h3>
 								</div>
 								<button
@@ -216,7 +216,7 @@ export default function GigHome() {
 									اذهب للنموذج
 								</button>
 							</div>
-							<GigAccordionButton title="أبرز التغطيات داخل هذا الديمو" />
+							<GigAccordionButton title="أبرز التغطيات" />
 						</div>
 
 						<GigInsightCard
