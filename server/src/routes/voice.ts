@@ -6,6 +6,7 @@ import { streamEFAgentResponse } from '../services/efAgent.js'
 import { streamEFAgentArResponse } from '../services/efAgentAr.js'
 import { streamZainAgentResponse } from '../services/zainAgent.js'
 import { streamMawhibaAgentResponse } from '../services/mawhibaAgent.js'
+import { streamGigAgentResponse } from '../services/gigAgent.js'
 import { streamTTS } from '../services/tts.js'
 
 // Helper to select the appropriate agent based on current URL
@@ -17,6 +18,10 @@ function selectAgentStream(url: string | undefined) {
 	if (url?.startsWith('/zain')) {
 		logger.info({ url }, 'Using Zain Jordan Agent')
 		return streamZainAgentResponse
+	}
+	if (url?.startsWith('/gig')) {
+		logger.info({ url }, 'Using GIG Jordan Agent')
+		return streamGigAgentResponse
 	}
 	if (url?.startsWith('/ef-ar')) {
 		logger.info({ url }, 'Using EF Arabic Agent')
@@ -509,5 +514,4 @@ export function setupVoiceWebSocket(server: Server) {
 
 	logger.info('Voice WebSocket server initialized on /voice')
 }
-
 

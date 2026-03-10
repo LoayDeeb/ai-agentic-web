@@ -32,6 +32,9 @@ const SasoImportedVehicleSubmit = React.lazy(() => import('./pages/SasoImportedV
 const GascoHome = React.lazy(() => import('./pages/GascoHome'))
 const GascoServices = React.lazy(() => import('./pages/GascoServices'))
 const GascoConnectionDetail = React.lazy(() => import('./pages/GascoConnectionDetail'))
+const GigHome = React.lazy(() => import('./pages/GigHome'))
+const GigCrownFamily = React.lazy(() => import('./pages/GigCrownFamily'))
+const GigSubmitRequest = React.lazy(() => import('./pages/GigSubmitRequest'))
 
 // Zain Jordan Pages
 const ZainHome = React.lazy(() => import('./pages/ZainHome'))
@@ -103,6 +106,11 @@ export default function App() {
 					<Route path="/gasco" element={<GascoHome />} />
 					<Route path="/gasco/services" element={<GascoServices />} />
 					<Route path="/gasco/service/new-connection" element={<GascoConnectionDetail />} />
+
+					{/* GIG Jordan Routes */}
+					<Route path="/gig" element={<GigHome />} />
+					<Route path="/gig/crown-family" element={<GigCrownFamily />} />
+					<Route path="/gig/submit" element={<GigSubmitRequest />} />
 					
 					<Route
 						path="*"

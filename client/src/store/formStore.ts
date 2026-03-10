@@ -64,6 +64,20 @@ export type FormData = {
 	sasoCustomsNumber: string
 	sasoVehicleType: string
 	sasoTermsAccepted: boolean
+	// GIG Crown Family Fields
+	gigApplicantFullName: string
+	gigNationalId: string
+	gigDateOfBirth: string
+	gigGender: string
+	gigPhone: string
+	gigEmail: string
+	gigCity: string
+	gigCoverageClass: string
+	gigFamilyMembers: string
+	gigCopayOption: string
+	gigNeedsMaternity: string
+	gigPreExistingConditions: string
+	gigTermsAccepted: boolean
 }
 
 type FormStore = {
@@ -140,7 +154,21 @@ const initialFormData: FormData = {
 	sasoChassisNumber: '',
 	sasoCustomsNumber: '',
 	sasoVehicleType: '',
-	sasoTermsAccepted: false
+	sasoTermsAccepted: false,
+	// GIG Crown Family Fields
+	gigApplicantFullName: '',
+	gigNationalId: '',
+	gigDateOfBirth: '',
+	gigGender: '',
+	gigPhone: '',
+	gigEmail: '',
+	gigCity: '',
+	gigCoverageClass: '',
+	gigFamilyMembers: '',
+	gigCopayOption: '',
+	gigNeedsMaternity: '',
+	gigPreExistingConditions: '',
+	gigTermsAccepted: false
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({
@@ -188,6 +216,18 @@ export const useFormStore = create<FormStore>((set, get) => ({
 				'sasoVehicleType'
 			]
 		}
+		if (path.startsWith('/gig/submit')) {
+			required = [
+				'gigApplicantFullName',
+				'gigNationalId',
+				'gigDateOfBirth',
+				'gigGender',
+				'gigPhone',
+				'gigCoverageClass',
+				'gigFamilyMembers',
+				'gigCopayOption'
+			]
+		}
 		return required.filter((field) => !data[field as keyof FormData])
 	},
 
@@ -212,7 +252,6 @@ if (typeof window !== 'undefined') {
 		setCurrentStep: (step: number) => useFormStore.getState().setCurrentStep(step)
 	}
 }
-
 
 
 

@@ -20,12 +20,20 @@ export default function Home() {
 					This demo showcases a voice-enabled assistant that can navigate services and
 					guide users through ZATCA flows.
 				</p>
-				<Link
-					to="/services"
-					className="inline-block bg-[#1B8354] text-white rounded px-4 py-2 hover:bg-[#156b45]"
-				>
-					Browse Services
-				</Link>
+				<div className="flex flex-wrap gap-3">
+					<Link
+						to="/services"
+						className="inline-block bg-[#1B8354] text-white rounded px-4 py-2 hover:bg-[#156b45]"
+					>
+						Browse Services
+					</Link>
+					<Link
+						to="/gig"
+						className="inline-block rounded border border-[#1B8354] px-4 py-2 text-[#1B8354] hover:bg-[#f4faf7]"
+					>
+						Open GIG Demo
+					</Link>
+				</div>
 			</div>
 		</div>
 	)

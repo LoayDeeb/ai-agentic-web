@@ -243,6 +243,50 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: true, navigatedTo: `/zain/subscribe${packageParam}` }
 		}
 
+		// GIG Jordan Tools
+		case 'openGigHome':
+			navigateTo('/gig')
+			return { success: true, navigatedTo: '/gig' }
+
+		case 'openGigCrownFamily':
+			navigateTo('/gig/crown-family')
+			return { success: true, navigatedTo: '/gig/crown-family' }
+
+		case 'openGigSubmit':
+			navigateTo('/gig/submit')
+			return { success: true, navigatedTo: '/gig/submit' }
+
+		case 'openGigOfficial':
+			window.open(
+				'https://www.gig.com.jo/Page/212/%D9%83%D8%B1%D8%A7%D9%88%D9%86-%D8%B9%D8%A7%D8%A6%D9%84%D8%AA%D9%8A-(Unlimited-coverage)',
+				'_blank',
+				'noopener,noreferrer'
+			)
+			return { success: true, opened: 'gig-official-page' }
+
+		case 'scrollToGigSection': {
+			const sectionId = args.section
+			const sectionMap: Record<string, string> = {
+				overview: 'gig-overview',
+				maternity: 'gig-maternity',
+				benefits: 'gig-advanced-benefits',
+				death: 'gig-death-benefit',
+				pricing: 'gig-pricing'
+			}
+			const elementId = sectionMap[sectionId]
+			if (elementId) {
+				const element = document.getElementById(elementId)
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+					highlight(`#${elementId}`, 3)
+					return { success: true, scrolledTo: sectionId }
+				}
+				emitToolEvent('scrollToGigSection', args)
+				return { success: true, queuedScrollTo: sectionId }
+			}
+			return { success: false, error: `Unknown section: ${sectionId}` }
+		}
+
 		case 'scrollToFiberPackage': {
 			const packageId = args.packageId
 			const elementId = `${packageId}-section`
