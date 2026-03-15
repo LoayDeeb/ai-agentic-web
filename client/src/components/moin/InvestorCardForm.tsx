@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, ChevronRight, FileText, Info } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn } from '../../lib/utils'
 import { useFormStore } from '../../store/formStore'
 import { highlight } from '../../features/agent/spotlight'
 
