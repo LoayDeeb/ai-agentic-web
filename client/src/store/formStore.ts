@@ -78,6 +78,8 @@ export type FormData = {
 	gigNeedsMaternity: string
 	gigPreExistingConditions: string
 	gigTermsAccepted: boolean
+	// MOIN (Ministry of Investment) Fields
+	moinTermsAccepted: boolean
 }
 
 type FormStore = {
@@ -168,7 +170,9 @@ const initialFormData: FormData = {
 	gigCopayOption: '',
 	gigNeedsMaternity: '',
 	gigPreExistingConditions: '',
-	gigTermsAccepted: false
+	gigTermsAccepted: false,
+	// MOIN (Ministry of Investment) Fields
+	moinTermsAccepted: false
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({

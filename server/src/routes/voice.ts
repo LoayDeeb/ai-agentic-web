@@ -6,11 +6,16 @@ import { streamEFAgentResponse } from '../services/efAgent.js'
 import { streamEFAgentArResponse } from '../services/efAgentAr.js'
 import { streamZainAgentResponse } from '../services/zainAgent.js'
 import { streamMawhibaAgentResponse } from '../services/mawhibaAgent.js'
+import { streamMoinAgentResponse } from '../services/moinAgent.js'
 import { streamGigAgentResponse } from '../services/gigAgent.js'
 import { streamTTS } from '../services/tts.js'
 
 // Helper to select the appropriate agent based on current URL
 function selectAgentStream(url: string | undefined) {
+	if (url?.startsWith('/moin')) {
+		logger.info({ url }, 'Using MOIN Agent')
+		return streamMoinAgentResponse
+	}
 	if (url?.startsWith('/mawhiba')) {
 		logger.info({ url }, 'Using Mawhiba Agent')
 		return streamMawhibaAgentResponse

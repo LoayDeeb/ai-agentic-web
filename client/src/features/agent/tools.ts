@@ -243,6 +243,41 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: true, navigatedTo: `/zain/subscribe${packageParam}` }
 		}
 
+		// MOIN (Ministry of Investment) Tools
+		case 'openMoinServices':
+			navigateTo('/moin')
+			return { success: true, navigatedTo: '/moin' }
+
+		case 'openMoinService':
+			navigateTo('/moin/service')
+			return { success: true, navigatedTo: '/moin/service' }
+
+		case 'moinAgreeTerms': {
+			const store = useFormStore.getState()
+			store.setField('moinTermsAccepted', true)
+			emitToolEvent('moinAgreeTerms', {})
+			return { success: true, agreed: true }
+		}
+
+		case 'scrollToMoinSection': {
+			const moinSectionMap: Record<string, string> = {
+				terms: 'moin-terms-list',
+				agreement: 'moin-agreement-section',
+				services: 'moin-services-grid',
+			}
+			const moinElementId = moinSectionMap[args.section]
+			if (moinElementId) {
+				const element = document.getElementById(moinElementId)
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+					highlight(`#${moinElementId}`, 3)
+					return { success: true, scrolledTo: args.section }
+				}
+				return { success: false, error: `Section element not found: ${moinElementId}` }
+			}
+			return { success: false, error: `Unknown section: ${args.section}` }
+		}
+
 		// GIG Jordan Tools
 		case 'openGigHome':
 			navigateTo('/gig')
