@@ -5,6 +5,7 @@ import path from 'path'
 import { httpLogger, logger } from './logger.js'
 import servicesRouter from './routes/services.js'
 import agentRouter from './routes/agent.js'
+import weatherRouter from './routes/weather.js'
 import { setupVoiceWebSocket } from './routes/voice.js'
 
 const app = express()
@@ -18,6 +19,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/services', servicesRouter)
 app.use('/api/agent', agentRouter)
+app.use('/api/weather', weatherRouter)
 
 // Accept client logs for observability/audit
 app.post('/api/logs', (req, res) => {

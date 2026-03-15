@@ -263,6 +263,26 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: true, agreed: true }
 		}
 
+		case 'getWeather': {
+			try {
+				const response = await fetch('/api/weather', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						latitude: args.latitude || '31.953753',
+						longitude: args.longitude || '35.910053',
+					}),
+				})
+				if (!response.ok) {
+					return { success: false, error: 'Weather service unavailable' }
+				}
+				const weatherData = await response.json()
+				return { success: true, weather: weatherData }
+			} catch (e: any) {
+				return { success: false, error: e.message }
+			}
+		}
+
 		case 'scrollToMoinSection': {
 			const moinSectionMap: Record<string, string> = {
 				terms: 'moin-terms-list',
