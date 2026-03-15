@@ -79,6 +79,16 @@ export type FormData = {
 	gigPreExistingConditions: string
 	gigTermsAccepted: boolean
 	// MOIN (Ministry of Investment) Fields
+	moinInvestorName: string
+	moinNationalId: string
+	moinNationality: string
+	moinPhone: string
+	moinEmail: string
+	moinCompanyName: string
+	moinCompanyRegNumber: string
+	moinCapitalShare: string
+	moinEmployeesCount: string
+	moinActivityType: string
 	moinTermsAccepted: boolean
 }
 
@@ -172,6 +182,16 @@ const initialFormData: FormData = {
 	gigPreExistingConditions: '',
 	gigTermsAccepted: false,
 	// MOIN (Ministry of Investment) Fields
+	moinInvestorName: '',
+	moinNationalId: '',
+	moinNationality: '',
+	moinPhone: '',
+	moinEmail: '',
+	moinCompanyName: '',
+	moinCompanyRegNumber: '',
+	moinCapitalShare: '',
+	moinEmployeesCount: '',
+	moinActivityType: '',
 	moinTermsAccepted: false
 }
 

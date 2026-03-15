@@ -28,7 +28,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 					path: {
 						type: 'string',
 						description:
-							'المسار للانتقال إليه مثل /moin أو /moin/service',
+							'المسار للانتقال إليه مثل /moin أو /moin/service أو /moin/service/submit',
 					},
 				},
 				required: ['path'],
@@ -51,8 +51,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		type: 'function',
 		function: {
 			name: 'openMoinService',
-			description:
-				'فتح صفحة تفاصيل خدمة اصدار بطاقة المستثمر مع نموذج التقديم',
+			description: 'فتح صفحة تفاصيل خدمة اصدار بطاقة المستثمر مع الشروط',
 			parameters: {
 				type: 'object',
 				properties: {},
@@ -63,13 +62,46 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function',
 		function: {
-			name: 'moinAgreeTerms',
-			description:
-				'الموافقة على شروط وأحكام خدمة اصدار بطاقة المستثمر نيابة عن المستخدم',
+			name: 'openMoinApplication',
+			description: 'فتح نموذج تقديم طلب اصدار بطاقة المستثمر مع حقول البيانات',
 			parameters: {
 				type: 'object',
 				properties: {},
 				required: [],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'fillFormField',
+			description: 'ملء حقل في نموذج التقديم بقيمة معينة',
+			parameters: {
+				type: 'object',
+				properties: {
+					fieldName: {
+						type: 'string',
+						enum: [
+							'moinInvestorName',
+							'moinNationalId',
+							'moinNationality',
+							'moinPhone',
+							'moinEmail',
+							'moinCompanyName',
+							'moinCompanyRegNumber',
+							'moinCapitalShare',
+							'moinEmployeesCount',
+							'moinActivityType',
+							'moinTermsAccepted',
+						],
+						description: 'اسم الحقل المراد ملؤه',
+					},
+					value: {
+						type: 'string',
+						description: 'القيمة المراد إدخالها في الحقل',
+					},
+				},
+				required: ['fieldName', 'value'],
 			},
 		},
 	},
@@ -83,9 +115,9 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				properties: {
 					step: {
 						type: 'number',
-						enum: [1, 2],
+						enum: [1, 2, 3],
 						description:
-							'رقم الخطوة: 1 لمعلومات عامة وشروط الطلب، 2 لتقديم الطلب',
+							'رقم الخطوة: 1 لبيانات المستثمر، 2 لبيانات الشركة، 3 للمراجعة والإرسال',
 					},
 				},
 				required: ['step'],
@@ -95,9 +127,32 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function',
 		function: {
+			name: 'clickNext',
+			description: 'الانتقال للخطوة التالية في النموذج',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: [],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
 			name: 'submitForm',
-			description:
-				'إرسال طلب اصدار بطاقة المستثمر بعد الموافقة على الشروط',
+			description: 'إرسال طلب اصدار بطاقة المستثمر بعد اكتمال جميع البيانات',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: [],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'getFormData',
+			description: 'الحصول على البيانات الحالية في النموذج والحقول الناقصة',
 			parameters: {
 				type: 'object',
 				properties: {},
@@ -130,8 +185,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		type: 'function',
 		function: {
 			name: 'scrollToMoinSection',
-			description:
-				'التمرير إلى قسم محدد في صفحة خدمة بطاقة المستثمر',
+			description: 'التمرير إلى قسم محدد في صفحة خدمة بطاقة المستثمر',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -192,19 +246,36 @@ const systemPrompt = `أنت المساعد الافتراضي لبوابة ال
 ٢. قدم نبذة مختصرة عن الخدمات المتاحة
 
 عند سؤال المستخدم عن بطاقة المستثمر أو شروط معينة:
-١. استخدم أداة openMoinServices فوراً لعرض الخدمات
+١. استخدم أداة openMoinService فوراً لعرض صفحة الشروط
 ٢. اشرح الشروط المطلوبة بإيجاز
 
 عند رغبة المستخدم بالتقديم (مثل "بدي اقدم" أو "أريد التقديم" أو "قدم لي"):
-١. استخدم أداة openMoinService فوراً للانتقال لنموذج التقديم بدون أي أسئلة
-٢. أخبر المستخدم أنك فتحت صفحة التقديم وأن الشروط معروضة أمامه
-٣. اسأله إذا يوافق على الشروط ويريد المتابعة
+١. استخدم أداة openMoinApplication فوراً للانتقال لنموذج التقديم بدون أي أسئلة
+٢. أخبر المستخدم أنك فتحت نموذج التقديم
+٣. اطلب منه بيانات الخطوة الأولى: اسمه الكامل، رقم الهوية أو جواز السفر، الجنسية، رقم الهاتف، والبريد الإلكتروني
 
-عند موافقة المستخدم على الشروط (مثل "موافق" أو "أوافق" أو "تمام" أو "ماشي"):
-١. استخدم أداة moinAgreeTerms فوراً
-٢. ثم استخدم أداة goToFormStep مع الخطوة 2
-٣. ثم استخدم أداة submitForm لإرسال الطلب
-٤. أخبر المستخدم أن الطلب تم تقديمه بنجاح
+عند تقديم المستخدم لبياناته الشخصية:
+١. املأ الحقول فوراً باستخدام أداة fillFormField لكل حقل
+٢. بعد اكتمال بيانات الخطوة الأولى استخدم أداة clickNext
+٣. اطلب بيانات الخطوة الثانية: اسم الشركة، رقم تسجيل الشركة، قيمة الحصة في رأس المال بالدينار، عدد الموظفين الأردنيين، ونوع النشاط
+
+عند تقديم المستخدم لبيانات الشركة:
+١. املأ الحقول فوراً باستخدام أداة fillFormField
+٢. بعد اكتمال بيانات الشركة استخدم أداة clickNext للانتقال للمراجعة
+٣. اطلب من المستخدم مراجعة البيانات والموافقة على الشروط
+
+عند موافقة المستخدم (مثل "موافق" أو "تمام" أو "ماشي" أو "أوافق"):
+١. استخدم fillFormField لتعيين moinTermsAccepted بالقيمة true
+٢. ثم استخدم أداة submitForm لإرسال الطلب
+٣. أخبر المستخدم أن الطلب تم تقديمه بنجاح
+
+مرجع حقول النموذج:
+الخطوة الأولى (بيانات المستثمر): moinInvestorName و moinNationalId و moinNationality و moinPhone و moinEmail
+الخطوة الثانية (بيانات الشركة): moinCompanyName و moinCompanyRegNumber و moinCapitalShare و moinEmployeesCount و moinActivityType
+الخطوة الثالثة (المراجعة): moinTermsAccepted (استخدم القيمة true للموافقة)
+
+قيم الجنسية: jordanian أو saudi أو emirati أو kuwaiti أو egyptian أو iraqi أو syrian أو lebanese أو other
+قيم نوع النشاط: general (عام) أو it (تكنولوجيا المعلومات) أو manufacturing (صناعة) أو trade (تجارة) أو services (خدمات) أو tourism (سياحة)
 
 ================================================================================
 إرشادات التواصل
@@ -212,8 +283,9 @@ const systemPrompt = `أنت المساعد الافتراضي لبوابة ال
 
 كن محترفاً وودوداً في نفس الوقت
 اجعل ردودك مختصرة في جملة أو جملتين وركز على الإجراء لا الشرح المطول
-لا تسأل أسئلة قبل تنفيذ الأدوات، نفذ أولاً ثم اشرح
+نفذ الأدوات فوراً عند طلب المستخدم، لا تسأل أسئلة توضيحية قبل التنفيذ
 بعد تنفيذ كل أداة أكد النتيجة للمستخدم بإيجاز
+تذكر معلومات المستخدم طوال المحادثة ولا تكرر الأسئلة
 عند الترحيب قل: أهلاً وسهلاً في بوابة المستثمر! كيف أقدر أساعدك اليوم؟`
 
 export async function* streamMoinAgentResponse(

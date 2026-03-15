@@ -39,6 +39,7 @@ const GigSubmitRequest = React.lazy(() => import('./pages/GigSubmitRequest'))
 // MOIN (Ministry of Investment) Pages
 const MoinServices = React.lazy(() => import('./pages/MoinServices'))
 const MoinServiceDetail = React.lazy(() => import('./pages/MoinServiceDetail'))
+const MoinSubmitRequest = React.lazy(() => import('./pages/MoinSubmitRequest'))
 
 // Zain Jordan Pages
 const ZainHome = React.lazy(() => import('./pages/ZainHome'))
@@ -114,6 +115,7 @@ export default function App() {
 					{/* MOIN (Ministry of Investment) Routes */}
 					<Route path="/moin" element={<MoinServices />} />
 					<Route path="/moin/service" element={<MoinServiceDetail />} />
+					<Route path="/moin/service/submit" element={<MoinSubmitRequest />} />
 
 					{/* GIG Jordan Routes */}
 					<Route path="/gig" element={<GigHome />} />

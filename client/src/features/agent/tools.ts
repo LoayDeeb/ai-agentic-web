@@ -252,6 +252,10 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			navigateTo('/moin/service')
 			return { success: true, navigatedTo: '/moin/service' }
 
+		case 'openMoinApplication':
+			navigateTo('/moin/service/submit')
+			return { success: true, navigatedTo: '/moin/service/submit' }
+
 		case 'moinAgreeTerms': {
 			const store = useFormStore.getState()
 			store.setField('moinTermsAccepted', true)
