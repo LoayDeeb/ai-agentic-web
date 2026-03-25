@@ -35,6 +35,7 @@ const GascoConnectionDetail = React.lazy(() => import('./pages/GascoConnectionDe
 const GigHome = React.lazy(() => import('./pages/GigHome'))
 const GigCrownFamily = React.lazy(() => import('./pages/GigCrownFamily'))
 const GigSubmitRequest = React.lazy(() => import('./pages/GigSubmitRequest'))
+const GigAdvisorRequest = React.lazy(() => import('./pages/GigAdvisorRequest'))
 
 // MOIN (Ministry of Investment) Pages
 const MoinServices = React.lazy(() => import('./pages/MoinServices'))
@@ -121,6 +122,7 @@ export default function App() {
 					<Route path="/gig" element={<GigHome />} />
 					<Route path="/gig/crown-family" element={<GigCrownFamily />} />
 					<Route path="/gig/submit" element={<GigSubmitRequest />} />
+					<Route path="/gig/advisor-request" element={<GigAdvisorRequest />} />
 					
 					<Route
 						path="*"

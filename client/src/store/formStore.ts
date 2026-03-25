@@ -78,6 +78,13 @@ export type FormData = {
 	gigNeedsMaternity: string
 	gigPreExistingConditions: string
 	gigTermsAccepted: boolean
+	// GIG Advisor Lead Fields
+	gigAdvisorInsuranceTarget: string
+	gigAdvisorInsuranceLabel: string
+	gigAdvisorCustomerType: string
+	gigAdvisorContactMethod: string
+	gigAdvisorNotes: string
+	gigAdvisorTermsAccepted: boolean
 	// MOIN (Ministry of Investment) Fields
 	moinInvestorName: string
 	moinNationalId: string
@@ -181,6 +188,13 @@ const initialFormData: FormData = {
 	gigNeedsMaternity: '',
 	gigPreExistingConditions: '',
 	gigTermsAccepted: false,
+	// GIG Advisor Lead Fields
+	gigAdvisorInsuranceTarget: '',
+	gigAdvisorInsuranceLabel: '',
+	gigAdvisorCustomerType: '',
+	gigAdvisorContactMethod: '',
+	gigAdvisorNotes: '',
+	gigAdvisorTermsAccepted: false,
 	// MOIN (Ministry of Investment) Fields
 	moinInvestorName: '',
 	moinNationalId: '',
@@ -252,6 +266,16 @@ export const useFormStore = create<FormStore>((set, get) => ({
 				'gigCopayOption'
 			]
 		}
+		if (path.startsWith('/gig/advisor-request')) {
+			required = [
+				'gigApplicantFullName',
+				'gigPhone',
+				'gigAdvisorInsuranceTarget',
+				'gigAdvisorCustomerType',
+				'gigAdvisorContactMethod',
+				'gigAdvisorTermsAccepted'
+			]
+		}
 		return required.filter((field) => !data[field as keyof FormData])
 	},
 
@@ -276,7 +300,6 @@ if (typeof window !== 'undefined') {
 		setCurrentStep: (step: number) => useFormStore.getState().setCurrentStep(step)
 	}
 }
-
 
 
 
