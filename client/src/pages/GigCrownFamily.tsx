@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ExternalLink, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, CheckCircle2 } from 'lucide-react'
 import {
 	GigAccordionButton,
 	GigHeaderTopBar,
@@ -9,7 +9,6 @@ import {
 	GigNavMenuButton
 } from '../components/gig/GigBlocks'
 import {
-	GIG_OFFICIAL_URL,
 	gigCostAdjustments,
 	gigCoverageSections,
 	gigHeroStats,
@@ -119,15 +118,13 @@ export default function GigCrownFamily() {
 								ابدأ طلب التأمين
 								<ArrowLeft className="h-4 w-4" />
 							</button>
-							<a
-								href={GIG_OFFICIAL_URL}
-								target="_blank"
-								rel="noreferrer"
+							<button type="button"
+								onClick={() => navigate('/gig/insurance/medical_category')}
 								className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 font-bold text-[#1D2146]"
 							>
 								زيارة الصفحة الرسمية
-								<ExternalLink className="h-4 w-4" />
-							</a>
+								<ArrowLeft className="h-4 w-4" />
+							</button>
 							<button
 								type="button"
 								onClick={() => navigate('/gig')}

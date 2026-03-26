@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ExternalLink, HeartPulse, ShieldPlus, Baby } from 'lucide-react'
+import { ArrowLeft, HeartPulse, ShieldPlus, Baby } from 'lucide-react'
 import {
 	GigAccordionButton,
 	GigHeaderTopBar,
@@ -9,13 +9,7 @@ import {
 	GigLogoBackground,
 	GigNavMenuButton
 } from '../components/gig/GigBlocks'
-import {
-	GIG_OFFICIAL_URL,
-	gigHeroStats,
-	gigInsightCard,
-	gigKeyBenefits,
-	gigMenuItems
-} from '../components/gig/content'
+import { gigHeroStats, gigInsightCard, gigKeyBenefits, gigMenuItems } from '../components/gig/content'
 
 const featureCards = [
 	{
@@ -112,15 +106,13 @@ export default function GigHome() {
 									عرض صفحة المنتج
 									<ArrowLeft className="h-4 w-4" />
 								</button>
-								<a
-									href={GIG_OFFICIAL_URL}
-									target="_blank"
-									rel="noreferrer"
+								<button type="button"
+									onClick={() => navigate('/gig/insurance/medical_category')}
 									className="inline-flex items-center gap-2 rounded-2xl border border-[#1D2146]/15 bg-white px-6 py-3 font-bold text-[#1D2146] transition-colors hover:border-[#1D2146] hover:bg-[#f8f9fd]"
 								>
 									فتح الصفحة الرسمية
-									<ExternalLink className="h-4 w-4" />
-								</a>
+									<ArrowLeft className="h-4 w-4" />
+								</button>
 								<button
 									type="button"
 									onClick={() => navigate('/gig/submit')}

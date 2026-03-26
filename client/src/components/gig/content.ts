@@ -20,7 +20,7 @@ export const gigMenuItems = [
 	{
 		label: 'الصفحة الرسمية',
 		iconSrc: 'https://www.gig.com.jo/DataFiles/menu/2.png',
-		href: GIG_OFFICIAL_URL
+		path: '/gig/insurance/medical_category'
 	}
 ] as const
 
