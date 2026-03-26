@@ -8,9 +8,8 @@ export type AgentTool = {
 	args: any
 }
 
-type GigRouteTarget = {
-	type: 'internal' | 'external'
-	value: string
+function buildGigInsurancePath(target: string) {
+	return `/gig/insurance/${encodeURIComponent(target)}`
 }
 
 const gigInsuranceLabels: Record<string, string> = {
@@ -36,92 +35,27 @@ const gigInsuranceLabels: Record<string, string> = {
 	workers_online: 'تأمين العاملين في المنازل (إلكتروني)'
 }
 
-const gigInsuranceTargets: Record<string, GigRouteTarget> = {
-	// Local experience
-	crown_family_overview: { type: 'internal', value: '/gig/crown-family' },
-	crown_family_apply: { type: 'internal', value: '/gig/submit' },
-	gig_home: { type: 'internal', value: '/gig' },
-
-	// Official category pages
-	medical_category: {
-		type: 'external',
-		value:
-			'https://www.gig.com.jo/Page/167/%D8%A7%D9%84%D8%AA%D8%A3%D9%85%D9%8A%D9%86%D8%A7%D8%AA-%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%D8%A9'
-	},
-	life_individual: {
-		type: 'external',
-		value: 'https://www.gig.com.jo/Page/412/Individual-Life-Insurance'
-	},
-	life_group: {
-		type: 'external',
-		value:
-			'https://www.gig.com.jo/Page/411/%D8%A7%D9%84%D8%AA%D8%A3%D9%85%D9%8A%D9%86-%D8%A7%D9%84%D8%AC%D9%85%D8%A7%D8%B9%D9%8A-%D8%B9%D9%84%D9%89-%D8%A7%D9%84%D8%AD%D9%8A%D8%A7%D8%A9-%D8%A7%D9%84%D8%AE%D8%A7%D8%B5-%D8%A8%D8%A7%D9%84%D8%B4%D8%B1%D9%83%D8%A7%D8%AA'
-	},
-	motor_comprehensive: {
-		type: 'external',
-		value:
-			'https://www.gig.com.jo/Page/219/%D8%AA%D8%A3%D9%85%D9%8A%D9%86-%D8%A7%D9%84%D9%85%D8%B1%D9%83%D8%A8%D8%A7%D8%AA-%D8%B4%D8%A7%D9%85%D9%84---%D8%AA%D9%83%D9%85%D9%8A%D9%84%D9%8A'
-	},
-	travel_standard: {
-		type: 'external',
-		value:
-			'https://www.gig.com.jo/Page/225/%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D8%AC-%D8%B3%D9%81%D8%B1'
-	},
-	travel_hajj_umrah: {
-		type: 'external',
-		value:
-			'https://www.gig.com.jo/Page/169/%D8%AA%D8%A3%D9%85%D9%8A%D9%86-%D8%A7%D9%84%D8%B3%D9%81%D8%B1'
-	},
-	property_insurance: {
-		type: 'external',
-		value:
-			'https://www.gig.com.jo/Page/236/%D8%AA%D8%A3%D9%85%D9%8A%D9%86-%D8%A7%D9%84%D9%85%D9%85%D8%AA%D9%84%D9%83%D8%A7%D8%AA'
-	},
-	marine_cargo: {
-		type: 'external',
-		value:
-			'https://www.gig.com.jo/Page/228/%D8%A7%D9%84%D8%AA%D8%A3%D9%85%D9%8A%D9%86-%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%D9%8A-%D9%86%D9%82%D9%84-%D8%A7%D9%84%D8%A8%D8%B6%D8%A7%D8%A6%D8%B9'
-	},
-	marine_forwarders_liability: {
-		type: 'external',
-		value:
-			'https://www.gig.com.jo/Page/229/%D8%AA%D8%A3%D9%85%D9%8A%D9%86-%D8%A7%D9%84%D9%85%D8%B3%D8%A4%D9%88%D9%84%D9%8A%D8%A9-%D8%A7%D9%84%D9%82%D8%A7%D9%86%D9%88%D9%86%D9%8A%D8%A9-%D9%84%D9%88%D9%83%D9%84%D8%A7%D8%A1-%D8%A7%D9%84%D8%B4%D8%AD%D9%86-'
-	},
-	engineering_insurance: {
-		type: 'external',
-		value: 'https://www.gig.com.jo/Page/237/Engineering-Insurance'
-	},
-	other_general_insurance: {
-		type: 'external',
-		value:
-			'https://www.gig.com.jo/Page/238/%D8%AA%D8%A3%D9%85%D9%8A%D9%86%D8%A7%D8%AA-%D8%A3%D8%AE%D8%B1%D9%89'
-	},
-
-	// Official digital services (purchase / issuance / renewal)
-	travel_online_issue: {
-		type: 'external',
-		value: 'https://e-services.gig.com.jo/ourproducts?id=16&locale=ar'
-	},
-	motor_online_renew: {
-		type: 'external',
-		value: 'https://e-services.gig.com.jo/ourproducts?id=23&locale=ar'
-	},
-	motor_online_new: {
-		type: 'external',
-		value: 'https://e-services.gig.com.jo/quote/motor-issuance?cmsId=28&linkingId=null'
-	},
-	medical_online_individual_family: {
-		type: 'external',
-		value: 'https://e-services.gig.com.jo/ourproducts?id=21&locale=ar'
-	},
-	home_online: {
-		type: 'external',
-		value: 'https://e-services.gig.com.jo/ourproducts?id=30'
-	},
-	workers_online: {
-		type: 'external',
-		value: 'https://e-services.gig.com.jo/ourproducts?id=20&locale=ar'
-	}
+const gigInsuranceTargets: Record<string, string> = {
+	crown_family_overview: '/gig/crown-family',
+	crown_family_apply: '/gig/submit',
+	gig_home: '/gig',
+	medical_category: buildGigInsurancePath('medical_category'),
+	medical_online_individual_family: buildGigInsurancePath('medical_online_individual_family'),
+	life_individual: buildGigInsurancePath('life_individual'),
+	life_group: buildGigInsurancePath('life_group'),
+	motor_comprehensive: buildGigInsurancePath('motor_comprehensive'),
+	motor_online_new: buildGigInsurancePath('motor_online_new'),
+	motor_online_renew: buildGigInsurancePath('motor_online_renew'),
+	travel_standard: buildGigInsurancePath('travel_standard'),
+	travel_hajj_umrah: buildGigInsurancePath('travel_hajj_umrah'),
+	travel_online_issue: buildGigInsurancePath('travel_online_issue'),
+	property_insurance: buildGigInsurancePath('property_insurance'),
+	home_online: buildGigInsurancePath('home_online'),
+	marine_cargo: buildGigInsurancePath('marine_cargo'),
+	marine_forwarders_liability: buildGigInsurancePath('marine_forwarders_liability'),
+	engineering_insurance: buildGigInsurancePath('engineering_insurance'),
+	other_general_insurance: buildGigInsurancePath('other_general_insurance'),
+	workers_online: buildGigInsurancePath('workers_online')
 }
 
 function buildGigAdvisorRequestPath(target: string, reason?: string, label?: string) {
@@ -452,26 +386,17 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 
 		case 'routeGigInsurance': {
 			const target = String(args.target || '')
-			const route = gigInsuranceTargets[target]
+			const routePath = gigInsuranceTargets[target]
 			const reason = String(args.reason || '')
 			const label = gigInsuranceLabels[target] || target
 			const shouldOpenForm = Boolean(args.openForm)
 
-			if (!route) {
+			if (!routePath) {
 				return {
 					success: false,
 					error: `Unknown GIG insurance target: ${target}`,
 					availableTargets: Object.keys(gigInsuranceTargets)
 				}
-			}
-
-			if (route.type === 'internal' && !shouldOpenForm) {
-				navigateTo(route.value)
-				return { success: true, target, navigatedTo: route.value }
-			}
-
-			if (route.type === 'external') {
-				window.open(route.value, '_blank', 'noopener,noreferrer')
 			}
 
 			if (shouldOpenForm) {
@@ -481,22 +406,17 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 					success: true,
 					target,
 					label,
-					opened: route.type === 'external' ? route.value : undefined,
 					navigatedTo: path
 				}
 			}
 
-			navigateTo(route.value)
-			return { success: true, target, navigatedTo: route.value }
+			navigateTo(routePath)
+			return { success: true, target, label, navigatedTo: routePath }
 		}
 
 		case 'openGigOfficial':
-			window.open(
-				'https://www.gig.com.jo/Page/212/%D9%83%D8%B1%D8%A7%D9%88%D9%86-%D8%B9%D8%A7%D8%A6%D9%84%D8%AA%D9%8A-(Unlimited-coverage)',
-				'_blank',
-				'noopener,noreferrer'
-			)
-			return { success: true, opened: 'gig-official-page' }
+			navigateTo('/gig/crown-family')
+			return { success: true, navigatedTo: '/gig/crown-family' }
 
 		case 'scrollToGigSection': {
 			const sectionId = args.section

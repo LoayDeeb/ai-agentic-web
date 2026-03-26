@@ -18,7 +18,7 @@ export async function* streamTTS(
 	text: string,
 	config: TTSConfig = {}
 ): AsyncGenerator<Buffer> {
-	const voiceId = config.voiceId || process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM'
+	const voiceId = config.voiceId || process.env.ELEVENLABS_VOICE_ID || 'Mf4F6aozsBEFAtuBhiIf'
 	const modelId = config.modelId || process.env.ELEVENLABS_MODEL || 'eleven_multilingual_v2'
 
 	try {
@@ -50,4 +50,3 @@ export async function* streamTTS(
 		throw error
 	}
 }
-

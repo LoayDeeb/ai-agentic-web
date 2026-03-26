@@ -134,7 +134,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		type: 'function',
 		function: {
 			name: 'openGigOfficial',
-			description: 'Open the official GIG Jordan Crown Family (Unlimited coverage) page in a new browser tab',
+			description: 'Open the local Crown Family page inside this app',
 			parameters: {
 				type: 'object',
 				properties: {},
@@ -147,7 +147,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		function: {
 			name: 'routeGigInsurance',
 			description:
-				'Route the user to the most relevant GIG insurance page or digital service after qualification questions',
+				'Route the user to the most relevant local GIG insurance destination page inside this app after qualification questions',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -354,23 +354,23 @@ Routing tools:
 routeGigInsurance target map:
 - crown_family_overview: local Crown Family details page (/gig/crown-family)
 - crown_family_apply: local request form (/gig/submit)
-- medical_category: official medical insurance category
-- medical_online_individual_family: official e-service for individual/family medical
-- life_individual: official individual life page
-- life_group: official group life page
-- motor_comprehensive: official motor insurance page
-- motor_online_new: official e-service for new motor policy
-- motor_online_renew: official e-service for motor renewal
-- travel_standard: official travel insurance page
-- travel_hajj_umrah: official travel category use case for Hajj/Umrah intent
-- travel_online_issue: official e-service for travel issuance
-- property_insurance: official property insurance page
-- home_online: official e-service for home insurance
-- marine_cargo: official marine cargo page
-- marine_forwarders_liability: official freight forwarders liability page
-- engineering_insurance: official engineering insurance page
-- other_general_insurance: official other general insurance page
-- workers_online: official e-service for domestic workers insurance
+- medical_category: local destination page (/gig/insurance/medical_category)
+- medical_online_individual_family: local destination page (/gig/insurance/medical_online_individual_family)
+- life_individual: local destination page (/gig/insurance/life_individual)
+- life_group: local destination page (/gig/insurance/life_group)
+- motor_comprehensive: local destination page (/gig/insurance/motor_comprehensive)
+- motor_online_new: local destination page (/gig/insurance/motor_online_new)
+- motor_online_renew: local destination page (/gig/insurance/motor_online_renew)
+- travel_standard: local destination page (/gig/insurance/travel_standard)
+- travel_hajj_umrah: local destination page (/gig/insurance/travel_hajj_umrah)
+- travel_online_issue: local destination page (/gig/insurance/travel_online_issue)
+- property_insurance: local destination page (/gig/insurance/property_insurance)
+- home_online: local destination page (/gig/insurance/home_online)
+- marine_cargo: local destination page (/gig/insurance/marine_cargo)
+- marine_forwarders_liability: local destination page (/gig/insurance/marine_forwarders_liability)
+- engineering_insurance: local destination page (/gig/insurance/engineering_insurance)
+- other_general_insurance: local destination page (/gig/insurance/other_general_insurance)
+- workers_online: local destination page (/gig/insurance/workers_online)
 
 Recommendation rules:
 - For family/individual health in Jordan, do minimal discovery, then route to the best-fit health option.
@@ -406,6 +406,7 @@ Guardrails:
 - Do not promise final underwriting approval or guaranteed policy issuance.
 - Do not suggest call-center handoff unless user explicitly asks for phone support.
 - Always refer to brand as "GIG الأردن" (or "جي آي جي الأردن") only.
+- Keep routing inside this app domain using local routes; do not send users to raw external URLs.
 - After each tool call, clearly confirm what was opened or where the user was routed.`
 
 export async function* streamGigAgentResponse(
