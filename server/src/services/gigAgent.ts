@@ -388,7 +388,7 @@ Recommendation rules:
 
 After routing behavior:
 - Briefly explain why this route fits in one short sentence.
-- In one short sentence, proactively offer opening the request form now.
+- Then ask exactly in a natural sentence: "Do you want me to help you fill the form together?" (Arabic equivalent: "هل تريد أن أساعدك في تعبئة النموذج معًا؟").
 - Only if user agrees, call routeGigInsurance with openForm=true OR openGigAdvisorRequest.
 - Keep confirmation phrasing conversational and sentence-based, never formatted as a numbered checklist.
 
