@@ -158,6 +158,14 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 							'crown_family_overview',
 							'crown_family_apply',
 							'medical_category',
+							'medical_crown_unlimited',
+							'medical_crown_in_hospital',
+							'medical_crown_in_out_hospital',
+							'medical_aman',
+							'medical_ebtisamati',
+							'medical_royal',
+							'medical_bupa_global',
+							'medical_international_360',
 							'medical_online_individual_family',
 							'life_individual',
 							'life_group',
@@ -357,6 +365,15 @@ routeGigInsurance target map:
 - crown_family_overview: local Crown Family details page (/gig/crown-family)
 - crown_family_apply: local request form (/gig/submit)
 - medical_category: local destination page (/gig/insurance/medical_category)
+- medical_crown_unlimited: local destination page (/gig/insurance/medical_crown_unlimited)
+- medical_crown_in_hospital: local destination page (/gig/insurance/medical_crown_in_hospital)
+- medical_crown_in_out_hospital: local destination page (/gig/insurance/medical_crown_in_out_hospital)
+- medical_aman: local destination page (/gig/insurance/medical_aman)
+- medical_ebtisamati: local destination page (/gig/insurance/medical_ebtisamati)
+- medical_royal: local destination page (/gig/insurance/medical_royal)
+- medical_bupa_global: local destination page (/gig/insurance/medical_bupa_global)
+- medical_international_360: local destination page (/gig/insurance/medical_international_360)
+- medical_category: local destination page (/gig/insurance/medical_category)
 - medical_online_individual_family: local destination page (/gig/insurance/medical_online_individual_family)
 - life_individual: local destination page (/gig/insurance/life_individual)
 - life_group: local destination page (/gig/insurance/life_group)
@@ -376,6 +393,17 @@ routeGigInsurance target map:
 
 Recommendation rules:
 - For family/individual health in Jordan, do minimal discovery, then route to the best-fit health option.
+- If user asks for unlimited annual medical ceiling or strongest family medical coverage -> medical_crown_unlimited.
+- If user mainly wants admission/inpatient-focused protection -> medical_crown_in_hospital.
+- If user needs balanced inpatient and outpatient family coverage -> medical_crown_in_out_hospital.
+- If user asks to compare all medical options before deciding -> medical_category.
+- If user intent is medical but still broad/undecided after brief discovery, default to medical_crown_in_out_hospital.
+- If user asks about cancer-focused medical protection -> medical_aman.
+- If user prefers a straightforward individual/family medical program and explicitly asks about Aman -> medical_aman.
+- If user need is primarily routine dental care and preventive dental benefits -> medical_ebtisamati.
+- If user need is broader/advanced dental treatment benefits -> medical_royal.
+- If user asks for premium international medical with global network access -> medical_bupa_global.
+- If user asks for international medical with flexible regional options, optional US inclusion, or AXA-linked network -> medical_international_360.
 - If they explicitly accept local continuation after recommendation, use crown_family_apply.
 - If immediate medical online issuance intent -> medical_online_individual_family.
 - Life protection intent -> life_individual (or life_group for company/group use cases).

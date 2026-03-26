@@ -40,6 +40,14 @@ const gigInsuranceTargets: Record<string, string> = {
 	crown_family_apply: '/gig/submit',
 	gig_home: '/gig',
 	medical_category: buildGigInsurancePath('medical_category'),
+	medical_crown_unlimited: buildGigInsurancePath('medical_crown_unlimited'),
+	medical_crown_in_hospital: buildGigInsurancePath('medical_crown_in_hospital'),
+	medical_crown_in_out_hospital: buildGigInsurancePath('medical_crown_in_out_hospital'),
+	medical_aman: buildGigInsurancePath('medical_aman'),
+	medical_ebtisamati: buildGigInsurancePath('medical_ebtisamati'),
+	medical_royal: buildGigInsurancePath('medical_royal'),
+	medical_bupa_global: buildGigInsurancePath('medical_bupa_global'),
+	medical_international_360: buildGigInsurancePath('medical_international_360'),
 	medical_online_individual_family: buildGigInsurancePath('medical_online_individual_family'),
 	life_individual: buildGigInsurancePath('life_individual'),
 	life_group: buildGigInsurancePath('life_group'),
@@ -56,6 +64,21 @@ const gigInsuranceTargets: Record<string, string> = {
 	engineering_insurance: buildGigInsurancePath('engineering_insurance'),
 	other_general_insurance: buildGigInsurancePath('other_general_insurance'),
 	workers_online: buildGigInsurancePath('workers_online')
+}
+
+const gigSpecificInsuranceLabels: Record<string, string> = {
+	medical_crown_unlimited: 'كراون عائلتي (Unlimited coverage)',
+	medical_crown_in_hospital: 'كراون عائلتي (داخل المستشفى)',
+	medical_crown_in_out_hospital: 'كراون عائلتي (داخل وخارج المستشفى)',
+	medical_aman: 'برنامج أمان',
+	medical_ebtisamati: 'برنامج ابتسامتي',
+	medical_royal: 'برنامج رويال',
+	medical_bupa_global: 'BUPA Global',
+	medical_international_360: 'التأمين الطبي الدولي 360'
+}
+
+function getGigInsuranceLabel(target: string) {
+	return gigSpecificInsuranceLabels[target] || gigInsuranceLabels[target] || target
 }
 
 function buildGigAdvisorRequestPath(target: string, reason?: string, label?: string) {
@@ -378,7 +401,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 		case 'openGigAdvisorRequest': {
 			const target = String(args.target || '')
 			const reason = String(args.reason || '')
-			const label = String(args.label || gigInsuranceLabels[target] || '')
+			const label = String(args.label || getGigInsuranceLabel(target) || '')
 			const path = buildGigAdvisorRequestPath(target, reason, label)
 			navigateTo(path)
 			return { success: true, navigatedTo: path, target, label }
@@ -388,7 +411,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			const target = String(args.target || '')
 			const routePath = gigInsuranceTargets[target]
 			const reason = String(args.reason || '')
-			const label = gigInsuranceLabels[target] || target
+			const label = getGigInsuranceLabel(target)
 			const shouldOpenForm = Boolean(args.openForm)
 
 			if (!routePath) {

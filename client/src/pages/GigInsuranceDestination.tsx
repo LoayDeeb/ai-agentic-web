@@ -7,6 +7,7 @@ import { gigMenuItems } from '../components/gig/content'
 type ProductItem = {
 	name: string
 	summary: string
+	bullets?: string[]
 }
 
 type InsuranceDetail = {
@@ -239,6 +240,171 @@ const insuranceCatalog: Record<string, InsuranceDetail> = {
 	}
 }
 
+const medicalSpecificCatalog: Record<string, InsuranceDetail> = {
+	medical_crown_unlimited: {
+		title: 'كراون عائلتي (Unlimited coverage)',
+		family: 'التأمين الطبي الفردي - Crown Family',
+		description:
+			'برنامج عائلي بسقف تغطية سنوي مرتفع ضمن فئة كراون عائلتي، مناسب لمن يريد حماية أوسع داخل وخارج المستشفى.',
+		bestFor: 'العائلات التي تريد سقف تغطية كبير ومرونة أعلى في الاستخدام.',
+		advisorNote: 'هل تريد أن أساعدك في تعبئة النموذج معًا؟',
+		officialUrl:
+			'https://www.gig.com.jo/Page/212/%D9%83%D8%B1%D8%A7%D9%88%D9%86-%D8%B9%D8%A7%D8%A6%D9%84%D8%AA%D9%8A-(Unlimited-coverage)',
+		highlights: ['سقف سنوي مرتفع', 'تغطية عائلية', 'مسار علاجي داخل وخارج المستشفى'],
+		products: [
+			{
+				name: 'كراون عائلتي بلا حدود',
+				summary: 'منتج عائلي بفلسفة تغطية موسعة مع مسار علاجي داخل وخارج المستشفى.',
+				bullets: [
+					'سقف سنوي مرتفع حسب الفئة التأمينية.',
+					'تغطية داخل وخارج المستشفى ضمن شروط الوثيقة.',
+					'شبكة طبية واسعة داخل الأردن.'
+				]
+			}
+		]
+	},
+	medical_crown_in_hospital: {
+		title: 'كراون عائلتي (داخل المستشفى)',
+		family: 'التأمين الطبي الفردي - Crown Family',
+		description: 'نسخة تركّز على خدمات الإدخال والعلاج داخل المستشفى للعائلة ضمن برنامج كراون.',
+		bestFor: 'من يهمه أكثر تغطية حالات التنويم والجراحات داخل المستشفى.',
+		advisorNote: 'هل تريد أن أساعدك في تعبئة النموذج معًا؟',
+		officialUrl: 'https://www.gig.com.jo/Page/213/Crown-Family?lang=en',
+		highlights: ['تركيز داخلي بالمستشفى', 'مناسب للعائلات', 'ضمن فئة كراون'],
+		products: [
+			{
+				name: 'كراون عائلتي داخل المستشفى',
+				summary: 'مسار يركز على الإقامة والعلاج داخل المستشفى أكثر من المنافع الخارجية.',
+				bullets: [
+					'يركز على خدمات الإدخال والتنويم.',
+					'يتضمن الجراحات والفحوصات المرتبطة بالعلاج الداخلي حسب الوثيقة.',
+					'مناسب لمن استخدامه الرئيسي داخل المستشفى.'
+				]
+			}
+		]
+	},
+	medical_crown_in_out_hospital: {
+		title: 'كراون عائلتي (داخل وخارج المستشفى)',
+		family: 'التأمين الطبي الفردي - Crown Family',
+		description: 'تغطية متوازنة بين خدمات المستشفى والعيادات الخارجية ضمن برنامج كراون.',
+		bestFor: 'من يريد استخدامًا طبيًا يوميًا مع حماية للحالات الداخلية.',
+		advisorNote: 'هل تريد أن أساعدك في تعبئة النموذج معًا؟',
+		officialUrl: 'https://www.gig.com.jo/Page/214/Crown-Family?lang=en',
+		highlights: ['تغطية داخلية وخارجية', 'مرونة أعلى', 'شبكة طبية واسعة'],
+		products: [
+			{
+				name: 'كراون عائلتي داخل وخارج المستشفى',
+				summary: 'مسار متوازن مع منافع داخلية وخارجية في الوثيقة نفسها.',
+				bullets: [
+					'يغطي حالات الإدخال والعلاج الخارجي حسب الدرجة.',
+					'يشمل مزايا علاجية مثل التصوير والتحاليل والأدوية بنسبة تغطية حسب الجدول.',
+					'يتضمن مزايا إضافية مثل الأمومة ضمن حدود البرنامج.'
+				]
+			}
+		]
+	},
+	medical_aman: {
+		title: 'برنامج أمان',
+		family: 'التأمين الطبي الفردي',
+		description: 'برنامج أمان هو برنامج طبي موجّه مع تركيز خاص على تغطيات مرتبطة بعلاجات السرطان وفق الشروط.',
+		bestFor: 'من يبحث عن برنامج طبي مخصص أكثر لحالات الأورام والعلاج المرتبط بها.',
+		advisorNote: 'هل تريد أن أساعدك في تعبئة النموذج معًا؟',
+		officialUrl: 'https://www.gig.com.jo/Page/215/%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D8%AC-%D8%A3%D9%85%D8%A7%D9%86',
+		highlights: ['برنامج طبي محلي', 'للأفراد والعائلات', 'يمكن ربطه بطلب إلكتروني'],
+		products: [
+			{
+				name: 'برنامج أمان',
+				summary: 'برنامج فردي مخصص مع نطاق تغطية علاجي مرتبط بحالات السرطان.',
+				bullets: [
+					'يغطي الفحوصات التشخيصية لحالات السرطان والأورام الحميدة والخبيثة حسب الوثيقة.',
+					'يغطي العلاج داخل وخارج المستشفى ضمن حدود البرنامج.',
+					'يشمل الأدوية والكيماوي والأشعة المرتبطة بالحالة حسب شروط العقد.'
+				]
+			}
+		]
+	},
+	medical_ebtisamati: {
+		title: 'برنامج ابتسامتي',
+		family: 'التأمين الطبي الفردي',
+		description: 'برنامج طبي يركز على مزايا مرتبطة بالعناية السنية ضمن فئة التأمين الطبي الفردي.',
+		bestFor: 'من يهتم أكثر بالعناية السنية الدورية ومزايا الأسنان.',
+		advisorNote: 'هل تريد أن أساعدك في تعبئة النموذج معًا؟',
+		officialUrl: 'https://www.gig.com.jo/Page/216/%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D8%AC-%D8%A7%D8%A8%D8%AA%D8%B3%D8%A7%D9%85%D8%AA%D9%8A',
+		highlights: ['تركيز على مزايا سنية', 'ضمن الفئة الطبية الفردية', 'ملائم للاستخدام الدوري'],
+		products: [
+			{
+				name: 'برنامج ابتسامتي',
+				summary: 'برنامج تأمين أسنان مع مستويات اشتراك متعددة.',
+				bullets: [
+					'يوفر باقات اشتراك شهرية بمستويات تغطية مختلفة.',
+					'يتضمن خدمات تنظيف، فحوصات، وعلاجات سنية حسب الخطة.',
+					'مناسب لمن يريد تغطية سنية دورية.'
+				]
+			}
+		]
+	},
+	medical_royal: {
+		title: 'برنامج رويال',
+		family: 'التأمين الطبي الفردي',
+		description: 'برنامج طبي بمستوى تغطية متقدم ضمن منتجات التأمين الطبي الفردي لدى GIG الأردن.',
+		bestFor: 'من يحتاج مزايا أعلى ضمن برامج التأمين الطبي الفردية.',
+		advisorNote: 'هل تريد أن أساعدك في تعبئة النموذج معًا؟',
+		officialUrl: 'https://www.gig.com.jo/Page/217/%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D8%AC-%D8%B1%D9%88%D9%8A%D8%A7%D9%84',
+		highlights: ['مزايا متقدمة', 'برنامج فردي', 'مناسب للاحتياج الأعلى'],
+		products: [
+			{
+				name: 'برنامج رويال',
+				summary: 'برنامج طبي متقدم ضمن الفئة الفردية بمزايا علاجية واسعة.',
+				bullets: [
+					'شبكة طبية واسعة داخل الأردن.',
+					'تغطية داخل وخارج المستشفى حسب الخطة.',
+					'مزايا للأمراض المزمنة والطارئة ضمن الشروط المعتمدة.'
+				]
+			}
+		]
+	},
+	medical_bupa_global: {
+		title: 'BUPA Global',
+		family: 'التأمين الطبي الدولي',
+		description: 'برنامج تأمين طبي دولي ضمن شراكات GIG الأردن للفئات الدولية.',
+		bestFor: 'من يحتاج تغطية طبية دولية واسعة وشبكات علاج خارج الأردن.',
+		advisorNote: 'هل تريد أن أساعدك في تعبئة النموذج معًا؟',
+		officialUrl: 'https://www.gig.com.jo/Page/281/BUPA-Global',
+		highlights: ['تغطية دولية', 'ملائم للتنقل والسفر', 'شبكات طبية عالمية'],
+		products: [
+			{
+				name: 'BUPA Global',
+				summary: 'برنامج تأمين طبي دولي يقدم شبكة رعاية واسعة خارج الأردن.',
+				bullets: [
+					'شبكة عالمية تغطي عدداً كبيراً من الدول ومقدمي الخدمة.',
+					'مناسب للمقيمين كثيري السفر أو الحالات الدولية.',
+					'يغطي خدمات علاج داخل وخارج المستشفى حسب الخطة.'
+				]
+			}
+		]
+	},
+	medical_international_360: {
+		title: 'التأمين الطبي الدولي 360',
+		family: 'التأمين الطبي الدولي',
+		description: 'برنامج طبي دولي 360 ضمن منتجات GIG الأردن الدولية.',
+		bestFor: 'من يريد خيارًا دوليًا مرنًا مع نطاق تغطية واسع.',
+		advisorNote: 'هل تريد أن أساعدك في تعبئة النموذج معًا؟',
+		officialUrl: 'https://www.gig.com.jo/Page/369/gig--AXA-International-360-product',
+		highlights: ['منتج دولي 360', 'خيار دولي مرن', 'ضمن فئة الطبي الدولي'],
+		products: [
+			{
+				name: 'gig - AXA International 360',
+				summary: 'برنامج طبي دولي بالتعاون مع AXA وبخيارين أساسي/شامل.',
+				bullets: [
+					'خيارا تغطية أساسي (B) وشامل (A).',
+					'إمكانية اختيار نطاق جغرافي مع خيار شمول الولايات المتحدة.',
+					'يشمل منافع مثل الإخلاء الطبي الطارئ والرعاية داخل وخارج المستشفى حسب الخطة.'
+				]
+			}
+		]
+	}
+}
+
 const fallbackInsurance: InsuranceDetail = {
 	title: 'مسار تأمين من GIG الأردن',
 	family: 'استشارة تأمينية',
@@ -255,7 +421,7 @@ export default function GigInsuranceDestination() {
 	const navigate = useNavigate()
 	const { target = '' } = useParams()
 	const targetKey = decodeURIComponent(target)
-	const insurance = insuranceCatalog[targetKey] || fallbackInsurance
+	const insurance = medicalSpecificCatalog[targetKey] || insuranceCatalog[targetKey] || fallbackInsurance
 
 	React.useEffect(() => {
 		document.documentElement.dir = 'rtl'
@@ -380,6 +546,13 @@ export default function GigInsuranceDestination() {
 							<article key={product.name} className="rounded-2xl border border-[#e2e7f3] bg-[#f7f9fc] p-5">
 								<h3 className="text-lg font-bold text-[#1D2146]">{product.name}</h3>
 								<p className="mt-2 text-sm leading-7 text-[#52607d]">{product.summary}</p>
+								{product.bullets && product.bullets.length > 0 ? (
+									<ul className="mt-3 space-y-1 text-sm leading-7 text-[#52607d]">
+										{product.bullets.map((bullet) => (
+											<li key={bullet}>• {bullet}</li>
+										))}
+									</ul>
+								) : null}
 							</article>
 						))}
 					</div>
