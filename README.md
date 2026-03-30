@@ -41,7 +41,7 @@ OPENAI_MODEL=gpt-4o
 
 # ElevenLabs
 ELEVENLABS_API_KEY=your_key_here
-ELEVENLABS_VOICE_ID=Mf4F6aozsBEFAtuBhiIf
+ELEVENLABS_VOICE_ID=VjBRcaE3Sdto7eOqwIcc
 ELEVENLABS_MODEL=eleven_turbo_v2_5
 ```
 
