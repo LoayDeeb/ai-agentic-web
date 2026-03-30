@@ -18,10 +18,22 @@ export async function* streamTTS(
 	text: string,
 	config: TTSConfig = {}
 ): AsyncGenerator<Buffer> {
-	const voiceId = config.voiceId || process.env.ELEVENLABS_VOICE_ID || 'VjBRcaE3Sdto7eOqwIcc'
+	const legacyVoiceId = 'Mf4F6aozsBEFAtuBhiIf'
+	const preferredVoiceId = 'VjBRcaE3Sdto7eOqwIcc'
+	const envVoiceId = process.env.ELEVENLABS_VOICE_ID
+	const normalizedEnvVoiceId =
+		envVoiceId && envVoiceId.trim() === legacyVoiceId ? preferredVoiceId : envVoiceId
+	const voiceId = config.voiceId || normalizedEnvVoiceId || preferredVoiceId
 	const modelId = config.modelId || process.env.ELEVENLABS_MODEL || 'eleven_multilingual_v2'
 
 	try {
+		if (envVoiceId && envVoiceId.trim() === legacyVoiceId) {
+			logger.warn(
+				{ legacyVoiceId, preferredVoiceId },
+				'Legacy ElevenLabs voice id detected in environment; overriding to preferred voice'
+			)
+		}
+
 		logger.info({ text, voiceId, modelId }, 'Streaming TTS request')
 
 		const audioStream = await client.textToSpeech.stream(voiceId, {
