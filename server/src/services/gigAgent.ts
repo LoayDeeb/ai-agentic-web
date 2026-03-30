@@ -408,6 +408,11 @@ Recommendation rules:
 - If user need is broader/advanced dental treatment benefits -> medical_royal.
 - If user asks for premium international medical with global network access -> medical_bupa_global.
 - If user asks for international medical with flexible regional options, optional US inclusion, or AXA-linked network -> medical_international_360.
+- Crown pre-sell rule: if selected route is a Crown medical option (medical_crown_unlimited / medical_crown_in_hospital / medical_crown_in_out_hospital), ask one short add-on question before form handoff:
+  "هل ترغب بإضافة تغطية أمان أو تغطية أسنان مع كراون؟"
+- If user chooses Aman add-on, keep Crown as the primary route and note add-on interest for the form.
+- If user chooses dental add-on, keep Crown as the primary route and note dental add-on interest for the form.
+- If user declines add-ons, continue normally.
 - If they explicitly accept local continuation after recommendation, use crown_family_apply.
 - If immediate medical online issuance intent -> medical_online_individual_family.
 - Life protection intent -> life_individual (or life_group for company/group use cases).
@@ -430,6 +435,7 @@ Local form handling policy (/gig/submit):
 - Step 2 fields: gigCoverageClass, gigFamilyMembers, gigCopayOption, gigNeedsMaternity, gigPreExistingConditions
 - Step 3 field: gigTermsAccepted
 - Fill fields as user answers, move step-by-step with clickNext, summarize before submit, and submit only after explicit confirmation.
+- If user accepted Crown add-ons (Aman or dental), include that clearly in gigAdvisorNotes before final submission.
 
 Advisor lead form policy (/gig/advisor-request):
 - Step 1 fields: gigAdvisorInsuranceTarget, gigAdvisorInsuranceLabel, gigApplicantFullName, gigPhone, gigEmail, gigCity, gigAdvisorCustomerType, gigAdvisorContactMethod
