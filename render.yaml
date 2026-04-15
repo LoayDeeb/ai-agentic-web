@@ -28,6 +28,8 @@ services:
         value: elevenlabs
       - key: NABRAH_API_KEY
         sync: false
+      - key: NABRAH_API_KEY_FALLBACK
+        sync: false
       - key: NABRAH_PROJECT_ID
         sync: false
       - key: NABRAH_MODEL

@@ -64,7 +64,6 @@ async function* streamWithNabrah(
 	text: string,
 	config: TTSConfig = {}
 ): AsyncGenerator<Buffer> {
-	const apiKey = (process.env.NABRAH_API_KEY || '').trim()
 	const projectId = (process.env.NABRAH_PROJECT_ID || '').trim()
 	const modelId = config.modelId || process.env.NABRAH_MODEL || 'phantom_v1'
 	const voiceId =
@@ -72,43 +71,59 @@ async function* streamWithNabrah(
 		process.env.NABRAH_VOICE_ID ||
 		'87f4c7b0-d9b5-45aa-8c6c-9e2ccf941912'
 	const speed = config.speed ?? Number(process.env.NABRAH_SPEED || '0.9')
+	const apiKeys = [
+		(process.env.NABRAH_API_KEY || '').trim(),
+		(process.env.NABRAH_API_KEY_FALLBACK || '').trim()
+	].filter(Boolean)
 
-	if (!apiKey || !projectId) {
+	if (apiKeys.length === 0 || !projectId) {
 		throw new Error('Selected TTS provider credentials are missing')
 	}
 
 	logger.info(
-		{ provider: 'external', text, voiceId, modelId, projectId, speed },
+		{ provider: 'external', text, voiceId, modelId, projectId, speed, keyCount: apiKeys.length },
 		'Streaming TTS request'
 	)
 
-	const response = await fetch(
-		`https://api.nabrah.ai/api/ext/tts/generations?project_id=${encodeURIComponent(projectId)}`,
-		{
-			method: 'POST',
-			headers: {
-				'X-API-Key': apiKey,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				model: modelId,
-				input: text,
-				voice: voiceId,
-				response_format: 'mp3',
-				speed
-			})
+	let lastError = 'Unknown TTS error'
+
+	for (let index = 0; index < apiKeys.length; index++) {
+		const response = await fetch(
+			`https://api.nabrah.ai/api/ext/tts/generations?project_id=${encodeURIComponent(projectId)}`,
+			{
+				method: 'POST',
+				headers: {
+					'X-API-Key': apiKeys[index],
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					model: modelId,
+					input: text,
+					voice: voiceId,
+					response_format: 'mp3',
+					speed
+				})
+			}
+		)
+
+		if (response.ok) {
+			const audioBuffer = Buffer.from(await response.arrayBuffer())
+			if (audioBuffer.length > 0) {
+				yield audioBuffer
+			}
+			return
 		}
-	)
 
-	if (!response.ok) {
 		const errorText = await response.text()
-		throw new Error(`TTS request failed (${response.status}): ${errorText}`)
+		lastError = `TTS request failed (${response.status}): ${errorText}`
+
+		logger.warn(
+			{ provider: 'external', attempt: index + 1, totalAttempts: apiKeys.length, status: response.status },
+			'TTS request failed, trying next credential if available'
+		)
 	}
 
-	const audioBuffer = Buffer.from(await response.arrayBuffer())
-	if (audioBuffer.length > 0) {
-		yield audioBuffer
-	}
+	throw new Error(lastError)
 }
 
 /**

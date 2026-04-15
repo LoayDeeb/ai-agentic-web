@@ -41,6 +41,9 @@ OPENAI_MODEL=gpt-4o
 
 # TTS provider selection
 TTS_PROVIDER=elevenlabs
+
+# Optional fallback credential for providers that support retry
+NABRAH_API_KEY_FALLBACK=your_secondary_key
 ```
 
 **Get API keys:**
