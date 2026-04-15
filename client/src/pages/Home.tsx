@@ -27,12 +27,6 @@ export default function Home() {
 					>
 						Browse Services
 					</Link>
-					<Link
-						to="/gig"
-						className="inline-block rounded border border-[#1B8354] px-4 py-2 text-[#1B8354] hover:bg-[#f4faf7]"
-					>
-						Open GIG
-					</Link>
 				</div>
 			</div>
 		</div>
