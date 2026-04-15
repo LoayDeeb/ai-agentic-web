@@ -32,6 +32,8 @@ services:
         sync: false
       - key: NABRAH_PROJECT_ID
         sync: false
+      - key: NABRAH_PROJECT_ID_FALLBACK
+        sync: false
       - key: NABRAH_MODEL
         value: phantom_v1
       - key: NABRAH_VOICE_ID

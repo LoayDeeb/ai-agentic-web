@@ -44,6 +44,7 @@ TTS_PROVIDER=elevenlabs
 
 # Optional fallback credential for providers that support retry
 NABRAH_API_KEY_FALLBACK=your_secondary_key
+NABRAH_PROJECT_ID_FALLBACK=your_secondary_project_id
 ```
 
 **Get API keys:**

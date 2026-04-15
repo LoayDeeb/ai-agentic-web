@@ -64,36 +64,52 @@ async function* streamWithNabrah(
 	text: string,
 	config: TTSConfig = {}
 ): AsyncGenerator<Buffer> {
-	const projectId = (process.env.NABRAH_PROJECT_ID || '').trim()
+	const primaryProjectId = (process.env.NABRAH_PROJECT_ID || '').trim()
+	const fallbackProjectId =
+		(process.env.NABRAH_PROJECT_ID_FALLBACK || '').trim() || primaryProjectId
 	const modelId = config.modelId || process.env.NABRAH_MODEL || 'phantom_v1'
 	const voiceId =
 		config.voiceId ||
 		process.env.NABRAH_VOICE_ID ||
 		'87f4c7b0-d9b5-45aa-8c6c-9e2ccf941912'
 	const speed = config.speed ?? Number(process.env.NABRAH_SPEED || '0.9')
-	const apiKeys = [
-		(process.env.NABRAH_API_KEY || '').trim(),
-		(process.env.NABRAH_API_KEY_FALLBACK || '').trim()
-	].filter(Boolean)
+	const attempts = [
+		{
+			apiKey: (process.env.NABRAH_API_KEY || '').trim(),
+			projectId: primaryProjectId
+		},
+		{
+			apiKey: (process.env.NABRAH_API_KEY_FALLBACK || '').trim(),
+			projectId: fallbackProjectId
+		}
+	].filter((entry) => entry.apiKey && entry.projectId)
 
-	if (apiKeys.length === 0 || !projectId) {
+	if (attempts.length === 0) {
 		throw new Error('Selected TTS provider credentials are missing')
 	}
 
 	logger.info(
-		{ provider: 'external', text, voiceId, modelId, projectId, speed, keyCount: apiKeys.length },
+		{
+			provider: 'external',
+			text,
+			voiceId,
+			modelId,
+			speed,
+			keyCount: attempts.length
+		},
 		'Streaming TTS request'
 	)
 
 	let lastError = 'Unknown TTS error'
 
-	for (let index = 0; index < apiKeys.length; index++) {
+	for (let index = 0; index < attempts.length; index++) {
+		const { apiKey, projectId } = attempts[index]
 		const response = await fetch(
 			`https://api.nabrah.ai/api/ext/tts/generations?project_id=${encodeURIComponent(projectId)}`,
 			{
 				method: 'POST',
 				headers: {
-					'X-API-Key': apiKeys[index],
+					'X-API-Key': apiKey,
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
@@ -118,7 +134,7 @@ async function* streamWithNabrah(
 		lastError = `TTS request failed (${response.status}): ${errorText}`
 
 		logger.warn(
-			{ provider: 'external', attempt: index + 1, totalAttempts: apiKeys.length, status: response.status },
+			{ provider: 'external', attempt: index + 1, totalAttempts: attempts.length, status: response.status },
 			'TTS request failed, trying next credential if available'
 		)
 	}
