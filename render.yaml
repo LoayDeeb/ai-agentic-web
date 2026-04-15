@@ -24,4 +24,16 @@ services:
         value: VjBRcaE3Sdto7eOqwIcc
       - key: ELEVENLABS_MODEL
         value: eleven_flash_v2_5
+      - key: TTS_PROVIDER
+        value: elevenlabs
+      - key: NABRAH_API_KEY
+        sync: false
+      - key: NABRAH_PROJECT_ID
+        sync: false
+      - key: NABRAH_MODEL
+        value: phantom_v1
+      - key: NABRAH_VOICE_ID
+        value: 87f4c7b0-d9b5-45aa-8c6c-9e2ccf941912
+      - key: NABRAH_SPEED
+        value: 0.9
     healthCheckPath: /api/health
