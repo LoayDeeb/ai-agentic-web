@@ -9,7 +9,7 @@ Voice-enabled chatbot for ZATCA (Zakat, Tax and Customs Authority) services with
 - **Voice Stack**:
   - **STT**: Browser Web Speech API (continuous recognition, Arabic + English)
   - **Agent**: OpenAI Chat API with streaming + function calling
-  - **TTS**: ElevenLabs or Nabrah
+  - **TTS**: External text-to-speech provider
   - **Transport**: WebSocket for real-time bidirectional communication
 
 ## Features
@@ -39,26 +39,13 @@ Create `server/.env` from `server/.env.example`:
 OPENAI_API_KEY=sk-...
 OPENAI_MODEL=gpt-4o
 
-# TTS provider: elevenlabs or nabrah
+# TTS provider selection
 TTS_PROVIDER=elevenlabs
-
-# ElevenLabs
-ELEVENLABS_API_KEY=your_key_here
-ELEVENLABS_VOICE_ID=VjBRcaE3Sdto7eOqwIcc
-ELEVENLABS_MODEL=eleven_turbo_v2_5
-
-# Nabrah
-NABRAH_API_KEY=your_key_here
-NABRAH_PROJECT_ID=your_project_id
-NABRAH_MODEL=phantom_v1
-NABRAH_VOICE_ID=87f4c7b0-d9b5-45aa-8c6c-9e2ccf941912
-NABRAH_SPEED=0.9
 ```
 
 **Get API keys:**
 - OpenAI: https://platform.openai.com/api-keys
-- ElevenLabs: https://elevenlabs.io/app/settings/api-keys
-- Nabrah: use your Nabrah dashboard credentials and project id
+- Configure the environment variables required by your selected TTS provider
 
 ### 3. Run development servers
 

@@ -36,11 +36,11 @@ async function* streamWithElevenLabs(
 	if (envVoiceId && envVoiceId.trim() === legacyVoiceId) {
 		logger.warn(
 			{ legacyVoiceId, preferredVoiceId },
-			'Legacy ElevenLabs voice id detected in environment; overriding to preferred voice'
+			'Legacy TTS voice id detected in environment; overriding to preferred voice'
 		)
 	}
 
-	logger.info({ provider: 'elevenlabs', text, voiceId, modelId }, 'Streaming TTS request')
+	logger.info({ provider: 'external', text, voiceId, modelId }, 'Streaming TTS request')
 
 	const audioStream = await elevenLabsClient.textToSpeech.stream(voiceId, {
 		text,
@@ -74,11 +74,11 @@ async function* streamWithNabrah(
 	const speed = config.speed ?? Number(process.env.NABRAH_SPEED || '0.9')
 
 	if (!apiKey || !projectId) {
-		throw new Error('NABRAH_API_KEY and NABRAH_PROJECT_ID are required for Nabrah TTS')
+		throw new Error('Selected TTS provider credentials are missing')
 	}
 
 	logger.info(
-		{ provider: 'nabrah', text, voiceId, modelId, projectId, speed },
+		{ provider: 'external', text, voiceId, modelId, projectId, speed },
 		'Streaming TTS request'
 	)
 
@@ -102,7 +102,7 @@ async function* streamWithNabrah(
 
 	if (!response.ok) {
 		const errorText = await response.text()
-		throw new Error(`Nabrah TTS failed (${response.status}): ${errorText}`)
+		throw new Error(`TTS request failed (${response.status}): ${errorText}`)
 	}
 
 	const audioBuffer = Buffer.from(await response.arrayBuffer())
@@ -127,7 +127,7 @@ export async function* streamTTS(
 			yield* streamWithElevenLabs(text, config)
 		}
 
-		logger.info({ provider }, 'TTS stream completed')
+		logger.info({ provider: 'external' }, 'TTS stream completed')
 	} catch (error: any) {
 		logger.error({ error: error.message }, 'TTS streaming failed')
 		throw error
