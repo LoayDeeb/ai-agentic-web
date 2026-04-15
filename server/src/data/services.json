@@ -1,40 +1,42 @@
 {
   "services": [
     {
-      "id": "svc-installment-plan",
-      "slug": "request-installment-plan",
-      "category": "Zakat Services",
-      "title": "Request an Installment Plan",
-      "summary": "An e-service that allows you to request installment payments in cases where you face difficulties in paying the full amount due.",
-      "badges": ["Zakat"],
+      "id": "svc-vat-registration-establishments",
+      "slug": "vat-registration-establishments",
+      "category": "ضريبة القيمة المضافة",
+      "title": "التسجيل في ضريبة القيمة المضافة للمنشآت",
+      "summary": "خدمة إلكترونية توفر التسجيل كـ \"منشآت\" خاضعة لضريبة القيمة المضافة، وسيتم بعد التسجيل، تخصيص رقم حساب لضريبة القيمة المضافة.",
+      "badges": ["ضريبة القيمة المضافة"],
       "steps": [
-        "Log into ZATCA website",
-        "Go to \"Indirect Tax - Value Added Tax\"",
-        "Click \"VAT Installment Plan\"",
-        "Select \"Create New Request\", fill in the request form, and complete the steps to submit the request",
-        "Once approved, a notification of your installment plan will be sent to you"
+        "الدخول إلى موقع الهيئة الإلكتروني وتسجيل الدخول إلى حساب المستفيد",
+        "الانتقال إلى تبويب الخدمات العامة",
+        "الانتقال إلى علامة التسجيل في ضريبة القيمة المضافة",
+        "تعبئة نموذج التسجيل",
+        "سيصلك إشعار لشهادة الضريبة عند اكتمال الطلب"
       ],
       "eligibility": [
-        "Submit a request using the portal",
-        "Prepayment of the installment request",
-        "Bank statement for the last 3 months",
-        "Explain the justification for the installment request",
-        "Submit all due returns",
-        "Pay all other due amounts"
+        "وصول الإيرادات السنوية لحد التسجيل الإلزامي أو الاختياري."
       ],
-      "requiredDocuments": [
-        "No Documents"
-      ],
+      "requiredDocuments": [],
       "meta": {
-        "audience": "Taxpayers Registered in Zakat / CIT",
-        "duration": "20 Business days",
-        "cost": "No Fees",
-        "channels": ["Website"],
-        "languages": ["Arabic"],
-        "releaseDate": "2019-04-16",
-        "sms": "Not Available",
-        "paymentChannels": ["mada", "mada debit", "VISA"]
-      }
+        "audience": "المنشآت التي تمارس نشاطًا اقتصاديًا خاضعًا لضريبة القيمة المضافة.",
+        "duration": "5 دقائق",
+        "cost": "لا يوجد رسوم",
+        "channels": ["الموقع الإلكتروني", "تطبيق الهاتف الجوال", "الدردشة المباشرة"],
+        "languages": ["العربية"],
+        "releaseDate": "2019-04-15",
+        "sms": "غير متوفر",
+        "paymentChannels": ["FREE"]
+      },
+      "videoUrl": "https://www.youtube.com/watch?v=A3NjiqNgn8g",
+      "startLabel": "ابدأ",
+      "faqLink": "https://zatca.gov.sa/ar/eServices/Pages/eServices_001.aspx#faq",
+      "phoneNumber": "19993",
+      "email": "info@zatca.gov.sa",
+      "twitterHandle": "@Zatca_care",
+      "twitterUrl": "https://twitter.com/Zatca_care",
+      "manualLink": "https://zatca.gov.sa/ar/eServices/Documents/Registration%20for%20VAT.pdf",
+      "manualLabel": "تحميل دليل الخدمة"
     },
     {
       "id": "svc-zakat-return",

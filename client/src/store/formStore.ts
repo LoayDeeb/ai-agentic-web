@@ -2,14 +2,21 @@ import { create } from 'zustand'
 
 export type FormData = {
 	tin: string
+	contactEmail: string
+	contactPhone: string
+	vatEntityType: string
+	vatRegistrationBasis: string
+	vatAnnualRevenue: string
+	vatEffectiveDate: string
+	vatActivityDescription: string
+	vatRegistrationCertificate: File | null
+	vatTermsAccepted: boolean
 	taxPeriod: string
 	amountDue: string
 	requestedInstallments: string
 	justification: string
 	bankName: string
 	accountNumber: string
-	contactEmail: string
-	contactPhone: string
 	bankStatement: File | null
 	// Mawhiba Fields
 	studentName: string
@@ -112,14 +119,21 @@ type FormStore = {
 
 const initialFormData: FormData = {
 	tin: '',
+	contactEmail: '',
+	contactPhone: '',
+	vatEntityType: '',
+	vatRegistrationBasis: '',
+	vatAnnualRevenue: '',
+	vatEffectiveDate: '',
+	vatActivityDescription: '',
+	vatRegistrationCertificate: null,
+	vatTermsAccepted: false,
 	taxPeriod: '',
 	amountDue: '',
 	requestedInstallments: '',
 	justification: '',
 	bankName: '',
 	accountNumber: '',
-	contactEmail: '',
-	contactPhone: '',
 	bankStatement: null,
 	// Mawhiba Fields
 	studentName: '',
@@ -236,12 +250,14 @@ export const useFormStore = create<FormStore>((set, get) => ({
 		const path = typeof window !== 'undefined' ? window.location.pathname : ''
 		let required = [
 			'tin',
-			'taxPeriod',
-			'amountDue',
-			'requestedInstallments',
-			'justification',
+			'vatEntityType',
+			'vatRegistrationBasis',
+			'vatAnnualRevenue',
+			'vatEffectiveDate',
+			'vatActivityDescription',
 			'contactEmail',
-			'contactPhone'
+			'contactPhone',
+			'vatTermsAccepted'
 		]
 
 		if (path.startsWith('/saso/service/imported-vehicles')) {
@@ -300,7 +316,6 @@ if (typeof window !== 'undefined') {
 		setCurrentStep: (step: number) => useFormStore.getState().setCurrentStep(step)
 	}
 }
-
 
 
 

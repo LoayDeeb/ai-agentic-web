@@ -34,6 +34,15 @@ type ServiceDetail = {
 		sms: string
 		paymentChannels: string[]
 	}
+	videoUrl?: string
+	startLabel?: string
+	faqLink?: string
+	phoneNumber?: string
+	email?: string
+	twitterHandle?: string
+	twitterUrl?: string
+	manualLink?: string
+	manualLabel?: string
 }
 
 export default function ServiceDetail() {
@@ -119,6 +128,21 @@ export default function ServiceDetail() {
 			.catch(() => setService(null))
 	}, [slug])
 
+	const resolveVideoEmbedUrl = (url?: string) => {
+		if (!url) return `https://www.youtube.com/embed/Vpg245dc3jI`
+		if (url.includes('/embed/')) return url
+		try {
+			const parsed = new URL(url)
+			const videoId = parsed.searchParams.get('v')
+			if (videoId) {
+				return `https://www.youtube.com/embed/${videoId}`
+			}
+		} catch {
+			return url
+		}
+		return url
+	}
+
 	if (!service) {
 		return (
 			<div className="min-h-screen">
@@ -130,6 +154,8 @@ export default function ServiceDetail() {
 			</div>
 		)
 	}
+
+	const embedVideoUrl = resolveVideoEmbedUrl(service.videoUrl)
 
 	return (
 		<div className="min-h-screen bg-gray-50">
@@ -153,7 +179,7 @@ export default function ServiceDetail() {
 						{/* Header with title and Start button */}
 						<InstallmentHeader
 							title={t(service.title)}
-							buttonText={t('Start now')}
+							buttonText={t(service.startLabel || 'Start now')}
 							onButtonClick={() => navigate(`/services/${slug}/submit`)}
 						/>
 
@@ -197,7 +223,7 @@ export default function ServiceDetail() {
 											<iframe
 												ref={videoRef}
 												className="absolute top-0 left-0 w-full h-full rounded-lg"
-												src={`https://www.youtube.com/embed/Vpg245dc3jI?enablejsapi=1&origin=${window.location.origin}&playsinline=1&mute=1`}
+												src={`${embedVideoUrl}${embedVideoUrl.includes('?') ? '&' : '?'}enablejsapi=1&origin=${window.location.origin}&playsinline=1&mute=1`}
 												title="Service Tutorial Video"
 												frameBorder="0"
 												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -255,7 +281,7 @@ export default function ServiceDetail() {
 											))}
 										</ul>
 									) : (
-										<p className="text-gray-600">{t('No Documents')}</p>
+										<p className="text-gray-600">{t('No documents are listed on this service page.')}</p>
 									)}
 								</div>
 							)}
@@ -315,6 +341,7 @@ export default function ServiceDetail() {
 
 							{service.meta.paymentChannels && service.meta.paymentChannels.length > 0 && (
 								<PaymentChannels
+									showFree={service.meta.paymentChannels.includes('FREE')}
 									enabledChannels={{
 										sadad: service.meta.paymentChannels.includes('SADAD'),
 										mada: service.meta.paymentChannels.some((ch) =>
@@ -327,7 +354,15 @@ export default function ServiceDetail() {
 								/>
 							)}
 
-							<SupportContactInfo />
+							<SupportContactInfo
+								faqLink={service.faqLink}
+								phoneNumber={service.phoneNumber}
+								email={service.email}
+								twitterHandle={service.twitterHandle}
+								twitterUrl={service.twitterUrl}
+								manualLink={service.manualLink}
+								manualLabel={service.manualLabel}
+							/>
 						</div>
 					</aside>
 				</div>

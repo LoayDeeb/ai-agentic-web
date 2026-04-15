@@ -6,8 +6,8 @@ export type ServiceRoute = {
 
 export const serviceRoutes: ServiceRoute[] = [
 	{
-		slug: 'request-installment-plan',
-		path: '/services/request-installment-plan',
+		slug: 'vat-registration-establishments',
+		path: '/services/vat-registration-establishments',
 		primarySelector: 'h1'
 	}
 ]

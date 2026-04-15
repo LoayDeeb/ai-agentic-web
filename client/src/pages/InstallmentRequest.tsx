@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { CheckCircle, Upload } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
 import { TopHeaderBar } from '../components/TopHeader'
 import { ZATCAHeader } from '../components/ZATCAHeader'
 import { BreadcrumbSocial } from '../components/BreadcrumbSocial'
@@ -16,29 +16,23 @@ export default function InstallmentRequest() {
 	const navigate = useNavigate()
 	const switchLang = useLocaleStore((s) => s.switchLanguage)
 	const dir = useLocaleStore((s) => s.dir)
-	
-	// Use global form store for agent access
 	const formData = useFormStore((s) => s.formData)
 	const setField = useFormStore((s) => s.setField)
 	const currentStep = useFormStore((s) => s.currentStep)
 	const setCurrentStep = useFormStore((s) => s.setCurrentStep)
-	
 	const [submitted, setSubmitted] = useState(false)
-
 	const [errors, setErrors] = useState<Record<string, string>>({})
 
 	useEffect(() => {
 		document.documentElement.dir = dir
 	}, [dir])
 
-	// Listen for agent tool events
 	useEffect(() => {
 		const handler = (e: Event) => {
 			const { tool, args } = (e as CustomEvent).detail
-			
+
 			if (tool === 'fillFormField') {
 				setField(args.fieldName, args.value)
-				// Highlight the field that was filled
 				setTimeout(() => {
 					const input = document.querySelector(`[name="${args.fieldName}"]`) as HTMLElement
 					if (input) {
@@ -55,70 +49,67 @@ export default function InstallmentRequest() {
 					input.scrollIntoView({ behavior: 'smooth', block: 'center' })
 					highlight(`[name="${args.fieldName}"]`, args.duration || 3)
 				}
-			} else if (tool === 'submitForm') {
-				if (currentStep === 4) {
-					handleSubmit()
-				}
+			} else if (tool === 'submitForm' && currentStep === 4) {
+				handleSubmit()
 			}
 		}
-		
+
 		window.addEventListener('agentTool', handler)
 		return () => window.removeEventListener('agentTool', handler)
-	}, [currentStep])
+	}, [currentStep, setCurrentStep, setField])
 
 	const steps = [
-		{ number: 1, label: t('Basic Info'), completed: currentStep > 1, active: currentStep === 1 },
-		{ number: 2, label: t('Financial Details'), completed: currentStep > 2, active: currentStep === 2 },
-		{ number: 3, label: t('Supporting Documents'), completed: currentStep > 3, active: currentStep === 3 },
+		{ number: 1, label: t('Entity Details'), completed: currentStep > 1, active: currentStep === 1 },
+		{ number: 2, label: t('Registration Details'), completed: currentStep > 2, active: currentStep === 2 },
+		{ number: 3, label: t('Confirmation'), completed: currentStep > 3, active: currentStep === 3 },
 		{ number: 4, label: t('Review & Submit'), completed: submitted, active: currentStep === 4 }
 	]
 
-	const validateStep = (step: number): boolean => {
-		const newErrors: Record<string, string> = {}
+	const validateStep = (step: number) => {
+		const nextErrors: Record<string, string> = {}
 
 		if (step === 1) {
-			if (!formData.tin) newErrors.tin = t('TIN is required')
-			if (!formData.taxPeriod) newErrors.taxPeriod = t('Tax period is required')
-		} else if (step === 2) {
-			if (!formData.amountDue) newErrors.amountDue = t('Amount due is required')
-			if (!formData.requestedInstallments) newErrors.requestedInstallments = t('Number of installments is required')
-			if (!formData.justification) newErrors.justification = t('Justification is required')
-		} else if (step === 3) {
-			if (!formData.bankStatement) newErrors.bankStatement = t('Bank statement is required')
+			if (!formData.tin) nextErrors.tin = 'TIN is required'
+			if (!formData.vatEntityType) nextErrors.vatEntityType = 'Entity type is required'
+			if (!formData.vatRegistrationBasis) {
+				nextErrors.vatRegistrationBasis = 'Registration basis is required'
+			}
 		}
 
-		setErrors(newErrors)
-		return Object.keys(newErrors).length === 0
+		if (step === 2) {
+			if (!formData.vatAnnualRevenue) nextErrors.vatAnnualRevenue = 'Annual revenue is required'
+			if (!formData.vatEffectiveDate) {
+				nextErrors.vatEffectiveDate = 'Effective registration date is required'
+			}
+			if (!formData.contactEmail) nextErrors.contactEmail = 'Contact email is required'
+			if (!formData.contactPhone) nextErrors.contactPhone = 'Contact phone is required'
+			if (!formData.vatActivityDescription) {
+				nextErrors.vatActivityDescription = 'Economic activity description is required'
+			}
+		}
+
+		if (step === 3 && !formData.vatTermsAccepted) {
+			nextErrors.vatTermsAccepted = 'You must confirm the declaration before continuing'
+		}
+
+		setErrors(nextErrors)
+		return Object.keys(nextErrors).length === 0
 	}
 
 	const handleNext = () => {
-		if (validateStep(currentStep)) {
-			const nextStep = Math.min(currentStep + 1, 4)
-			setCurrentStep(nextStep)
-			window.scrollTo({ top: 0, behavior: 'smooth' })
-		}
+		if (!validateStep(currentStep)) return
+		setCurrentStep(Math.min(currentStep + 1, 4))
+		window.scrollTo({ top: 0, behavior: 'smooth' })
 	}
 
 	const handleBack = () => {
-		const prevStep = Math.max(currentStep - 1, 1)
-		setCurrentStep(prevStep)
+		setCurrentStep(Math.max(currentStep - 1, 1))
 		window.scrollTo({ top: 0, behavior: 'smooth' })
 	}
 
 	const handleSubmit = () => {
-		if (validateStep(currentStep)) {
-			// In production, submit to API
-			console.log('Submitting form:', formData)
-			setSubmitted(true)
-		}
-	}
-
-	const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0]
-		if (file) {
-			setField('bankStatement', file)
-			setErrors({ ...errors, bankStatement: '' })
-		}
+		if (!validateStep(currentStep)) return
+		setSubmitted(true)
 	}
 
 	if (submitted) {
@@ -133,14 +124,17 @@ export default function InstallmentRequest() {
 							className="text-3xl font-bold text-[#1F2A37] mb-4"
 							style={{ fontFamily: '"IBM Plex Sans Arabic", sans-serif' }}
 						>
-							{t('Request Submitted Successfully')}
+							{t('تم تقديم طلب التسجيل بنجاح')}
 						</h1>
 						<p className="text-gray-600 mb-6">
-							{t('Your installment plan request has been submitted. You will receive a notification once it is reviewed and approved.')}
+							{t('سيصلك إشعار لشهادة الضريبة عند اكتمال الطلب.')}
 						</p>
 						<div className="bg-gray-50 rounded-lg p-4 mb-6">
 							<p className="text-sm text-gray-700">
-								<strong>{t('Reference Number')}:</strong> <span className="font-mono">REQ-2025-{Math.floor(Math.random() * 100000).toString().padStart(5, '0')}</span>
+								<strong>{t('Reference Number')}:</strong>{' '}
+								<span className="font-mono">
+									VAT-{Math.floor(Math.random() * 100000).toString().padStart(5, '0')}
+								</span>
 							</p>
 						</div>
 						<button
@@ -164,9 +158,12 @@ export default function InstallmentRequest() {
 					breadcrumbs={[
 						{ label: t('Home'), href: '/' },
 						{ label: t('Zakat, Tax and Customs Services'), href: '/services' },
-						{ label: t('Request an Installment Plan'), href: '/services/request-installment-plan' }
+						{
+							label: t('التسجيل في ضريبة القيمة المضافة للمنشآت'),
+							href: '/services/vat-registration-establishments'
+						}
 					]}
-					pageTitle={t('Submit Request')}
+					pageTitle={t('ابدأ الخدمة')}
 				/>
 
 				<div className="max-w-4xl mx-auto">
@@ -174,227 +171,212 @@ export default function InstallmentRequest() {
 						className="text-3xl font-bold text-[#1F2A37] mb-8"
 						style={{ fontFamily: '"IBM Plex Sans Arabic", sans-serif' }}
 					>
-						{t('Request an Installment Plan')}
+						{t('التسجيل في ضريبة القيمة المضافة للمنشآت')}
 					</h1>
 
 					<StepIndicator steps={steps} />
 
 					<div className="bg-white rounded-lg shadow-md p-8">
-						{/* Step 1: Basic Info */}
 						{currentStep === 1 && (
 							<div>
-								<h2
-									className="text-xl font-bold text-[#1F2A37] mb-6"
-									style={{ fontFamily: '"IBM Plex Sans Arabic", sans-serif' }}
-								>
-									{t('Basic Information')}
+								<h2 className="text-xl font-bold text-[#1F2A37] mb-6">
+									{t('بيانات المنشأة')}
 								</h2>
 
-								<FormField label={t('Tax Identification Number (TIN)')} required error={errors.tin}>
+								<FormField label={t('الرقم المميز / TIN')} required error={errors.tin}>
 									<TextInput
 										name="tin"
 										value={formData.tin}
 										onChange={(val) => setField('tin', val)}
-										placeholder={t('Enter your TIN')}
+										placeholder={t('أدخل الرقم المميز')}
 									/>
 								</FormField>
 
-								<FormField label={t('Tax Period')} required error={errors.taxPeriod}>
+								<FormField label={t('نوع المنشأة')} required error={errors.vatEntityType}>
 									<SelectInput
-										name="taxPeriod"
-										value={formData.taxPeriod}
-										onChange={(val) => setField('taxPeriod', val)}
-										placeholder={t('Select tax period')}
+										name="vatEntityType"
+										value={formData.vatEntityType}
+										onChange={(val) => setField('vatEntityType', val)}
+										placeholder={t('اختر نوع المنشأة')}
 										options={[
-											{ value: 'Q1-2024', label: 'Q1 2024' },
-											{ value: 'Q2-2024', label: 'Q2 2024' },
-											{ value: 'Q3-2024', label: 'Q3 2024' },
-											{ value: 'Q4-2024', label: 'Q4 2024' }
+											{ value: 'company', label: t('شركة') },
+											{ value: 'establishment', label: t('مؤسسة') },
+											{ value: 'non-profit', label: t('جهة غير ربحية') },
+											{ value: 'government', label: t('جهة حكومية') }
 										]}
 									/>
 								</FormField>
 
-								<FormField label={t('Contact Email')} required>
+								<FormField
+									label={t('أساس التسجيل')}
+									required
+									error={errors.vatRegistrationBasis}
+									helpText={t('وصول الإيرادات السنوية لحد التسجيل الإلزامي أو الاختياري.')}
+								>
+									<SelectInput
+										name="vatRegistrationBasis"
+										value={formData.vatRegistrationBasis}
+										onChange={(val) => setField('vatRegistrationBasis', val)}
+										placeholder={t('اختر أساس التسجيل')}
+										options={[
+											{ value: 'mandatory', label: t('تسجيل إلزامي') },
+											{ value: 'optional', label: t('تسجيل اختياري') }
+										]}
+									/>
+								</FormField>
+							</div>
+						)}
+
+						{currentStep === 2 && (
+							<div>
+								<h2 className="text-xl font-bold text-[#1F2A37] mb-6">
+									{t('تفاصيل التسجيل')}
+								</h2>
+
+								<FormField
+									label={t('الإيرادات السنوية')}
+									required
+									error={errors.vatAnnualRevenue}
+								>
+									<TextInput
+										name="vatAnnualRevenue"
+										type="number"
+										value={formData.vatAnnualRevenue}
+										onChange={(val) => setField('vatAnnualRevenue', val)}
+										placeholder={t('أدخل الإيرادات السنوية بالريال السعودي')}
+									/>
+								</FormField>
+
+								<FormField
+									label={t('تاريخ التسجيل الفعلي')}
+									required
+									error={errors.vatEffectiveDate}
+								>
+									<TextInput
+										name="vatEffectiveDate"
+										value={formData.vatEffectiveDate}
+										onChange={(val) => setField('vatEffectiveDate', val)}
+										placeholder={t('مثال: 15-04-2019')}
+									/>
+								</FormField>
+
+								<FormField
+									label={t('البريد الإلكتروني')}
+									required
+									error={errors.contactEmail}
+								>
 									<TextInput
 										name="contactEmail"
 										type="email"
 										value={formData.contactEmail}
 										onChange={(val) => setField('contactEmail', val)}
-										placeholder={t('example@email.com')}
+										placeholder={t('example@company.sa')}
 									/>
 								</FormField>
 
-								<FormField label={t('Contact Phone')} required>
+								<FormField
+									label={t('رقم الجوال')}
+									required
+									error={errors.contactPhone}
+								>
 									<TextInput
 										name="contactPhone"
 										type="tel"
 										value={formData.contactPhone}
 										onChange={(val) => setField('contactPhone', val)}
-										placeholder="+966 XX XXX XXXX"
-									/>
-								</FormField>
-							</div>
-						)}
-
-						{/* Step 2: Financial Details */}
-						{currentStep === 2 && (
-							<div>
-								<h2
-									className="text-xl font-bold text-[#1F2A37] mb-6"
-									style={{ fontFamily: '"IBM Plex Sans Arabic", sans-serif' }}
-								>
-									{t('Financial Details')}
-								</h2>
-
-								<FormField label={t('Total Amount Due (SAR)')} required error={errors.amountDue}>
-									<TextInput
-										name="amountDue"
-										type="number"
-										value={formData.amountDue}
-										onChange={(val) => setField('amountDue', val)}
-										placeholder={t('Enter amount in SAR')}
-									/>
-								</FormField>
-
-								<FormField label={t('Requested Number of Installments')} required error={errors.requestedInstallments}>
-									<SelectInput
-										name="requestedInstallments"
-										value={formData.requestedInstallments}
-										onChange={(val) => setField('requestedInstallments', val)}
-										placeholder={t('Select number of installments')}
-										options={[
-											{ value: '3', label: '3 ' + t('Months') },
-											{ value: '6', label: '6 ' + t('Months') },
-											{ value: '12', label: '12 ' + t('Months') }
-										]}
+										placeholder="+9665XXXXXXXX"
 									/>
 								</FormField>
 
 								<FormField
-									label={t('Justification for Installment Request')}
+									label={t('وصف النشاط الاقتصادي')}
 									required
-									error={errors.justification}
-									helpText={t('Please explain why you need an installment plan')}
+									error={errors.vatActivityDescription}
 								>
 									<TextArea
-										name="justification"
-										value={formData.justification}
-										onChange={(val) => setField('justification', val)}
-										placeholder={t('Describe your financial situation and reasons for requesting installments...')}
-										rows={6}
-									/>
-								</FormField>
-
-								<FormField label={t('Bank Name')} required>
-									<TextInput
-										name="bankName"
-										value={formData.bankName}
-										onChange={(val) => setField('bankName', val)}
-										placeholder={t('Enter bank name')}
-									/>
-								</FormField>
-
-								<FormField label={t('Bank Account Number')} required>
-									<TextInput
-										name="accountNumber"
-										value={formData.accountNumber}
-										onChange={(val) => setField('accountNumber', val)}
-										placeholder={t('Enter account number')}
+										name="vatActivityDescription"
+										value={formData.vatActivityDescription}
+										onChange={(val) => setField('vatActivityDescription', val)}
+										placeholder={t('اكتب وصفًا مختصرًا للنشاط الاقتصادي الخاضع لضريبة القيمة المضافة')}
+										rows={5}
 									/>
 								</FormField>
 							</div>
 						)}
 
-						{/* Step 3: Supporting Documents */}
 						{currentStep === 3 && (
 							<div>
-								<h2
-									className="text-xl font-bold text-[#1F2A37] mb-6"
-									style={{ fontFamily: '"IBM Plex Sans Arabic", sans-serif' }}
-								>
-									{t('Supporting Documents')}
+								<h2 className="text-xl font-bold text-[#1F2A37] mb-6">
+									{t('الإقرار والتأكيد')}
 								</h2>
 
-								<FormField
-									label={t('Bank Statement (Last 3 Months)')}
-									required
-									error={errors.bankStatement}
-									helpText={t('Accepted formats: PDF, JPG, PNG (Max 5MB)')}
-								>
-									<div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#1B8354] transition-colors">
-										<input
-											type="file"
-											id="bank-statement"
-											accept=".pdf,.jpg,.jpeg,.png"
-											onChange={handleFileUpload}
-											className="hidden"
-										/>
-										<label
-											htmlFor="bank-statement"
-											className="cursor-pointer flex flex-col items-center"
-										>
-											<Upload className="w-12 h-12 text-gray-400 mb-2" />
-											{formData.bankStatement ? (
-												<>
-													<p className="text-sm font-medium text-[#1B8354]">
-														{formData.bankStatement.name}
-													</p>
-													<p className="text-xs text-gray-500 mt-1">
-														{(formData.bankStatement.size / 1024 / 1024).toFixed(2)} MB
-													</p>
-												</>
-											) : (
-												<>
-													<p className="text-sm font-medium text-gray-700">
-														{t('Click to upload or drag and drop')}
-													</p>
-													<p className="text-xs text-gray-500 mt-1">
-														PDF, JPG, PNG {t('up to')} 5MB
-													</p>
-												</>
-											)}
-										</label>
-									</div>
-								</FormField>
-
-								<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-									<p className="text-sm text-blue-800">
-										<strong>{t('Note')}:</strong> {t('Please ensure your bank statement clearly shows transactions for the last 3 months.')}
-									</p>
+								<div className="bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg p-5 mb-6 space-y-3 text-sm text-gray-700">
+									<p>{t('الخدمة متاحة للمنشآت التي تمارس نشاطًا اقتصاديًا خاضعًا لضريبة القيمة المضافة.')}</p>
+									<p>{t('مدة تنفيذ الخدمة خمس دقائق.')}</p>
+									<p>{t('تكلفة الخدمة: لا يوجد رسوم.')}</p>
+									<p>{t('سيصلك إشعار لشهادة الضريبة عند اكتمال الطلب.')}</p>
 								</div>
+
+								<label className="flex items-start gap-3 rounded-lg border border-gray-200 p-4">
+									<input
+										name="vatTermsAccepted"
+										type="checkbox"
+										checked={formData.vatTermsAccepted}
+										onChange={(e) => setField('vatTermsAccepted', e.target.checked)}
+										className="mt-1 h-4 w-4 accent-[#1B8354]"
+									/>
+									<span className="text-sm text-gray-700">
+										{t('أقر بصحة المعلومات المدخلة وأوافق على متابعة طلب التسجيل في ضريبة القيمة المضافة للمنشآت.')}
+									</span>
+								</label>
+								{errors.vatTermsAccepted && (
+									<p className="mt-2 text-xs text-red-600">{t(errors.vatTermsAccepted)}</p>
+								)}
 							</div>
 						)}
 
-						{/* Step 4: Review & Submit */}
 						{currentStep === 4 && (
 							<div>
-								<h2
-									className="text-xl font-bold text-[#1F2A37] mb-6"
-									style={{ fontFamily: '"IBM Plex Sans Arabic", sans-serif' }}
-								>
-									{t('Review Your Request')}
+								<h2 className="text-xl font-bold text-[#1F2A37] mb-6">
+									{t('مراجعة الطلب')}
 								</h2>
 
 								<div className="space-y-6">
 									<div>
-										<h3 className="font-semibold text-[#1F2A37] mb-3">
-											{t('Basic Information')}
-										</h3>
+										<h3 className="font-semibold text-[#1F2A37] mb-3">{t('بيانات المنشأة')}</h3>
 										<div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
-											<div className="flex justify-between">
-												<span className="text-gray-600">{t('TIN')}:</span>
+											<div className="flex justify-between gap-4">
+												<span className="text-gray-600">{t('الرقم المميز / TIN')}:</span>
 												<span className="font-medium">{formData.tin}</span>
 											</div>
-											<div className="flex justify-between">
-												<span className="text-gray-600">{t('Tax Period')}:</span>
-												<span className="font-medium">{formData.taxPeriod}</span>
+											<div className="flex justify-between gap-4">
+												<span className="text-gray-600">{t('نوع المنشأة')}:</span>
+												<span className="font-medium">{formData.vatEntityType}</span>
 											</div>
-											<div className="flex justify-between">
-												<span className="text-gray-600">{t('Contact Email')}:</span>
+											<div className="flex justify-between gap-4">
+												<span className="text-gray-600">{t('أساس التسجيل')}:</span>
+												<span className="font-medium">{formData.vatRegistrationBasis}</span>
+											</div>
+										</div>
+									</div>
+
+									<div>
+										<h3 className="font-semibold text-[#1F2A37] mb-3">{t('تفاصيل التسجيل')}</h3>
+										<div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
+											<div className="flex justify-between gap-4">
+												<span className="text-gray-600">{t('الإيرادات السنوية')}:</span>
+												<span className="font-medium">{formData.vatAnnualRevenue}</span>
+											</div>
+											<div className="flex justify-between gap-4">
+												<span className="text-gray-600">{t('تاريخ التسجيل الفعلي')}:</span>
+												<span className="font-medium">{formData.vatEffectiveDate}</span>
+											</div>
+											<div className="flex justify-between gap-4">
+												<span className="text-gray-600">{t('البريد الإلكتروني')}:</span>
 												<span className="font-medium">{formData.contactEmail}</span>
 											</div>
-											<div className="flex justify-between">
-												<span className="text-gray-600">{t('Contact Phone')}:</span>
+											<div className="flex justify-between gap-4">
+												<span className="text-gray-600">{t('رقم الجوال')}:</span>
 												<span className="font-medium">{formData.contactPhone}</span>
 											</div>
 										</div>
@@ -402,86 +384,50 @@ export default function InstallmentRequest() {
 
 									<div>
 										<h3 className="font-semibold text-[#1F2A37] mb-3">
-											{t('Financial Details')}
-										</h3>
-										<div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
-											<div className="flex justify-between">
-												<span className="text-gray-600">{t('Amount Due')}:</span>
-												<span className="font-medium">{formData.amountDue} SAR</span>
-											</div>
-											<div className="flex justify-between">
-												<span className="text-gray-600">{t('Installments')}:</span>
-												<span className="font-medium">{formData.requestedInstallments} {t('Months')}</span>
-											</div>
-											<div className="flex justify-between">
-												<span className="text-gray-600">{t('Bank')}:</span>
-												<span className="font-medium">{formData.bankName}</span>
-											</div>
-										</div>
-									</div>
-
-									<div>
-										<h3 className="font-semibold text-[#1F2A37] mb-3">
-											{t('Justification')}
+											{t('النشاط الاقتصادي')}
 										</h3>
 										<div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700">
-											{formData.justification}
-										</div>
-									</div>
-
-									<div>
-										<h3 className="font-semibold text-[#1F2A37] mb-3">
-											{t('Uploaded Documents')}
-										</h3>
-										<div className="bg-gray-50 rounded-lg p-4 text-sm">
-											{formData.bankStatement && (
-												<div className="flex items-center gap-2">
-													<Upload className="w-4 h-4 text-[#1B8354]" />
-													<span className="font-medium">{formData.bankStatement.name}</span>
-													<span className="text-gray-500">
-														({(formData.bankStatement.size / 1024 / 1024).toFixed(2)} MB)
-													</span>
-												</div>
-											)}
+											{formData.vatActivityDescription}
 										</div>
 									</div>
 
 									<div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
 										<p className="text-sm text-yellow-800">
-											<strong>{t('Important')}:</strong> {t('Please review all information carefully before submitting. You will receive a notification within 20 business days.')}
+											<strong>{t('مهم')}:</strong>{' '}
+											{t('بعد إرسال الطلب ستصلك شهادة الضريبة عند اكتمال الطلب.')}
 										</p>
 									</div>
 								</div>
 							</div>
 						)}
 
-						{/* Navigation buttons */}
 						<div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
-							{currentStep > 1 && !submitted && (
+							{currentStep > 1 && !submitted ? (
 								<button
 									onClick={handleBack}
 									className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
 								>
 									{t('Back')}
 								</button>
+							) : (
+								<div />
 							)}
-							<div className={currentStep === 1 ? 'ml-auto' : ''}>
-								{currentStep < 4 ? (
-									<button
-										onClick={handleNext}
-										className="px-6 py-3 bg-[#1B8354] text-white rounded-lg font-medium hover:bg-[#156b45] transition-colors"
-									>
-										{t('Next')}
-									</button>
-								) : (
-									<button
-										onClick={handleSubmit}
-										className="px-6 py-3 bg-[#1B8354] text-white rounded-lg font-medium hover:bg-[#156b45] transition-colors"
-									>
-										{t('Submit Request')}
-									</button>
-								)}
-							</div>
+
+							{currentStep < 4 ? (
+								<button
+									onClick={handleNext}
+									className="px-6 py-3 bg-[#1B8354] text-white rounded-lg font-medium hover:bg-[#156b45] transition-colors"
+								>
+									{t('Next')}
+								</button>
+							) : (
+								<button
+									onClick={handleSubmit}
+									className="px-6 py-3 bg-[#1B8354] text-white rounded-lg font-medium hover:bg-[#156b45] transition-colors"
+								>
+									{t('Submit Request')}
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
@@ -489,4 +435,3 @@ export default function InstallmentRequest() {
 		</div>
 	)
 }
-
