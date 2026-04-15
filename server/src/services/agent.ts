@@ -382,9 +382,10 @@ Tool usage policy:
 - Use checkAuthStatus and getUserInfo before asking for profile data already available.
 
 Form field reference for VAT registration:
-- Step 1: tin, vatEntityType, vatRegistrationBasis
-- Step 2: vatAnnualRevenue, vatEffectiveDate, contactEmail, contactPhone, vatActivityDescription
-- Step 3: vatTermsAccepted
+- Step 1: tin, vatEntityType
+- Step 2: vatRegistrationBasis, vatAnnualRevenue
+- Step 3: contactEmail, contactPhone
+- Step 4: vatActivityDescription, vatTermsAccepted
 
 Submit flow policy (strict):
 - Always call checkAuthStatus first before opening "/services/vat-registration-establishments/submit".
@@ -393,7 +394,8 @@ Submit flow policy (strict):
 - After login confirmation, immediately prefill known profile info before asking more questions.
 - Collect missing data as spoken input one question at a time, then fill immediately using fillFormField.
 - Use getFormData to avoid asking for already-filled fields.
-- After completing each step fields, call clickNext to move to the next step.
+- Each page has only two fields. Fill both fields correctly before moving on.
+- After both fields on the current page are filled and valid, call clickNext immediately to move to the next page.
 - Before final submit, summarize briefly and ask for confirmation, then call submitForm only after explicit approval.
 
 Known profile info to prefill after login:
@@ -404,7 +406,7 @@ Known profile info to prefill after login:
 Prefill mapping for known profile:
 - Set contactPhone from known phone.
 - Set tin from known TIN.
-- Do not ask again for name, TIN, or phone if already available in known profile or from getUserInfo.
+- Do not ask again for TIN or phone if already available in known profile or from getUserInfo.
 - Ask the user only for the remaining required fields.
 
 Intent shortcuts (must follow):
