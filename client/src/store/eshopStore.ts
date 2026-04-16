@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import { getEshopProductById } from '../components/eshop/catalog'
 
 export type EshopCartItem = {
@@ -22,60 +23,72 @@ function getPriceNumber(value: string) {
 	return Number.parseFloat(value.replace(/,/g, '')) || 0
 }
 
-export const useEshopStore = create<EshopStore>((set, get) => ({
-	items: [],
-	isCartOpen: false,
+export const useEshopStore = create<EshopStore>()(
+	persist(
+		(set, get) => ({
+			items: [],
+			isCartOpen: false,
 
-	addItem: (productId) => {
-		const product = getEshopProductById(productId)
-		if (!product || product.soldOut) {
-			return {
-				success: false,
-				itemCount: get().getItemCount(),
-				cartTotal: get().getCartTotal(),
-			}
-		}
-
-		set((state) => {
-			const existing = state.items.find((item) => item.productId === productId)
-			if (existing) {
-				return {
-					items: state.items.map((item) =>
-						item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
-					),
-					isCartOpen: true,
+			addItem: (productId) => {
+				const product = getEshopProductById(productId)
+				if (!product || product.soldOut) {
+					return {
+						success: false,
+						itemCount: get().getItemCount(),
+						cartTotal: get().getCartTotal(),
+					}
 				}
-			}
 
-			return {
-				items: [...state.items, { productId, quantity: 1 }],
-				isCartOpen: true,
-			}
-		})
+				set((state) => {
+					const existing = state.items.find((item) => item.productId === productId)
+					if (existing) {
+						return {
+							items: state.items.map((item) =>
+								item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
+							),
+							isCartOpen: true,
+						}
+					}
 
-		return {
-			success: true,
-			itemCount: get().getItemCount(),
-			cartTotal: get().getCartTotal(),
-			productName: product.name,
+					return {
+						items: [...state.items, { productId, quantity: 1 }],
+						isCartOpen: true,
+					}
+				})
+
+				return {
+					success: true,
+					itemCount: get().getItemCount(),
+					cartTotal: get().getCartTotal(),
+					productName: product.name,
+				}
+			},
+
+			removeItem: (productId) =>
+				set((state) => ({
+					items: state.items.filter((item) => item.productId !== productId),
+				})),
+
+			openCart: () => set({ isCartOpen: true }),
+			closeCart: () => set({ isCartOpen: false }),
+			clearCart: () => set({ items: [], isCartOpen: false }),
+
+			getItemCount: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
+
+			getCartTotal: () =>
+				get().items.reduce((sum, item) => {
+					const product = getEshopProductById(item.productId)
+					if (!product) return sum
+					return sum + getPriceNumber(product.price) * item.quantity
+				}, 0),
+		}),
+		{
+			name: 'eshop-cart',
+			storage: createJSONStorage(() => localStorage),
+			partialize: (state) => ({
+				items: state.items,
+				isCartOpen: state.isCartOpen,
+			}),
 		}
-	},
-
-	removeItem: (productId) =>
-		set((state) => ({
-			items: state.items.filter((item) => item.productId !== productId),
-		})),
-
-	openCart: () => set({ isCartOpen: true }),
-	closeCart: () => set({ isCartOpen: false }),
-	clearCart: () => set({ items: [], isCartOpen: false }),
-
-	getItemCount: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
-
-	getCartTotal: () =>
-		get().items.reduce((sum, item) => {
-			const product = getEshopProductById(item.productId)
-			if (!product) return sum
-			return sum + getPriceNumber(product.price) * item.quantity
-		}, 0),
-}))
+	)
+)

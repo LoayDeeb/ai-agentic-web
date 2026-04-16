@@ -118,6 +118,14 @@ export function onToolEvent(callback: (tool: string, args: any) => void) {
 	return () => window.removeEventListener('agentTool', handler)
 }
 
+function hardNavigateTo(path: string) {
+	if (typeof window !== 'undefined') {
+		window.location.assign(path)
+		return
+	}
+	navigateTo(path)
+}
+
 // Execute agent tool calls
 export async function executeAgentTool(tool: string, args: any): Promise<any> {
 	console.log('[AgentTools] Executing:', tool, args)
@@ -431,7 +439,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 
 			useEshopStore.getState().closeCart()
 			const path = `/eshop/product/${detailProduct.slug}`
-			navigateTo(path)
+			hardNavigateTo(path)
 			return {
 				success: true,
 				navigatedTo: path,
@@ -457,7 +465,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 
 		case 'openEshopCheckout':
 			useEshopStore.getState().closeCart()
-			navigateTo('/eshop/checkout')
+			hardNavigateTo('/eshop/checkout')
 			return { success: true, navigatedTo: '/eshop/checkout', ...buildEshopCartSummary() }
 
 		case 'fillEshopCheckoutField': {

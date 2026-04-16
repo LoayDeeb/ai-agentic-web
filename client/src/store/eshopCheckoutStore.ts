@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 export type EshopPaymentMethod = 'card_online' | 'cash_on_delivery' | 'card_on_delivery'
 
@@ -65,38 +66,50 @@ const requiredFields: EshopCheckoutFieldName[] = [
 	'paymentMethod',
 ]
 
-export const useEshopCheckoutStore = create<EshopCheckoutStore>((set, get) => ({
-	formData: initialFormData,
-	isSubmitted: false,
-
-	setField: (fieldName, value) =>
-		set((state) => ({
-			formData: {
-				...state.formData,
-				[fieldName]: value,
-			},
-			isSubmitted: false,
-		})),
-
-	reset: () =>
-		set({
+export const useEshopCheckoutStore = create<EshopCheckoutStore>()(
+	persist(
+		(set, get) => ({
 			formData: initialFormData,
 			isSubmitted: false,
-		}),
 
-	getMissingFields: () =>
-		requiredFields.filter((fieldName) => {
-			const value = get().formData[fieldName]
-			return typeof value !== 'string' || value.trim().length === 0
-		}),
+			setField: (fieldName, value) =>
+				set((state) => ({
+					formData: {
+						...state.formData,
+						[fieldName]: value,
+					},
+					isSubmitted: false,
+				})),
 
-	submit: () => {
-		const missingFields = get().getMissingFields()
-		if (missingFields.length > 0) {
-			return { success: false, missingFields }
+			reset: () =>
+				set({
+					formData: initialFormData,
+					isSubmitted: false,
+				}),
+
+			getMissingFields: () =>
+				requiredFields.filter((fieldName) => {
+					const value = get().formData[fieldName]
+					return typeof value !== 'string' || value.trim().length === 0
+				}),
+
+			submit: () => {
+				const missingFields = get().getMissingFields()
+				if (missingFields.length > 0) {
+					return { success: false, missingFields }
+				}
+
+				set({ isSubmitted: true })
+				return { success: true, formData: get().formData }
+			},
+		}),
+		{
+			name: 'eshop-checkout',
+			storage: createJSONStorage(() => localStorage),
+			partialize: (state) => ({
+				formData: state.formData,
+				isSubmitted: state.isSubmitted,
+			}),
 		}
-
-		set({ isSubmitted: true })
-		return { success: true, formData: get().formData }
-	},
-}))
+	)
+)
