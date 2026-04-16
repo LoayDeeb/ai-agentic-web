@@ -5,6 +5,7 @@ import { createSpeechRecognition, SpeechRecognitionController } from './speechRe
 import { connectVoiceSocket, VoiceSocketController } from './voiceSocket'
 import { createAudioQueue, AudioQueueController } from './audioQueue'
 import { executeActions } from '../agent/execute'
+import { useEshopStore } from '../../store/eshopStore'
 
 const DOCK_STATE_KEY = 'voice.dock.state'
 
@@ -73,6 +74,7 @@ export function AgentDock() {
 	const sessionIdRef = React.useRef(persistedState.sessionId)
 	const unloadingRef = React.useRef(false)
 	const isEshopRoute = location.pathname.startsWith('/eshop')
+	const isCartOpen = useEshopStore((state) => state.isCartOpen)
 
 	const getCurrentPageContext = React.useCallback(() => ({
 		url: window.location.pathname,
@@ -379,7 +381,14 @@ export function AgentDock() {
 	}
 
 	return (
-		<div className={`fixed bottom-4 z-50 ${isEshopRoute ? 'left-4' : 'right-4'}`}>
+		<div
+			className="fixed bottom-4"
+			style={{
+				zIndex: isEshopRoute ? 35 : 50,
+				left: isEshopRoute ? '1rem' : 'auto',
+				right: isEshopRoute ? (isCartOpen ? 'auto' : '1rem') : '1rem',
+			}}
+		>
 			{open ? (
 				<div className="flex max-h-[70vh] w-[340px] max-w-[calc(100vw-1rem)] flex-col rounded-2xl border bg-white p-4 shadow-lg">
 					<div className="flex items-center justify-between mb-3">

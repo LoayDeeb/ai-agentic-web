@@ -126,6 +126,24 @@ function hardNavigateTo(path: string) {
 	navigateTo(path)
 }
 
+function smartNavigateTo(path: string) {
+	if (typeof window === 'undefined') {
+		navigateTo(path)
+		return
+	}
+
+	const target = new URL(path, window.location.origin)
+	const targetPath = `${target.pathname}${target.search}${target.hash}`
+	navigateTo(targetPath)
+
+	window.setTimeout(() => {
+		const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`
+		if (currentPath !== targetPath) {
+			window.location.assign(targetPath)
+		}
+	}, 220)
+}
+
 function shouldUseHardNavigation(path: string) {
 	return (
 		path === '/eshop' ||
@@ -172,7 +190,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 		case 'navigateTo': {
 			const path = String(args.path || '')
 			if (shouldUseHardNavigation(path)) {
-				hardNavigateTo(path)
+				smartNavigateTo(path)
 			} else {
 				navigateTo(path)
 			}
@@ -375,7 +393,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 
 		case 'openEshopHome':
 			useEshopStore.getState().closeCart()
-			hardNavigateTo('/eshop')
+			smartNavigateTo('/eshop')
 			return { success: true, navigatedTo: '/eshop' }
 
 		case 'openEshopSection': {
@@ -446,7 +464,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 
 			useEshopStore.getState().closeCart()
 			const path = `/eshop/product/${detailProduct.slug}`
-			hardNavigateTo(path)
+			smartNavigateTo(path)
 			return {
 				success: true,
 				navigatedTo: path,
@@ -463,7 +481,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 
 		case 'showEshopCart': {
 			useEshopStore.getState().openCart()
-			hardNavigateTo('/eshop')
+			smartNavigateTo('/eshop')
 			return { success: true, navigatedTo: '/eshop', ...buildEshopCartSummary() }
 		}
 
@@ -472,8 +490,18 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 
 		case 'openEshopCheckout':
 			useEshopStore.getState().closeCart()
-			hardNavigateTo('/eshop/checkout')
+			smartNavigateTo('/eshop/checkout')
 			return { success: true, navigatedTo: '/eshop/checkout', ...buildEshopCartSummary() }
+
+		case 'openIphone17Detail':
+			useEshopStore.getState().closeCart()
+			smartNavigateTo('/eshop/product/iphone-17')
+			return { success: true, navigatedTo: '/eshop/product/iphone-17', productId: 21 }
+
+		case 'openIphone17ProDetail':
+			useEshopStore.getState().closeCart()
+			smartNavigateTo('/eshop/product/iphone-17-pro')
+			return { success: true, navigatedTo: '/eshop/product/iphone-17-pro', productId: 22 }
 
 		case 'fillEshopCheckoutField': {
 			const fieldName = String(args.fieldName) as EshopCheckoutFieldName

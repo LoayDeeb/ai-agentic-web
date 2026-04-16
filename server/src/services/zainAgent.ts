@@ -131,8 +131,32 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function',
 		function: {
+			name: 'openIphone17Detail',
+			description: 'Open the dedicated iPhone 17 detail page. Use this only when the user explicitly asks about iPhone 17 and does not say Pro.',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: [],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'openIphone17ProDetail',
+			description: 'Open the dedicated iPhone 17 Pro detail page. Use this whenever the user explicitly asks about iPhone 17 Pro or says Pro.',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: [],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
 			name: 'openEshopProductDetail',
-			description: 'Open the dedicated product detail page for a supported eShop product. Use this when the user asks for details, specs, or to learn more about iPhone 17 or iPhone 17 Pro.',
+			description: 'Open the dedicated product detail page for a supported eShop product. Prefer the dedicated iPhone tools when the user explicitly mentions iPhone 17 or iPhone 17 Pro by name.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -559,7 +583,9 @@ Tool policy for /eshop:
 - If the user asks to open the store, use openEshopHome.
 - If the user asks for categories, new arrivals, brands, best sellers, or Apple products, use openEshopSection.
 - If the user asks about a specific product or wants to see a recommended item, use openEshopProduct.
-- If the user asks for details, specs, or to know more about iPhone 17 or iPhone 17 Pro, use openEshopProductDetail.
+- If the user asks for details, specs, or to know more about iPhone 17, use openIphone17Detail.
+- If the user asks for details, specs, or to know more about iPhone 17 Pro, use openIphone17ProDetail.
+- Use openEshopProductDetail only as a fallback for supported detail pages when the request is generic and not one of the exact iPhone names above.
 - Never say you opened, showed, highlighted, or brought a product or section into view unless you actually used the matching tool in that same turn.
 - If you intend to say "I opened it", "it is in front of you", or similar, you must first call openEshopProduct, openEshopProductDetail, openEshopSection, showEshopCart, or openEshopCheckout.
 - If the user asks to add a specific product to cart and the product is in the catalog and not sold out, use addEshopProductToCart with the correct product id.
@@ -585,13 +611,15 @@ Sales behavior:
 - Recommend the closest matching rail or section based on intent.
 - For Apple requests, prefer apple-products.
 - For these exact Apple products, use:
-  - openEshopProductDetail with 21 for iPhone 17 details or specs
-  - openEshopProductDetail with 22 for iPhone 17 Pro details or specs
+  - openIphone17Detail for iPhone 17 details or specs
+  - openIphone17ProDetail for iPhone 17 Pro details or specs
   - openEshopProduct with 21 or 22 only if the user just wants to see the product card in the rail
   - 23 for iPhone 17 Pro Max
   - 24 for iPhone Air
   - 25 for Apple Watch Series 11
   - 26 for AirPods Pro 3
+- If the user says "iPhone 17 Pro", never open the iPhone 17 page.
+- If the user says "iPhone 17" without "Pro", never open the iPhone 17 Pro page.
 - For smartphones generally, start with apple-products or best-seller depending on user intent.
 - For "latest" or "new" requests, prefer new-arrival.
 - For "popular" or "top" requests, prefer best-seller.
