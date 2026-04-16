@@ -38,6 +38,7 @@ const GigSubmitRequest = React.lazy(() => import('./pages/GigSubmitRequest'))
 const GigAdvisorRequest = React.lazy(() => import('./pages/GigAdvisorRequest'))
 const GigInsuranceDestination = React.lazy(() => import('./pages/GigInsuranceDestination'))
 const EshopHome = React.lazy(() => import('./pages/EshopHome'))
+const EshopCheckout = React.lazy(() => import('./pages/EshopCheckout'))
 
 // MOIN (Ministry of Investment) Pages
 const MoinServices = React.lazy(() => import('./pages/MoinServices'))
@@ -104,6 +105,7 @@ export default function App() {
 					<Route path="/zain/fiber" element={<ZainFiber />} />
 					<Route path="/zain/subscribe" element={<ZainSubscribe />} />
 					<Route path="/eshop" element={<EshopHome />} />
+					<Route path="/eshop/checkout" element={<EshopCheckout />} />
 
 					{/* SASO Routes */}
 					<Route path="/saso" element={<SasoHome />} />

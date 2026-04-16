@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowRight, CreditCard, Gift, ShieldCheck, Smartphone, Wifi } from 'lucide-react'
 import {
 	EshopBrandStrip,
@@ -43,6 +43,7 @@ const signals = [
 
 export default function EshopHome() {
 	const location = useLocation()
+	const navigate = useNavigate()
 	const items = useEshopStore((state) => state.items)
 	const isCartOpen = useEshopStore((state) => state.isCartOpen)
 	const addItem = useEshopStore((state) => state.addItem)
@@ -90,14 +91,14 @@ export default function EshopHome() {
 					<div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8 lg:py-16">
 						<div className="max-w-2xl">
 							<p className="text-sm font-semibold uppercase tracking-[0.26em] text-white/65">
-								Zain Jordan eShop Demo
+								Zain Jordan eShop
 							</p>
 							<h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-								A storefront demo built around the same Zain language, but tuned for commerce.
+								Shop devices, plans, and add-ons in one polished Zain storefront.
 							</h1>
 							<p className="mt-5 max-w-xl text-base leading-7 text-white/78 sm:text-lg">
-								This page packages categories, launches, best sellers, and brand-led shopping into a
-								single route so the e-commerce experience sits beside the existing service demos.
+								Discover the latest arrivals, browse best sellers, and build your basket with a sales
+								assistant that can guide you all the way to checkout.
 							</p>
 
 							<div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -220,8 +221,7 @@ export default function EshopHome() {
 					<div>
 						<div className="text-2xl font-bold text-[#1a0050]">zain</div>
 						<p className="mt-3 max-w-xs text-sm leading-6 text-slate-600">
-							eShop demo route for devices, digital vouchers, and commerce-led merchandising inside the
-							existing showcase app.
+							Zain Jordan eShop for devices, digital vouchers, and commerce-led merchandising in one place.
 						</p>
 					</div>
 					<div>
@@ -243,7 +243,7 @@ export default function EshopHome() {
 					<div>
 						<h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Status</h3>
 						<p className="mt-4 text-sm leading-6 text-slate-700">
-							Commerce demo route added for internal showcase purposes. Content and pricing are illustrative.
+							Shop flow with guided browsing, cart actions, and checkout support.
 						</p>
 					</div>
 				</div>
@@ -254,6 +254,10 @@ export default function EshopHome() {
 				isOpen={isCartOpen}
 				onClose={closeCart}
 				onRemove={removeItem}
+				onProceedToCheckout={() => {
+					closeCart()
+					navigate('/eshop/checkout')
+				}}
 				total={cartTotal}
 			/>
 		</div>

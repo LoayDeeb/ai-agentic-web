@@ -3,6 +3,12 @@ import { highlight } from './spotlight'
 import i18n from '../../i18n'
 import { useFormStore } from '../../store/formStore'
 import { useEshopStore } from '../../store/eshopStore'
+import {
+	eshopCheckoutFieldLabels,
+	type EshopCheckoutFieldName,
+	useEshopCheckoutStore,
+} from '../../store/eshopCheckoutStore'
+import { getEshopProductById, getRecommendedUpsells } from '../../components/eshop/catalog'
 
 export type AgentTool = {
 	tool: string
@@ -110,6 +116,36 @@ export function onToolEvent(callback: (tool: string, args: any) => void) {
 // Execute agent tool calls
 export async function executeAgentTool(tool: string, args: any): Promise<any> {
 	console.log('[AgentTools] Executing:', tool, args)
+
+	const buildEshopCartSummary = () => {
+		const eshopStore = useEshopStore.getState()
+
+		return {
+			itemCount: eshopStore.getItemCount(),
+			cartTotal: eshopStore.getCartTotal(),
+			items: eshopStore.items
+				.map((item) => {
+					const product = getEshopProductById(item.productId)
+					if (!product) return null
+					return {
+						productId: item.productId,
+						name: product.name,
+						quantity: item.quantity,
+						price: product.price,
+						currency: product.currency,
+					}
+				})
+				.filter(Boolean),
+			recommendedUpsells: getRecommendedUpsells(
+				eshopStore.items.map((item) => item.productId)
+			).map((product) => ({
+				productId: product.id,
+				name: product.name,
+				price: product.price,
+				currency: product.currency,
+			})),
+		}
+	}
 
 	switch (tool) {
 		case 'navigateTo':
@@ -346,9 +382,51 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 		case 'showEshopCart': {
 			navigateTo('/eshop')
 			useEshopStore.getState().openCart()
-			const itemCount = useEshopStore.getState().getItemCount()
-			const cartTotal = useEshopStore.getState().getCartTotal()
-			return { success: true, itemCount, cartTotal, navigatedTo: '/eshop' }
+			return { success: true, navigatedTo: '/eshop', ...buildEshopCartSummary() }
+		}
+
+		case 'getEshopCart':
+			return { success: true, ...buildEshopCartSummary() }
+
+		case 'openEshopCheckout':
+			navigateTo('/eshop/checkout')
+			return { success: true, navigatedTo: '/eshop/checkout', ...buildEshopCartSummary() }
+
+		case 'fillEshopCheckoutField': {
+			const fieldName = String(args.fieldName) as EshopCheckoutFieldName
+			const value = String(args.value ?? '')
+			useEshopCheckoutStore.getState().setField(fieldName, value)
+			return {
+				success: true,
+				fieldName,
+				label: eshopCheckoutFieldLabels[fieldName],
+				value,
+			}
+		}
+
+		case 'getEshopCheckoutData': {
+			const checkoutStore = useEshopCheckoutStore.getState()
+			return {
+				success: true,
+				formData: checkoutStore.formData,
+				missingFields: checkoutStore.getMissingFields(),
+				isSubmitted: checkoutStore.isSubmitted,
+			}
+		}
+
+		case 'highlightEshopCheckoutField': {
+			const fieldName = String(args.fieldName) as EshopCheckoutFieldName
+			highlight(`#eshop-checkout-${fieldName}`, args.duration ?? 3)
+			return { success: true, fieldName }
+		}
+
+		case 'submitEshopCheckout': {
+			const result = useEshopCheckoutStore.getState().submit()
+			if (!result.success) {
+				return { success: false, missingFields: result.missingFields }
+			}
+
+			return { success: true, formData: result.formData, ...buildEshopCartSummary() }
 		}
 
 		case 'openZainFiber':

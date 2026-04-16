@@ -250,3 +250,45 @@ export const eshopProductMap = new Map(allEshopProducts.map((product) => [produc
 export function getEshopProductById(productId: number) {
 	return eshopProductMap.get(productId)
 }
+
+const upsellPairs: Record<number, number[]> = {
+	1: [5, 7],
+	11: [25, 26],
+	12: [26, 21],
+	13: [5, 26],
+	15: [25, 26],
+	17: [7, 8],
+	18: [7, 8],
+	21: [25, 26],
+	22: [23, 26],
+	23: [25, 26],
+	24: [26, 25],
+	25: [26, 21],
+	27: [5, 26],
+}
+
+export function getRecommendedUpsells(cartProductIds: number[]) {
+	const inCart = new Set(cartProductIds)
+	const recommendedIds = new Set<number>()
+
+	for (const productId of cartProductIds) {
+		for (const candidateId of upsellPairs[productId] ?? []) {
+			if (!inCart.has(candidateId)) {
+				recommendedIds.add(candidateId)
+			}
+		}
+	}
+
+	if (recommendedIds.size === 0) {
+		for (const fallbackId of [26, 25, 5, 7, 8, 21]) {
+			if (!inCart.has(fallbackId)) {
+				recommendedIds.add(fallbackId)
+			}
+			if (recommendedIds.size >= 3) break
+		}
+	}
+
+	return Array.from(recommendedIds)
+		.map((productId) => getEshopProductById(productId))
+		.filter((product): product is EshopProduct => Boolean(product && !product.soldOut))
+}

@@ -144,6 +144,112 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function',
 		function: {
+			name: 'getEshopCart',
+			description: 'Get the current eShop cart contents and matching upsell suggestions.',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: [],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'openEshopCheckout',
+			description: 'Open the Zain Jordan eShop checkout page.',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: [],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'fillEshopCheckoutField',
+			description: 'Fill a specific field in the eShop checkout form.',
+			parameters: {
+				type: 'object',
+				properties: {
+					fieldName: {
+						type: 'string',
+						enum: [
+							'fullName',
+							'phone',
+							'email',
+							'city',
+							'area',
+							'streetAddress',
+							'paymentMethod',
+							'deliveryNotes',
+						],
+					},
+					value: {
+						type: 'string',
+					},
+				},
+				required: ['fieldName', 'value'],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'getEshopCheckoutData',
+			description: 'Get the current eShop checkout form data and missing required fields.',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: [],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'highlightEshopCheckoutField',
+			description: 'Highlight a specific eShop checkout field to guide the user.',
+			parameters: {
+				type: 'object',
+				properties: {
+					fieldName: {
+						type: 'string',
+						enum: [
+							'fullName',
+							'phone',
+							'email',
+							'city',
+							'area',
+							'streetAddress',
+							'paymentMethod',
+							'deliveryNotes',
+						],
+					},
+					duration: {
+						type: 'number',
+					},
+				},
+				required: ['fieldName'],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'submitEshopCheckout',
+			description: 'Submit the eShop checkout form.',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: [],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
 			name: 'openZainFiber',
 			description: 'Open the Zain Fiber page showing all fiber packages.',
 			parameters: {
@@ -361,10 +467,11 @@ const zainFiberPrompt = `أنت المساعد الافتراضي لزين ال�
 const zainEshopPrompt = `You are the Zain Jordan eShop sales assistant.
 
 Role:
-- You only help with the Zain Jordan eShop demo on /eshop.
-- Act like a concise retail sales assistant, not a general help bot.
-- Focus on browsing, recommending products, adding items to cart, and showing the cart.
+- You only help with the Zain Jordan eShop experience on /eshop and /eshop/checkout.
+- Act like a confident retail sales assistant, not a general help bot.
+- Focus on browsing, recommending products, adding items to cart, opening checkout, and closing the sale.
 - Never answer as ZATCA, EF, GIG, SASO, or any other demo.
+- Never call this experience a demo, prototype, or mockup unless the user explicitly asks about implementation details.
 
 Conversation style:
 - Reply in the same language as the user.
@@ -372,6 +479,7 @@ Conversation style:
 - Prefer one to two short sentences.
 - Ask at most one clarifying question when needed.
 - When intent is clear, act immediately with tools.
+- Sound commercially helpful: guide, recommend, reassure, and move the user forward.
 
 Available eShop sections:
 - categories
@@ -411,17 +519,28 @@ Tool policy for /eshop:
 - If the user asks to open the store, use openEshopHome.
 - If the user asks for categories, new arrivals, brands, best sellers, or Apple products, use openEshopSection.
 - If the user asks to add a specific product to cart and the product is in the catalog and not sold out, use addEshopProductToCart with the correct product id.
-- After adding to cart, briefly confirm the product name and ask if they want to see the cart or continue shopping.
+- After adding to cart, briefly confirm the product name and suggest one next step: view cart, add a matching accessory, or go to checkout.
 - If the user asks to see the cart, review the cart, or check what was added, use showEshopCart.
-- If the user asks for something unsupported, say the demo currently supports browsing sections and cart actions, then guide them to the closest valid section.
+- If you need the cart contents or matching add-ons before responding, use getEshopCart.
+- If the user wants to buy, complete the order, proceed, or checkout, use openEshopCheckout.
+- On checkout, gather missing fields one at a time, use fillEshopCheckoutField, verify progress with getEshopCheckoutData, and then use submitEshopCheckout.
+- If a required field is missing, guide the user to it and use highlightEshopCheckoutField when helpful.
+- If the user asks for something outside the current store flow, steer them to the closest available product, cart, or checkout action without mentioning internal limitations unless necessary.
 
 Sales behavior:
 - Recommend the closest matching rail or section based on intent.
 - For Apple requests, prefer apple-products.
-- For “latest” or “new” requests, prefer new-arrival.
-- For “popular” or “top” requests, prefer best-seller.
 - For smartphones generally, start with apple-products or best-seller depending on user intent.
-- Do not claim checkout, payment, or order tracking is fully functional unless visible in the demo.
+- For "latest" or "new" requests, prefer new-arrival.
+- For "popular" or "top" requests, prefer best-seller.
+- Upsell naturally after the main product is clear:
+  - iPhone or Apple device: suggest AirPods Pro 3 or Apple Watch Series 11.
+  - MacBook or tablet: suggest Xiaomi Gaming Mouse Lite GL or AirPods Pro 3.
+  - Samsung phone: suggest TP-Link Wi-Fi adapter or FOLG Ear Phone.
+- Only suggest one upsell at a time and keep it relevant.
+- When the user greets you or starts broadly, welcome them and ask what they want to shop for.
+- Do not invent prices, discounts, financing plans, or inventory beyond the listed catalog.
+- Do not claim payment or order tracking is completed unless it is visible in the current flow.
 `
 
 function buildSystemPrompt(currentUrl?: string) {

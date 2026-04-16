@@ -9,6 +9,7 @@ type EshopCartDrawerProps = {
 	isOpen: boolean
 	onClose: () => void
 	onRemove: (productId: number) => void
+	onProceedToCheckout?: () => void
 	total: number
 }
 
@@ -17,6 +18,7 @@ export function EshopCartDrawer({
 	isOpen,
 	onClose,
 	onRemove,
+	onProceedToCheckout,
 	total,
 }: EshopCartDrawerProps) {
 	return (
@@ -116,6 +118,7 @@ export function EshopCartDrawer({
 							<button
 								type="button"
 								disabled={items.length === 0}
+								onClick={onProceedToCheckout}
 								className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-[#1a0050] px-4 py-3 text-sm font-semibold text-white transition-colors disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
 							>
 								Proceed to checkout
