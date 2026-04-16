@@ -1,27 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {
-	Heart,
-	Menu,
-	Search,
-	ShoppingCart,
-	User,
-	X,
-	ChevronDown,
-} from 'lucide-react'
+import { ChevronDown, Heart, Menu, Search, ShoppingCart, User, X } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import { useLocaleStore } from '../../store/locale'
+import { eshopCopy } from './content'
 
 const BRAND_BG = '#1a0050'
-
-const navLinks = [
-	{ label: 'العربية', href: '#' },
-	{ label: 'Main website', href: '#' },
-	{ label: 'Track order', href: '#' },
-]
-
-const accountMenuItems = [
-	{ label: 'Log in', href: '#' },
-	{ label: 'Register', href: '#' },
-]
 
 function ZainWordmark({ compact = false }: { compact?: boolean }) {
 	return (
@@ -56,10 +39,25 @@ type EshopHeaderProps = {
 }
 
 export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
+	const { lang, switchLanguage } = useLocaleStore()
+	const copy = eshopCopy.header[lang]
 	const [searchValue, setSearchValue] = useState('')
 	const [accountOpen, setAccountOpen] = useState(false)
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 	const accountRef = useRef<HTMLDivElement>(null)
+	const navLinks = [
+		{
+			label: copy.languageLabel,
+			href: '#',
+			action: () => switchLanguage(lang === 'ar' ? 'en' : 'ar'),
+		},
+		{ label: copy.mainWebsite, href: '#' },
+		{ label: copy.trackOrder, href: '#' },
+	]
+	const accountMenuItems = [
+		{ label: copy.logIn, href: '#' },
+		{ label: copy.register, href: '#' },
+	]
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -84,16 +82,16 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 						<div className="flex h-10 flex-1 items-center rounded-l-full border border-black/5 bg-white px-4">
 							<input
 								type="text"
-								placeholder="Search"
+								placeholder={copy.searchPlaceholder}
 								value={searchValue}
 								onChange={(event) => setSearchValue(event.target.value)}
-								aria-label="Search store"
+								aria-label={copy.searchAria}
 								className="w-full bg-transparent text-sm text-black/70 outline-none placeholder:text-black/40"
 							/>
 						</div>
 						<button
 							type="button"
-							aria-label="Submit search"
+							aria-label={copy.submitSearch}
 							className="flex h-10 w-11 items-center justify-center rounded-r-full bg-[#ebebeb] text-black/70 transition-colors hover:bg-[#dfdfdf]"
 						>
 							<Search size={18} strokeWidth={1.8} />
@@ -105,6 +103,11 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 							<a
 								key={link.label}
 								href={link.href}
+								onClick={(event) => {
+									if (!link.action) return
+									event.preventDefault()
+									link.action()
+								}}
 								className="px-3 py-2 text-sm text-white/90 transition-opacity hover:opacity-75"
 							>
 								{link.label}
@@ -115,7 +118,7 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 					<div className="flex items-center gap-1 text-white">
 						<a
 							href="#"
-							aria-label="Wishlist"
+							aria-label={copy.wishlist}
 							className="rounded-full p-2 transition-colors hover:bg-white/10"
 						>
 							<Heart size={22} strokeWidth={1.7} />
@@ -125,7 +128,7 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 							<button
 								type="button"
 								onClick={() => setAccountOpen((value) => !value)}
-								aria-label="My account"
+								aria-label={copy.myAccount}
 								className="flex items-center gap-1 rounded-full p-2 transition-colors hover:bg-white/10"
 							>
 								<User size={22} strokeWidth={1.7} />
@@ -153,7 +156,7 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 						<button
 							type="button"
 							onClick={onCartClick}
-							aria-label="Shopping cart"
+							aria-label={copy.cart}
 							className="relative rounded-full p-2 transition-colors hover:bg-white/10"
 						>
 							<ShoppingCart size={22} strokeWidth={1.7} />
@@ -170,7 +173,7 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 					<div className="flex items-center justify-between gap-3">
 						<button
 							type="button"
-							aria-label="Open menu"
+							aria-label={copy.openMenu}
 							onClick={() => setMobileMenuOpen((value) => !value)}
 							className="rounded-full p-2 text-white transition-colors hover:bg-white/10"
 						>
@@ -184,7 +187,7 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 						<div className="flex items-center gap-1 text-white">
 							<a
 								href="#"
-								aria-label="Wishlist"
+								aria-label={copy.wishlist}
 								className="rounded-full p-2 transition-colors hover:bg-white/10"
 							>
 								<Heart size={20} strokeWidth={1.7} />
@@ -192,7 +195,7 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 							<button
 								type="button"
 								onClick={onCartClick}
-								aria-label="Shopping cart"
+								aria-label={copy.cart}
 								className="relative rounded-full p-2 transition-colors hover:bg-white/10"
 							>
 								<ShoppingCart size={20} strokeWidth={1.7} />
@@ -209,16 +212,16 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 						<div className="flex h-10 flex-1 items-center rounded-l-full border border-black/5 bg-white px-4">
 							<input
 								type="text"
-								placeholder="Search"
+								placeholder={copy.searchPlaceholder}
 								value={searchValue}
 								onChange={(event) => setSearchValue(event.target.value)}
-								aria-label="Search store"
+								aria-label={copy.searchAria}
 								className="w-full bg-transparent text-sm text-black/70 outline-none placeholder:text-black/40"
 							/>
 						</div>
 						<button
 							type="button"
-							aria-label="Submit search"
+							aria-label={copy.submitSearch}
 							className="flex h-10 w-11 items-center justify-center rounded-r-full bg-[#ebebeb] text-black/70 transition-colors hover:bg-[#dfdfdf]"
 						>
 							<Search size={18} strokeWidth={1.8} />
@@ -237,6 +240,12 @@ export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 									<a
 										key={link.label}
 										href={link.href}
+										onClick={(event) => {
+											if (!link.action) return
+											event.preventDefault()
+											link.action()
+											setMobileMenuOpen(false)
+										}}
 										className="block rounded-2xl px-4 py-3 text-sm text-white transition-colors hover:bg-white/10"
 									>
 										{link.label}

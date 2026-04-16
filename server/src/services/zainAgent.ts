@@ -205,7 +205,8 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		type: 'function',
 		function: {
 			name: 'fillEshopCheckoutField',
-			description: 'Fill a specific field in the eShop checkout form.',
+			description:
+				'Fill a specific field in the eShop checkout form. Use this immediately after the user gives you checkout information such as name, phone, email, city, area, street address, payment method, or delivery notes.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -234,7 +235,8 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		type: 'function',
 		function: {
 			name: 'getEshopCheckoutData',
-			description: 'Get the current eShop checkout form data and missing required fields.',
+			description:
+				'Get the current eShop checkout form data and missing required fields before deciding what information to ask the user for next.',
 			parameters: {
 				type: 'object',
 				properties: {},
@@ -275,7 +277,8 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		type: 'function',
 		function: {
 			name: 'submitEshopCheckout',
-			description: 'Submit the eShop checkout form.',
+			description:
+				'Submit the eShop checkout form only after the required fields are filled and the user is ready to confirm the order.',
 			parameters: {
 				type: 'object',
 				properties: {},
@@ -564,7 +567,17 @@ Tool policy for /eshop:
 - If the user asks to see the cart, review the cart, or check what was added, use showEshopCart.
 - If you need the cart contents or matching add-ons before responding, use getEshopCart.
 - If the user wants to buy, complete the order, proceed, or checkout, use openEshopCheckout.
-- On checkout, gather missing fields one at a time, use fillEshopCheckoutField, verify progress with getEshopCheckoutData, and then use submitEshopCheckout.
+- On checkout, act like a salesperson closing the order: open checkout, check the form state, ask only for the next missing item, fill it as soon as the user answers, and keep moving forward.
+- Always call getEshopCheckoutData before deciding which checkout question to ask next.
+- Required checkout order: fullName, phone, email, city, area, streetAddress, paymentMethod.
+- Ask for only one missing required field at a time unless the user already gave multiple fields in one message.
+- If the user gives multiple checkout values in one message, fill every clear value you can, then call getEshopCheckoutData again.
+- After each checkout answer, call fillEshopCheckoutField before replying.
+- For payment method, map common Arabic wording as follows:
+  - "كاش", "نقد", "نقداً", or "الدفع عند الاستلام" -> cash_on_delivery
+  - "بطاقة عند الاستلام" or "كي نت عند الاستلام" -> card_on_delivery
+  - "بطاقة", "أونلاين", or "ادفع بالبطاقة" -> card_online
+- Once all required checkout fields are filled, summarize the order briefly and ask for final confirmation before using submitEshopCheckout.
 - If a required field is missing, guide the user to it and use highlightEshopCheckoutField when helpful.
 - If the user asks for something outside the current store flow, steer them to the closest available product, cart, or checkout action without mentioning internal limitations unless necessary.
 
@@ -592,6 +605,7 @@ Sales behavior:
 - When the user greets you or starts broadly, welcome them and ask what they want to shop for.
 - Do not invent prices, discounts, financing plans, or inventory beyond the listed catalog.
 - Do not claim payment or order tracking is completed unless it is visible in the current flow.
+- Do not say the checkout is complete until submitEshopCheckout succeeds.
 `
 
 function buildSystemPrompt(currentUrl?: string) {

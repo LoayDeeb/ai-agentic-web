@@ -1,5 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { useLocaleStore } from '../../store/locale'
+import { eshopCopy } from './content'
 
 type Category = {
 	name: string
@@ -33,19 +35,21 @@ const cardVariants = {
 }
 
 export function EshopCategories() {
+	const { lang } = useLocaleStore()
+	const copy = eshopCopy.categories[lang]
+
 	return (
 		<section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 			<div className="rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_rgba(20,16,50,0.08)] sm:p-8">
 				<div className="mx-auto max-w-2xl text-center">
 					<p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#d12b8a]">
-						Shop faster
+						{copy.kicker}
 					</p>
 					<h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-						Shop popular categories
+						{copy.title}
 					</h2>
 					<p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
-						Pick a lane and jump straight into the products, plans, and vouchers people browse the
-						most.
+						{copy.description}
 					</p>
 				</div>
 
@@ -56,7 +60,7 @@ export function EshopCategories() {
 					viewport={{ once: true, amount: 0.2 }}
 					className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5"
 				>
-					{categories.map((category) => (
+					{categories.map((category, index) => (
 						<motion.a
 							key={category.name}
 							href="#"
@@ -70,9 +74,9 @@ export function EshopCategories() {
 							className="group flex min-h-[210px] flex-col items-center justify-center rounded-3xl border border-slate-200/70 bg-[linear-gradient(180deg,#ffffff_0%,#f7fbff_100%)] p-5 text-center transition-colors hover:border-[#009BDE]/35"
 						>
 							<div className="flex h-20 items-center justify-center">{category.icon}</div>
-							<div className="mt-4 text-base font-bold text-slate-900">{category.name}</div>
+							<div className="mt-4 text-base font-bold text-slate-900">{copy.names[index]}</div>
 							<p className="mt-2 max-w-[14rem] text-sm text-slate-500 transition-colors group-hover:text-slate-700">
-								Explore curated items and current offers in one place.
+								{copy.cardCopy}
 							</p>
 						</motion.a>
 					))}

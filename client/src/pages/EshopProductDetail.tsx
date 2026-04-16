@@ -3,16 +3,23 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, Check, ShieldCheck, ShoppingCart, Sparkles } from 'lucide-react'
 import { EshopCartDrawer, EshopHeader } from '../components/eshop'
 import {
-	getEshopProductById,
 	getEshopProductDetailBySlug,
 	getRecommendedUpsells,
 } from '../components/eshop/catalog'
+import { detailCopyBySlug, eshopCopy, getEshopProductName } from '../components/eshop/content'
+import { useLocaleStore } from '../store/locale'
 import { useEshopStore } from '../store/eshopStore'
 
 export default function EshopProductDetail() {
 	const navigate = useNavigate()
 	const { slug = '' } = useParams()
-	const detail = getEshopProductDetailBySlug(slug)
+	const { lang, dir } = useLocaleStore()
+	const baseDetail = getEshopProductDetailBySlug(slug)
+	const detailCopy =
+		lang === 'ar' && (slug === 'iphone-17' || slug === 'iphone-17-pro')
+			? detailCopyBySlug[slug].ar
+			: undefined
+	const copy = eshopCopy.detail[lang]
 	const items = useEshopStore((state) => state.items)
 	const isCartOpen = useEshopStore((state) => state.isCartOpen)
 	const addItem = useEshopStore((state) => state.addItem)
@@ -22,14 +29,28 @@ export default function EshopProductDetail() {
 	const itemCount = useEshopStore((state) => state.getItemCount())
 	const cartTotal = useEshopStore((state) => state.getCartTotal())
 
-	if (!detail) {
+	if (!baseDetail) {
 		return <Navigate to="/eshop" replace />
+	}
+
+	const detail = {
+		...baseDetail,
+		name: detailCopy?.name ?? baseDetail.name,
+		tagline: detailCopy?.tagline ?? baseDetail.tagline,
+		finishLabel: detailCopy?.finishLabel ?? baseDetail.finishLabel,
+		heroDescription: detailCopy?.heroDescription ?? baseDetail.heroDescription,
+		highlights: detailCopy?.highlights ?? baseDetail.highlights,
+		specCards: detailCopy?.specCards ?? baseDetail.specCards,
+		inTheBox: detailCopy?.inTheBox ?? baseDetail.inTheBox,
 	}
 
 	const relatedUpsells = getRecommendedUpsells([detail.productId]).slice(0, 2)
 
 	return (
-		<div className="min-h-screen bg-[radial-gradient(circle_at_top,#f3ecff_0%,#f7f8fc_28%,#f3f7fc_60%,#eef3fb_100%)] text-slate-900">
+		<div
+			dir={dir}
+			className="min-h-screen bg-[radial-gradient(circle_at_top,#f3ecff_0%,#f7f8fc_28%,#f3f7fc_60%,#eef3fb_100%)] text-slate-900"
+		>
 			<EshopHeader itemCount={itemCount} onCartClick={openCart} />
 
 			<main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -39,8 +60,8 @@ export default function EshopProductDetail() {
 						onClick={() => navigate('/eshop')}
 						className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 font-medium text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-900"
 					>
-						<ArrowLeft size={16} />
-						Back to eShop
+						<ArrowLeft size={16} className={lang === 'ar' ? 'rotate-180' : ''} />
+						{copy.back}
 					</button>
 					<span>/</span>
 					<span className="font-semibold text-slate-900">{detail.name}</span>
@@ -76,7 +97,7 @@ export default function EshopProductDetail() {
 
 						<div className="flex flex-col">
 							<p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#6b5ca5]">
-								Apple product detail
+								{copy.kicker}
 							</p>
 							<h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-900">{detail.name}</h1>
 							<p className="mt-4 text-base leading-7 text-slate-600">{detail.heroDescription}</p>
@@ -129,7 +150,7 @@ export default function EshopProductDetail() {
 									className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1a0050] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#2b0b73]"
 								>
 									<ShoppingCart size={16} />
-									Add to cart
+									{copy.addToCart}
 								</button>
 								<button
 									type="button"
@@ -139,14 +160,14 @@ export default function EshopProductDetail() {
 									}}
 									className="inline-flex items-center justify-center rounded-full border border-[#1a0050] px-6 py-3 text-sm font-semibold text-[#1a0050] transition-colors hover:bg-[#f2edff]"
 								>
-									Buy now
+									{copy.buyNow}
 								</button>
 							</div>
 
 							<div className="mt-8 rounded-[1.6rem] border border-slate-200 bg-slate-50 p-5">
 								<div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
 									<ShieldCheck size={16} className="text-[#2b0b73]" />
-									In the box
+									{copy.inTheBox}
 								</div>
 								<ul className="mt-3 space-y-2 text-sm text-slate-600">
 									{detail.inTheBox.map((item) => (
@@ -160,7 +181,7 @@ export default function EshopProductDetail() {
 
 				{relatedUpsells.length > 0 ? (
 					<section className="mt-8 rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_rgba(20,16,50,0.08)] sm:p-8">
-						<h2 className="text-2xl font-bold text-slate-900">Pairs well with</h2>
+						<h2 className="text-2xl font-bold text-slate-900">{copy.pairsWell}</h2>
 						<div className="mt-5 grid gap-4 md:grid-cols-2">
 							{relatedUpsells.map((product) => (
 								<div key={product.id} className="rounded-[1.5rem] border border-slate-200 p-5">
@@ -169,7 +190,9 @@ export default function EshopProductDetail() {
 											<img src={product.image} alt={product.name} className="h-16 w-16 object-contain" />
 										</div>
 										<div className="min-w-0 flex-1">
-											<h3 className="text-lg font-semibold text-slate-900">{product.name}</h3>
+											<h3 className="text-lg font-semibold text-slate-900">
+												{getEshopProductName(product.id, product.name, lang)}
+											</h3>
 											<p className="mt-2 text-sm text-slate-600">
 												{product.price} {product.currency}
 											</p>
@@ -181,22 +204,22 @@ export default function EshopProductDetail() {
 											onClick={() => addItem(product.id)}
 											className="inline-flex flex-1 items-center justify-center rounded-full bg-[#1a0050] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2b0b73]"
 										>
-											Add to cart
+											{copy.addToCart}
 										</button>
-										{getEshopProductDetailBySlug('iphone-17') && product.id === 21 ? (
+										{product.id === 21 ? (
 											<Link
 												to="/eshop/product/iphone-17"
 												className="inline-flex flex-1 items-center justify-center rounded-full border border-[#1a0050] px-4 py-2 text-sm font-semibold text-[#1a0050] transition-colors hover:bg-[#f2edff]"
 											>
-												View details
+												{lang === 'ar' ? 'عرض التفاصيل' : 'View details'}
 											</Link>
 										) : null}
-										{getEshopProductDetailBySlug('iphone-17-pro') && product.id === 22 ? (
+										{product.id === 22 ? (
 											<Link
 												to="/eshop/product/iphone-17-pro"
 												className="inline-flex flex-1 items-center justify-center rounded-full border border-[#1a0050] px-4 py-2 text-sm font-semibold text-[#1a0050] transition-colors hover:bg-[#f2edff]"
 											>
-												View details
+												{lang === 'ar' ? 'عرض التفاصيل' : 'View details'}
 											</Link>
 										) : null}
 									</div>

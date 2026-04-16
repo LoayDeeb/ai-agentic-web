@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ShoppingBag, Trash2, X } from 'lucide-react'
 import { getEshopProductById } from './catalog'
 import type { EshopCartItem } from '../../store/eshopStore'
+import { useLocaleStore } from '../../store/locale'
+import { eshopCopy, getEshopProductName } from './content'
 
 type EshopCartDrawerProps = {
 	items: EshopCartItem[]
@@ -21,6 +23,9 @@ export function EshopCartDrawer({
 	onProceedToCheckout,
 	total,
 }: EshopCartDrawerProps) {
+	const { lang } = useLocaleStore()
+	const copy = eshopCopy.cart[lang]
+
 	return (
 		<AnimatePresence>
 			{isOpen ? (
@@ -42,9 +47,9 @@ export function EshopCartDrawer({
 						<div className="flex items-center justify-between border-b border-slate-200/70 px-6 py-5">
 							<div>
 								<p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
-									Your cart
+									{copy.kicker}
 								</p>
-								<h2 className="mt-1 text-2xl font-bold text-slate-900">Selected items</h2>
+								<h2 className="mt-1 text-2xl font-bold text-slate-900">{copy.title}</h2>
 							</div>
 							<button
 								type="button"
@@ -61,10 +66,9 @@ export function EshopCartDrawer({
 									<div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-500">
 										<ShoppingBag size={28} />
 									</div>
-									<h3 className="mt-5 text-xl font-semibold text-slate-900">Your cart is empty</h3>
+									<h3 className="mt-5 text-xl font-semibold text-slate-900">{copy.emptyTitle}</h3>
 									<p className="mt-2 max-w-xs text-sm leading-6 text-slate-500">
-										Add a product from the eShop rails and the sales agent can walk you through the
-										cart.
+										{copy.emptyCopy}
 									</p>
 								</div>
 							) : (
@@ -87,10 +91,10 @@ export function EshopCartDrawer({
 												</div>
 												<div className="min-w-0 flex-1">
 													<h3 className="text-sm font-semibold leading-6 text-slate-900">
-														{product.name}
+														{getEshopProductName(product.id, product.name, lang)}
 													</h3>
 													<p className="mt-1 text-sm text-slate-500">
-														Qty {item.quantity}
+														{copy.qty} {item.quantity}
 													</p>
 													<p className="mt-2 text-base font-bold text-slate-900">
 														{product.price} {product.currency}
@@ -112,7 +116,7 @@ export function EshopCartDrawer({
 
 						<div className="border-t border-slate-200/70 px-6 py-5">
 							<div className="flex items-center justify-between text-sm text-slate-500">
-								<span>Subtotal</span>
+								<span>{copy.subtotal}</span>
 								<span>{total.toFixed(2)} JOD</span>
 							</div>
 							<button
@@ -121,7 +125,7 @@ export function EshopCartDrawer({
 								onClick={onProceedToCheckout}
 								className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-[#1a0050] px-4 py-3 text-sm font-semibold text-white transition-colors disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
 							>
-								Proceed to checkout
+								{copy.proceed}
 							</button>
 						</div>
 					</motion.aside>

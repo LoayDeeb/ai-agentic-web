@@ -1,8 +1,8 @@
 import { navigateTo } from './navigator'
 import { highlight } from './spotlight'
-import i18n from '../../i18n'
 import { useFormStore } from '../../store/formStore'
 import { useEshopStore } from '../../store/eshopStore'
+import { useLocaleStore } from '../../store/locale'
 import {
 	eshopCheckoutFieldLabels,
 	type EshopCheckoutFieldName,
@@ -265,14 +265,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: true, highlighted: args.selector }
 
 		case 'setLanguage':
-			i18n.changeLanguage(args.lang)
-			if (args.lang === 'ar') {
-				document.documentElement.dir = 'rtl'
-				document.documentElement.lang = 'ar'
-			} else {
-				document.documentElement.dir = 'ltr'
-				document.documentElement.lang = 'en'
-			}
+			useLocaleStore.getState().switchLanguage(args.lang)
 			return { success: true, language: args.lang }
 
 		case 'scrollToTab':

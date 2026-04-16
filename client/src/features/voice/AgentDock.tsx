@@ -4,12 +4,10 @@ import { createSpeechRecognition, SpeechRecognitionController } from './speechRe
 import { connectVoiceSocket, VoiceSocketController } from './voiceSocket'
 import { createAudioQueue, AudioQueueController } from './audioQueue'
 import { executeActions } from '../agent/execute'
-import { useLocaleStore } from '../../store/locale'
 
 const DOCK_STATE_KEY = 'voice.dock.state'
 
 type PersistedDockState = {
-	open: boolean
 	transcript: string[]
 	sessionId: string
 	hasActiveSession: boolean
@@ -25,7 +23,6 @@ function createSessionId() {
 function readPersistedDockState(): PersistedDockState {
 	if (typeof window === 'undefined') {
 		return {
-			open: false,
 			transcript: [],
 			sessionId: createSessionId(),
 			hasActiveSession: false,
@@ -36,7 +33,6 @@ function readPersistedDockState(): PersistedDockState {
 		const raw = window.sessionStorage.getItem(DOCK_STATE_KEY)
 		if (!raw) {
 			return {
-				open: false,
 				transcript: [],
 				sessionId: createSessionId(),
 				hasActiveSession: false,
@@ -44,14 +40,12 @@ function readPersistedDockState(): PersistedDockState {
 		}
 		const parsed = JSON.parse(raw)
 		return {
-			open: Boolean(parsed.open),
 			transcript: Array.isArray(parsed.transcript) ? parsed.transcript.filter((line: unknown) => typeof line === 'string') : [],
 			sessionId: typeof parsed.sessionId === 'string' && parsed.sessionId.length > 0 ? parsed.sessionId : createSessionId(),
 			hasActiveSession: Boolean(parsed.hasActiveSession),
 		}
 	} catch {
 		return {
-			open: false,
 			transcript: [],
 			sessionId: createSessionId(),
 			hasActiveSession: false,
@@ -61,7 +55,7 @@ function readPersistedDockState(): PersistedDockState {
 
 export function AgentDock() {
 	const persistedState = React.useMemo(() => readPersistedDockState(), [])
-	const [open, setOpen] = React.useState(persistedState.open)
+	const [open, setOpen] = React.useState(false)
 	const [connecting, setConnecting] = React.useState(false)
 	const [isListening, setIsListening] = React.useState(false)
 	const [isSpeaking, setIsSpeaking] = React.useState(false)
@@ -72,7 +66,6 @@ export function AgentDock() {
 	const [transcript, setTranscript] = React.useState<string[]>(persistedState.transcript)
 	const [interimText, setInterimText] = React.useState('')
 	const [hasActiveSession, setHasActiveSession] = React.useState(persistedState.hasActiveSession)
-	const { lang: locale } = useLocaleStore()
 	const isSpeakingRef = React.useRef(false)
 	const dropIncomingRef = React.useRef(false)
 	const sessionIdRef = React.useRef(persistedState.sessionId)
@@ -91,13 +84,12 @@ export function AgentDock() {
 		window.sessionStorage.setItem(
 			DOCK_STATE_KEY,
 			JSON.stringify({
-				open,
 				transcript,
 				sessionId: sessionIdRef.current,
 				hasActiveSession,
 			} satisfies PersistedDockState)
 		)
-	}, [open, transcript, hasActiveSession])
+	}, [transcript, hasActiveSession])
 
 	React.useEffect(() => {
 		if (!persistedState.hasActiveSession) return
@@ -336,7 +328,6 @@ export function AgentDock() {
 		window.sessionStorage.setItem(
 			DOCK_STATE_KEY,
 			JSON.stringify({
-				open,
 				transcript,
 				sessionId: sessionIdRef.current,
 				hasActiveSession: false,
@@ -385,9 +376,9 @@ export function AgentDock() {
 	}
 
 	return (
-		<div className={`fixed bottom-4 z-50 left-4`}>
+		<div className="fixed bottom-4 right-4 z-50">
 			{open ? (
-				<div className="w-[380px] bg-white border rounded-2xl shadow-lg p-4 flex flex-col max-h-[80vh]">
+				<div className="flex max-h-[70vh] w-[340px] max-w-[calc(100vw-1rem)] flex-col rounded-2xl border bg-white p-4 shadow-lg">
 					<div className="flex items-center justify-between mb-3">
 						<h3 className="font-semibold text-lg">Voice Assistant</h3>
 						<button className="p-2 hover:bg-gray-100 rounded" onClick={() => setOpen(false)}>
@@ -510,11 +501,16 @@ export function AgentDock() {
 				</div>
 			) : (
 				<button
-					className="w-14 h-14 flex items-center justify-center rounded-full bg-[#1B8354] text-white shadow-lg hover:bg-[#156b45] transition-colors"
+					className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#1B8354] text-white shadow-lg transition-colors hover:bg-[#156b45]"
 					onClick={() => setOpen(true)}
 					title="Open voice assistant"
 				>
 					<Mic className="w-7 h-7" />
+					{hasActiveSession ? (
+						<span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#d12b8a] px-1 text-[10px] font-bold text-white">
+							{Math.min(transcript.length, 9)}
+						</span>
+					) : null}
 				</button>
 			)}
 		</div>

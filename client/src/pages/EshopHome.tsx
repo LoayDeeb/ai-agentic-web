@@ -15,36 +15,16 @@ import {
 	eshopSectionIds,
 	newArrivalProducts,
 } from '../components/eshop/catalog'
+import { eshopCopy } from '../components/eshop/content'
 import { onToolEvent } from '../features/agent/tools'
+import { useLocaleStore } from '../store/locale'
 import { useEshopStore } from '../store/eshopStore'
-
-const quickHighlights = [
-	{
-		title: 'Plans & top-up',
-		copy: 'Prepaid, postpaid, and recharge bundles sorted for the fastest path to purchase.',
-		icon: <CreditCard size={20} />,
-	},
-	{
-		title: 'Devices & accessories',
-		copy: 'Phones, tablets, smart home gear, and add-ons from the brands people already know.',
-		icon: <Smartphone size={20} />,
-	},
-	{
-		title: 'Fiber & gifting',
-		copy: 'Home internet, eVouchers, and giftable extras wrapped into one storefront.',
-		icon: <Wifi size={20} />,
-	},
-]
-
-const signals = [
-	{ label: 'Secure checkout', icon: <ShieldCheck size={16} /> },
-	{ label: 'Instant eVouchers', icon: <Gift size={16} /> },
-	{ label: 'Flexible payment', icon: <CreditCard size={16} /> },
-]
 
 export default function EshopHome() {
 	const location = useLocation()
 	const navigate = useNavigate()
+	const { lang, dir } = useLocaleStore()
+	const copy = eshopCopy.home[lang]
 	const items = useEshopStore((state) => state.items)
 	const isCartOpen = useEshopStore((state) => state.isCartOpen)
 	const addItem = useEshopStore((state) => state.addItem)
@@ -53,6 +33,30 @@ export default function EshopHome() {
 	const removeItem = useEshopStore((state) => state.removeItem)
 	const itemCount = useEshopStore((state) => state.getItemCount())
 	const cartTotal = useEshopStore((state) => state.getCartTotal())
+
+	const quickHighlights = [
+		{
+			title: copy.quickHighlights[0].title,
+			copy: copy.quickHighlights[0].copy,
+			icon: <CreditCard size={20} />,
+		},
+		{
+			title: copy.quickHighlights[1].title,
+			copy: copy.quickHighlights[1].copy,
+			icon: <Smartphone size={20} />,
+		},
+		{
+			title: copy.quickHighlights[2].title,
+			copy: copy.quickHighlights[2].copy,
+			icon: <Wifi size={20} />,
+		},
+	]
+
+	const signals = [
+		{ label: copy.signals[0], icon: <ShieldCheck size={16} /> },
+		{ label: copy.signals[1], icon: <Gift size={16} /> },
+		{ label: copy.signals[2], icon: <CreditCard size={16} /> },
+	]
 
 	React.useEffect(() => {
 		const scrollToHash = (hash: string) => {
@@ -89,7 +93,10 @@ export default function EshopHome() {
 	}, [])
 
 	return (
-		<div className="min-h-screen bg-[radial-gradient(circle_at_top,#efe6ff_0%,#f5f6fb_26%,#f8f9fc_60%,#f4f7fb_100%)] text-slate-900">
+		<div
+			dir={dir}
+			className="min-h-screen bg-[radial-gradient(circle_at_top,#efe6ff_0%,#f5f6fb_26%,#f8f9fc_60%,#f4f7fb_100%)] text-slate-900"
+		>
 			<EshopHeader itemCount={itemCount} onCartClick={openCart} />
 
 			<main className="pb-16">
@@ -98,14 +105,13 @@ export default function EshopHome() {
 					<div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8 lg:py-16">
 						<div className="max-w-2xl">
 							<p className="text-sm font-semibold uppercase tracking-[0.26em] text-white/65">
-								Zain Jordan eShop
+								{copy.kicker}
 							</p>
 							<h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-								Shop devices, plans, and add-ons in one polished Zain storefront.
+								{copy.title}
 							</h1>
 							<p className="mt-5 max-w-xl text-base leading-7 text-white/78 sm:text-lg">
-								Discover the latest arrivals, browse best sellers, and build your basket with a sales
-								assistant that can guide you all the way to checkout.
+								{copy.description}
 							</p>
 
 							<div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -113,14 +119,14 @@ export default function EshopHome() {
 									href={`#${eshopSectionIds.categories}`}
 									className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#21005f] transition-transform hover:-translate-y-0.5"
 								>
-									Explore categories
+									{copy.exploreCategories}
 								</a>
 								<a
 									href={`#${eshopSectionIds.appleProducts}`}
 									className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/8 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/14"
 								>
-									View Apple range
-									<ArrowRight size={16} className="ml-2" />
+									{copy.viewAppleRange}
+									<ArrowRight size={16} className={lang === 'ar' ? 'mr-2 rotate-180' : 'ml-2'} />
 								</a>
 							</div>
 
@@ -142,9 +148,9 @@ export default function EshopHome() {
 								<div className="flex items-start justify-between gap-4">
 									<div>
 										<p className="text-sm font-semibold uppercase tracking-[0.22em] text-white/55">
-											Promo stack
+											{copy.promoKicker}
 										</p>
-										<h2 className="mt-3 text-2xl font-bold">Storefront sections that feel retail-first</h2>
+										<h2 className="mt-3 text-2xl font-bold">{copy.promoTitle}</h2>
 									</div>
 									<div className="rounded-full bg-white/10 px-3 py-1 text-sm text-white/72">/eshop</div>
 								</div>
@@ -166,22 +172,18 @@ export default function EshopHome() {
 
 							<div className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur-sm">
 								<p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/55">
-									Launch focus
+									{copy.launchFocus}
 								</p>
 								<div className="mt-4 text-4xl font-bold">40+</div>
-								<p className="mt-2 text-sm leading-6 text-white/70">
-									Merchandising slots for device drops, accessories, and shopping campaigns.
-								</p>
+								<p className="mt-2 text-sm leading-6 text-white/70">{copy.launchCopy}</p>
 							</div>
 
 							<div className="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur-sm">
 								<p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/55">
-									Merch flow
+									{copy.merchFlow}
 								</p>
-								<div className="mt-4 text-4xl font-bold">4 rails</div>
-								<p className="mt-2 text-sm leading-6 text-white/70">
-									New arrivals, best sellers, audio picks, and Apple-specific inventory using reusable carousel logic.
-								</p>
+								<div className="mt-4 text-4xl font-bold">{lang === 'ar' ? '4 أقسام' : '4 rails'}</div>
+								<p className="mt-2 text-sm leading-6 text-white/70">{copy.merchFlowCopy}</p>
 							</div>
 						</div>
 					</div>
@@ -193,8 +195,8 @@ export default function EshopHome() {
 
 				<div id={eshopSectionIds.newArrival}>
 					<EshopProductCarousel
-						title="New arrival"
-						description="Fresh devices, smart home gear, and newly listed accessories arranged in a launch-first rail."
+						title={copy.sections.newArrival.title}
+						description={copy.sections.newArrival.description}
 						products={newArrivalProducts}
 						onAddToCart={addItem}
 					/>
@@ -206,8 +208,8 @@ export default function EshopHome() {
 
 				<div id={eshopSectionIds.bestSeller}>
 					<EshopProductCarousel
-						title="Best seller"
-						description="A higher-conversion rail for the products customers return to most often."
+						title={copy.sections.bestSeller.title}
+						description={copy.sections.bestSeller.description}
 						products={bestSellerProducts}
 						onAddToCart={addItem}
 					/>
@@ -215,8 +217,8 @@ export default function EshopHome() {
 
 				<div id={eshopSectionIds.audio}>
 					<EshopProductCarousel
-						title="Audio picks"
-						description="All earphones, earbuds, and audio add-ons grouped into one clean section for easier comparison."
+						title={copy.sections.audio.title}
+						description={copy.sections.audio.description}
 						products={audioProducts}
 						onAddToCart={addItem}
 					/>
@@ -224,8 +226,8 @@ export default function EshopHome() {
 
 				<div id={eshopSectionIds.appleProducts}>
 					<EshopProductCarousel
-						title="Apple products"
-						description="A brand-led collection with hover image swaps and review signals for premium device browsing."
+						title={copy.sections.apple.title}
+						description={copy.sections.apple.description}
 						products={appleProducts}
 						onAddToCart={addItem}
 					/>
@@ -236,31 +238,33 @@ export default function EshopHome() {
 				<div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
 					<div>
 						<div className="text-2xl font-bold text-[#1a0050]">zain</div>
-						<p className="mt-3 max-w-xs text-sm leading-6 text-slate-600">
-							Zain Jordan eShop for devices, digital vouchers, and commerce-led merchandising in one place.
-						</p>
+						<p className="mt-3 max-w-xs text-sm leading-6 text-slate-600">{copy.footer.about}</p>
 					</div>
 					<div>
-						<h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Shop</h3>
+						<h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
+							{copy.footer.shopTitle}
+						</h3>
 						<ul className="mt-4 space-y-3 text-sm text-slate-700">
-							<li>Smartphones</li>
-							<li>Fiber</li>
-							<li>Accessories</li>
+							{copy.footer.shopItems.map((item) => (
+								<li key={item}>{item}</li>
+							))}
 						</ul>
 					</div>
 					<div>
-						<h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Support</h3>
+						<h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
+							{copy.footer.supportTitle}
+						</h3>
 						<ul className="mt-4 space-y-3 text-sm text-slate-700">
-							<li>Track order</li>
-							<li>Payment options</li>
-							<li>Account access</li>
+							{copy.footer.supportItems.map((item) => (
+								<li key={item}>{item}</li>
+							))}
 						</ul>
 					</div>
 					<div>
-						<h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Status</h3>
-						<p className="mt-4 text-sm leading-6 text-slate-700">
-							Shop flow with guided browsing, cart actions, and checkout support.
-						</p>
+						<h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
+							{copy.footer.statusTitle}
+						</h3>
+						<p className="mt-4 text-sm leading-6 text-slate-700">{copy.footer.statusCopy}</p>
 					</div>
 				</div>
 			</footer>

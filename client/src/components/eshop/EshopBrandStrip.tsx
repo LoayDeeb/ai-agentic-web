@@ -1,5 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { useLocaleStore } from '../../store/locale'
+import { eshopCopy } from './content'
 
 type Brand = {
 	name: string
@@ -17,19 +19,21 @@ const brands: Brand[] = [
 ]
 
 export function EshopBrandStrip() {
+	const { lang } = useLocaleStore()
+	const copy = eshopCopy.brands[lang]
+
 	return (
 		<section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 			<div className="rounded-[2rem] border border-slate-200/70 bg-white px-6 py-8 shadow-[0_20px_60px_rgba(20,16,50,0.08)] sm:px-8">
 				<div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
 					<div>
 						<p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#009BDE]">
-							Trusted brands
+							{copy.kicker}
 						</p>
-						<h2 className="mt-2 text-3xl font-bold text-slate-900">Shop by brand</h2>
+						<h2 className="mt-2 text-3xl font-bold text-slate-900">{copy.title}</h2>
 					</div>
 					<p className="max-w-2xl text-sm leading-6 text-slate-600">
-						Discover current launches, accessories, and contract-ready devices from the labels people
-						ask for first.
+						{copy.description}
 					</p>
 				</div>
 

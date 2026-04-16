@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import { ChevronRight, ShoppingCart, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { getEshopProductDetailById } from './catalog'
+import { useLocaleStore } from '../../store/locale'
+import { eshopCopy, getEshopBadgeLabel, getEshopProductName } from './content'
 
 export type EshopProduct = {
 	id: number
@@ -36,6 +38,8 @@ export function EshopProductCarousel({
 	products,
 	onAddToCart,
 }: EshopProductCarouselProps) {
+	const { lang } = useLocaleStore()
+	const copy = eshopCopy.carousel[lang]
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const [scrollProgress, setScrollProgress] = useState(0)
 
@@ -76,8 +80,8 @@ export function EshopProductCarousel({
 						onClick={(event) => event.preventDefault()}
 						className="inline-flex items-center text-sm font-bold text-[#d12b8a] transition-opacity hover:opacity-80"
 					>
-						Show all
-						<ChevronRight size={18} className="ml-1" />
+						{copy.showAll}
+						<ChevronRight size={18} className={lang === 'ar' ? 'mr-1 rotate-180' : 'ml-1'} />
 					</a>
 				</div>
 
@@ -117,9 +121,12 @@ function ProductCard({
 	index: number
 	onAddToCart?: (productId: number) => void
 }) {
+	const { lang } = useLocaleStore()
+	const copy = eshopCopy.carousel[lang]
 	const [hovered, setHovered] = useState(false)
 	const badgeTone = product.badgeTone ?? 'blue'
 	const detailProduct = getEshopProductDetailById(product.id)
+	const productName = getEshopProductName(product.id, product.name, lang)
 
 	return (
 		<motion.article
@@ -159,7 +166,7 @@ function ProductCard({
 						className="absolute right-0 top-0 rounded-md px-2 py-1 text-xs font-semibold text-white"
 						style={{ background: badgeBackgrounds[badgeTone] }}
 					>
-						{product.badge}
+						{getEshopBadgeLabel(product.badge, lang)}
 					</div>
 				) : null}
 			</div>
@@ -179,10 +186,10 @@ function ProductCard({
 							to={`/eshop/product/${detailProduct.slug}`}
 							className="transition-colors hover:text-[#2b0b73]"
 						>
-							{product.name}
+							{productName}
 						</Link>
 					) : (
-						product.name
+						productName
 					)}
 				</h3>
 
@@ -194,7 +201,7 @@ function ProductCard({
 						<span className="text-base text-black/80">{product.currency}</span>
 					</div>
 					{product.soldOut ? (
-						<div className="mt-1 text-sm text-[#dc362e]">Sold Out</div>
+						<div className="mt-1 text-sm text-[#dc362e]">{copy.soldOut}</div>
 					) : (
 						<div className="mt-3 flex gap-2">
 							{detailProduct ? (
@@ -202,7 +209,7 @@ function ProductCard({
 									to={`/eshop/product/${detailProduct.slug}`}
 									className="inline-flex flex-1 items-center justify-center rounded-full border border-[#1a0050] px-4 py-2 text-sm font-semibold text-[#1a0050] transition-colors hover:bg-[#f2edff]"
 								>
-									View details
+									{copy.viewDetails}
 								</Link>
 							) : null}
 							<button
@@ -211,7 +218,7 @@ function ProductCard({
 								className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#1a0050] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2b0b73]"
 							>
 								<ShoppingCart size={16} />
-								Add to cart
+								{copy.addToCart}
 							</button>
 						</div>
 					)}

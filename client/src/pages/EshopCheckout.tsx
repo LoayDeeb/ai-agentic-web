@@ -3,31 +3,15 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft, CheckCircle2, CreditCard, ShieldCheck, ShoppingBag, Truck } from 'lucide-react'
 import { EshopCartDrawer, EshopHeader } from '../components/eshop'
 import { getEshopProductById, getRecommendedUpsells } from '../components/eshop/catalog'
+import { eshopCopy, getEshopProductName } from '../components/eshop/content'
 import { onToolEvent } from '../features/agent/tools'
 import { highlight } from '../features/agent/spotlight'
+import { useLocaleStore } from '../store/locale'
 import { useEshopStore } from '../store/eshopStore'
 import {
 	type EshopCheckoutFieldName,
 	useEshopCheckoutStore,
 } from '../store/eshopCheckoutStore'
-
-const paymentOptions = [
-	{
-		value: 'card_online',
-		label: 'Pay online by card',
-		copy: 'Fastest checkout with instant confirmation.',
-	},
-	{
-		value: 'cash_on_delivery',
-		label: 'Cash on delivery',
-		copy: 'Pay when your order reaches you.',
-	},
-	{
-		value: 'card_on_delivery',
-		label: 'Card on delivery',
-		copy: 'Tap to pay when the courier arrives.',
-	},
-] as const
 
 function getFieldSelector(fieldName: EshopCheckoutFieldName) {
 	return `#eshop-checkout-${fieldName}`
@@ -35,6 +19,8 @@ function getFieldSelector(fieldName: EshopCheckoutFieldName) {
 
 export default function EshopCheckout() {
 	const navigate = useNavigate()
+	const { lang, dir } = useLocaleStore()
+	const copy = eshopCopy.checkout[lang]
 	const items = useEshopStore((state) => state.items)
 	const isCartOpen = useEshopStore((state) => state.isCartOpen)
 	const openCart = useEshopStore((state) => state.openCart)
@@ -50,6 +36,29 @@ export default function EshopCheckout() {
 	const recommendedUpsells = React.useMemo(
 		() => getRecommendedUpsells(items.map((item) => item.productId)),
 		[items]
+	)
+	const summaryCountLabel =
+		lang === 'ar' ? `${itemCount} ${copy.itemsReady}` : `${itemCount} ${itemCount === 1 ? 'item ready' : copy.itemsReady}`
+
+	const paymentOptions = React.useMemo(
+		() => [
+			{
+				value: 'card_online',
+				label: copy.paymentOptions.card_online.label,
+				copy: copy.paymentOptions.card_online.copy,
+			},
+			{
+				value: 'cash_on_delivery',
+				label: copy.paymentOptions.cash_on_delivery.label,
+				copy: copy.paymentOptions.cash_on_delivery.copy,
+			},
+			{
+				value: 'card_on_delivery',
+				label: copy.paymentOptions.card_on_delivery.label,
+				copy: copy.paymentOptions.card_on_delivery.copy,
+			},
+		],
+		[copy.paymentOptions]
 	)
 
 	React.useEffect(() => {
@@ -76,10 +85,13 @@ export default function EshopCheckout() {
 			const product = getEshopProductById(item.productId)
 			return product ? { ...product, quantity: item.quantity } : null
 		})
-		.filter(Boolean)
+		.filter((product): product is NonNullable<typeof product> => Boolean(product))
 
 	return (
-		<div className="min-h-screen bg-[radial-gradient(circle_at_top,#f6f1ff_0%,#f8f8fc_24%,#f6f8fc_58%,#f1f5fb_100%)] text-slate-900">
+		<div
+			dir={dir}
+			className="min-h-screen bg-[radial-gradient(circle_at_top,#f6f1ff_0%,#f8f8fc_24%,#f6f8fc_58%,#f1f5fb_100%)] text-slate-900"
+		>
 			<EshopHeader itemCount={itemCount} onCartClick={openCart} />
 
 			<main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -89,11 +101,11 @@ export default function EshopCheckout() {
 						onClick={() => navigate('/eshop')}
 						className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 font-medium text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-900"
 					>
-						<ArrowLeft size={16} />
-						Continue shopping
+						<ArrowLeft size={16} className={lang === 'ar' ? 'rotate-180' : ''} />
+						{copy.continueShopping}
 					</button>
 					<span>/</span>
-					<span className="font-semibold text-slate-900">Checkout</span>
+					<span className="font-semibold text-slate-900">{copy.checkout}</span>
 				</div>
 
 				<div className="mt-6 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
@@ -101,13 +113,13 @@ export default function EshopCheckout() {
 						<div className="flex items-start justify-between gap-4">
 							<div>
 								<p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#6b5ca5]">
-									Secure checkout
+									{copy.kicker}
 								</p>
 								<h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
-									Finish your order in one step
+									{copy.title}
 								</h1>
 								<p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-									Add your contact and delivery details, then choose the payment option that suits you.
+									{copy.description}
 								</p>
 							</div>
 							<div className="hidden rounded-3xl bg-[#f3efff] p-4 text-[#2a0a76] sm:block">
@@ -122,20 +134,20 @@ export default function EshopCheckout() {
 										<CheckCircle2 size={28} />
 									</div>
 									<div>
-										<h2 className="text-2xl font-bold text-emerald-900">Order placed successfully</h2>
+										<h2 className="text-2xl font-bold text-emerald-900">{copy.successTitle}</h2>
 										<p className="mt-2 text-sm leading-6 text-emerald-800/80">
-											Thanks {formData.fullName || 'there'}. Your order is confirmed and our team can
-											reach you on {formData.phone || 'your phone number'} if anything is needed.
+											{copy.successThanks} {formData.fullName || copy.successFallbackName}.{' '}
+											{copy.successReach} {formData.phone || copy.successFallbackPhone} {copy.successIfNeeded}
 										</p>
 										<div className="mt-4 grid gap-3 text-sm text-emerald-900 sm:grid-cols-2">
 											<div className="rounded-2xl bg-white/75 p-4">
-												<p className="font-semibold">Delivery address</p>
+												<p className="font-semibold">{copy.deliveryAddress}</p>
 												<p className="mt-1 text-emerald-900/75">
 													{[formData.city, formData.area, formData.streetAddress].filter(Boolean).join(', ')}
 												</p>
 											</div>
 											<div className="rounded-2xl bg-white/75 p-4">
-												<p className="font-semibold">Payment</p>
+												<p className="font-semibold">{copy.payment}</p>
 												<p className="mt-1 text-emerald-900/75">
 													{paymentOptions.find((option) => option.value === formData.paymentMethod)?.label}
 												</p>
@@ -155,53 +167,53 @@ export default function EshopCheckout() {
 								<div className="grid gap-5 sm:grid-cols-2">
 									<FormField
 										id="eshop-checkout-fullName"
-										label="Full name"
+										label={copy.fields.fullName}
 										value={formData.fullName}
 										onChange={(value) => setField('fullName', value)}
-										placeholder="Enter your full name"
+										placeholder={copy.placeholders.fullName}
 									/>
 									<FormField
 										id="eshop-checkout-phone"
-										label="Phone number"
+										label={copy.fields.phone}
 										value={formData.phone}
 										onChange={(value) => setField('phone', value)}
-										placeholder="07XXXXXXXX"
+										placeholder={copy.placeholders.phone}
 									/>
 									<FormField
 										id="eshop-checkout-email"
-										label="Email address"
+										label={copy.fields.email}
 										value={formData.email}
 										onChange={(value) => setField('email', value)}
-										placeholder="name@example.com"
+										placeholder={copy.placeholders.email}
 									/>
 									<FormField
 										id="eshop-checkout-city"
-										label="City"
+										label={copy.fields.city}
 										value={formData.city}
 										onChange={(value) => setField('city', value)}
-										placeholder="Amman"
+										placeholder={copy.placeholders.city}
 									/>
 								</div>
 
 								<div className="grid gap-5 sm:grid-cols-[0.8fr_1.2fr]">
 									<FormField
 										id="eshop-checkout-area"
-										label="Area"
+										label={copy.fields.area}
 										value={formData.area}
 										onChange={(value) => setField('area', value)}
-										placeholder="Abdoun"
+										placeholder={copy.placeholders.area}
 									/>
 									<FormField
 										id="eshop-checkout-streetAddress"
-										label="Street address"
+										label={copy.fields.streetAddress}
 										value={formData.streetAddress}
 										onChange={(value) => setField('streetAddress', value)}
-										placeholder="Building, street, and apartment"
+										placeholder={copy.placeholders.streetAddress}
 									/>
 								</div>
 
 								<div>
-									<p className="mb-3 text-sm font-semibold text-slate-700">Payment method</p>
+									<p className="mb-3 text-sm font-semibold text-slate-700">{copy.paymentMethod}</p>
 									<div className="grid gap-4 md:grid-cols-3">
 										{paymentOptions.map((option) => {
 											const active = formData.paymentMethod === option.value
@@ -211,7 +223,7 @@ export default function EshopCheckout() {
 													key={option.value}
 													type="button"
 													onClick={() => setField('paymentMethod', option.value)}
-													className={`rounded-[1.5rem] border p-4 text-left transition-all ${
+													className={`rounded-[1.5rem] border p-4 text-start transition-all ${
 														active
 															? 'border-[#2a0a76] bg-[#f2edff] shadow-[0_10px_30px_rgba(42,10,118,0.08)]'
 															: 'border-slate-200 bg-slate-50 hover:border-slate-300'
@@ -233,13 +245,13 @@ export default function EshopCheckout() {
 										htmlFor="eshop-checkout-deliveryNotes"
 										className="mb-2 block text-sm font-semibold text-slate-700"
 									>
-										Delivery notes
+										{copy.fields.deliveryNotes}
 									</label>
 									<textarea
 										id="eshop-checkout-deliveryNotes"
 										value={formData.deliveryNotes}
 										onChange={(event) => setField('deliveryNotes', event.target.value)}
-										placeholder="Optional instructions for the courier"
+										placeholder={copy.placeholders.deliveryNotes}
 										className="min-h-[120px] w-full rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-[#2a0a76] focus:bg-white"
 									/>
 								</div>
@@ -247,13 +259,13 @@ export default function EshopCheckout() {
 								<div className="flex flex-wrap items-center justify-between gap-4 rounded-[1.5rem] border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-600">
 									<div className="flex items-center gap-2">
 										<Truck size={18} className="text-[#2a0a76]" />
-										Delivery across Jordan with contact confirmation before dispatch.
+										{copy.deliveryCopy}
 									</div>
 									<button
 										type="submit"
 										className="inline-flex items-center justify-center rounded-full bg-[#1a0050] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#2b0b73]"
 									>
-										Place order
+										{copy.placeOrder}
 									</button>
 								</div>
 							</form>
@@ -265,11 +277,9 @@ export default function EshopCheckout() {
 							<div className="flex items-start justify-between gap-3">
 								<div>
 									<p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-										Order summary
+										{copy.orderSummary}
 									</p>
-									<h2 className="mt-2 text-2xl font-bold text-slate-900">
-										{itemCount} item{itemCount === 1 ? '' : 's'} ready
-									</h2>
+									<h2 className="mt-2 text-2xl font-bold text-slate-900">{summaryCountLabel}</h2>
 								</div>
 								<div className="rounded-full bg-slate-100 p-3 text-slate-600">
 									<ShoppingBag size={20} />
@@ -278,15 +288,13 @@ export default function EshopCheckout() {
 
 							{orderItems.length === 0 ? (
 								<div className="mt-6 rounded-[1.5rem] border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
-									<p className="text-lg font-semibold text-slate-900">Your cart is empty</p>
-									<p className="mt-2 text-sm leading-6 text-slate-600">
-										Go back to the store, add a few products, then come back here to complete your order.
-									</p>
+									<p className="text-lg font-semibold text-slate-900">{copy.emptyTitle}</p>
+									<p className="mt-2 text-sm leading-6 text-slate-600">{copy.emptyCopy}</p>
 									<Link
 										to="/eshop"
 										className="mt-4 inline-flex items-center justify-center rounded-full bg-[#1a0050] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#2b0b73]"
 									>
-										Back to eShop
+										{copy.backToStore}
 									</Link>
 								</div>
 							) : (
@@ -300,8 +308,12 @@ export default function EshopCheckout() {
 												<img src={product.image} alt={product.name} className="h-16 w-16 object-contain" />
 											</div>
 											<div className="min-w-0 flex-1">
-												<h3 className="text-sm font-semibold leading-6 text-slate-900">{product.name}</h3>
-												<p className="mt-1 text-sm text-slate-500">Qty {product.quantity}</p>
+												<h3 className="text-sm font-semibold leading-6 text-slate-900">
+													{getEshopProductName(product.id, product.name, lang)}
+												</h3>
+												<p className="mt-1 text-sm text-slate-500">
+													{copy.qty} {product.quantity}
+												</p>
 												<p className="mt-2 text-base font-bold text-slate-900">
 													{product.price} {product.currency}
 												</p>
@@ -311,11 +323,11 @@ export default function EshopCheckout() {
 
 									<div className="rounded-[1.5rem] bg-[#f5f1ff] p-4">
 										<div className="flex items-center justify-between text-sm text-slate-600">
-											<span>Subtotal</span>
+											<span>{copy.subtotal}</span>
 											<span>{cartTotal.toFixed(2)} JOD</span>
 										</div>
 										<div className="mt-3 flex items-center justify-between text-base font-bold text-slate-900">
-											<span>Total</span>
+											<span>{copy.total}</span>
 											<span>{cartTotal.toFixed(2)} JOD</span>
 										</div>
 									</div>
@@ -326,12 +338,10 @@ export default function EshopCheckout() {
 						{recommendedUpsells.length > 0 ? (
 							<section className="rounded-[2rem] border border-slate-200/70 bg-white p-6 shadow-[0_20px_60px_rgba(20,16,50,0.08)]">
 								<p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-									Recommended add-ons
+									{copy.recommended}
 								</p>
-								<h2 className="mt-2 text-2xl font-bold text-slate-900">Complete the setup</h2>
-								<p className="mt-2 text-sm leading-6 text-slate-600">
-									Popular picks that pair naturally with what is already in your cart.
-								</p>
+								<h2 className="mt-2 text-2xl font-bold text-slate-900">{copy.completeSetup}</h2>
+								<p className="mt-2 text-sm leading-6 text-slate-600">{copy.recommendedCopy}</p>
 								<div className="mt-5 space-y-4">
 									{recommendedUpsells.slice(0, 3).map((product) => (
 										<div key={product.id} className="rounded-[1.5rem] border border-slate-200 p-4">
@@ -340,7 +350,9 @@ export default function EshopCheckout() {
 													<img src={product.image} alt={product.name} className="h-14 w-14 object-contain" />
 												</div>
 												<div className="min-w-0 flex-1">
-													<h3 className="text-sm font-semibold leading-6 text-slate-900">{product.name}</h3>
+													<h3 className="text-sm font-semibold leading-6 text-slate-900">
+														{getEshopProductName(product.id, product.name, lang)}
+													</h3>
 													<p className="mt-1 text-sm text-slate-500">
 														{product.price} {product.currency}
 													</p>
@@ -351,7 +363,7 @@ export default function EshopCheckout() {
 												onClick={() => addItem(product.id)}
 												className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-[#2a0a76] px-4 py-2 text-sm font-semibold text-[#2a0a76] transition-colors hover:bg-[#f2edff]"
 											>
-												Add this too
+												{copy.addThisToo}
 											</button>
 										</div>
 									))}
