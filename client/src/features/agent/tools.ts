@@ -126,6 +126,14 @@ function hardNavigateTo(path: string) {
 	navigateTo(path)
 }
 
+function shouldUseHardNavigation(path: string) {
+	return (
+		path === '/eshop' ||
+		path.startsWith('/eshop/checkout') ||
+		path.startsWith('/eshop/product/')
+	)
+}
+
 // Execute agent tool calls
 export async function executeAgentTool(tool: string, args: any): Promise<any> {
 	console.log('[AgentTools] Executing:', tool, args)
@@ -161,9 +169,15 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 	}
 
 	switch (tool) {
-		case 'navigateTo':
-			navigateTo(args.path)
-			return { success: true, navigatedTo: args.path }
+		case 'navigateTo': {
+			const path = String(args.path || '')
+			if (shouldUseHardNavigation(path)) {
+				hardNavigateTo(path)
+			} else {
+				navigateTo(path)
+			}
+			return { success: true, navigatedTo: path }
+		}
 
 		case 'openServiceBySlug':
 			navigateTo(`/services/${args.slug}`)
@@ -368,7 +382,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 
 		case 'openEshopHome':
 			useEshopStore.getState().closeCart()
-			navigateTo('/eshop')
+			hardNavigateTo('/eshop')
 			return { success: true, navigatedTo: '/eshop' }
 
 		case 'openEshopSection': {
@@ -455,8 +469,8 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 		}
 
 		case 'showEshopCart': {
-			navigateTo('/eshop')
 			useEshopStore.getState().openCart()
+			hardNavigateTo('/eshop')
 			return { success: true, navigatedTo: '/eshop', ...buildEshopCartSummary() }
 		}
 
