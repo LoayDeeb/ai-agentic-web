@@ -1,5 +1,6 @@
 import React from 'react'
 import { Mic, MicOff, X, Volume2, Send } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
 import { createSpeechRecognition, SpeechRecognitionController } from './speechRecognition'
 import { connectVoiceSocket, VoiceSocketController } from './voiceSocket'
 import { createAudioQueue, AudioQueueController } from './audioQueue'
@@ -54,6 +55,7 @@ function readPersistedDockState(): PersistedDockState {
 }
 
 export function AgentDock() {
+	const location = useLocation()
 	const persistedState = React.useMemo(() => readPersistedDockState(), [])
 	const [open, setOpen] = React.useState(false)
 	const [connecting, setConnecting] = React.useState(false)
@@ -70,6 +72,7 @@ export function AgentDock() {
 	const dropIncomingRef = React.useRef(false)
 	const sessionIdRef = React.useRef(persistedState.sessionId)
 	const unloadingRef = React.useRef(false)
+	const isEshopRoute = location.pathname.startsWith('/eshop')
 
 	const getCurrentPageContext = React.useCallback(() => ({
 		url: window.location.pathname,
@@ -376,7 +379,7 @@ export function AgentDock() {
 	}
 
 	return (
-		<div className="fixed bottom-4 right-4 z-50">
+		<div className={`fixed bottom-4 z-50 ${isEshopRoute ? 'left-4' : 'right-4'}`}>
 			{open ? (
 				<div className="flex max-h-[70vh] w-[340px] max-w-[calc(100vw-1rem)] flex-col rounded-2xl border bg-white p-4 shadow-lg">
 					<div className="flex items-center justify-between mb-3">
