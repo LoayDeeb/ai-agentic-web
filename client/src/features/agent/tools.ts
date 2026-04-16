@@ -8,7 +8,11 @@ import {
 	type EshopCheckoutFieldName,
 	useEshopCheckoutStore,
 } from '../../store/eshopCheckoutStore'
-import { getEshopProductById, getRecommendedUpsells } from '../../components/eshop/catalog'
+import {
+	getEshopProductById,
+	getRecommendedUpsells,
+	getEshopSectionForProduct,
+} from '../../components/eshop/catalog'
 
 export type AgentTool = {
 	tool: string
@@ -354,12 +358,14 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: true, navigatedTo: '/zain' }
 
 		case 'openEshopHome':
+			useEshopStore.getState().closeCart()
 			navigateTo('/eshop')
 			return { success: true, navigatedTo: '/eshop' }
 
 		case 'openEshopSection': {
 			const sectionId = String(args.sectionId || '')
 			const path = `/eshop#${sectionId}`
+			useEshopStore.getState().closeCart()
 			navigateTo(path)
 			window.setTimeout(() => {
 				const element = document.getElementById(sectionId)
@@ -371,6 +377,48 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 				}
 			}, 120)
 			return { success: true, navigatedTo: path, sectionId }
+		}
+
+		case 'openEshopProduct': {
+			const productId = Number(args.productId)
+			const product = getEshopProductById(productId)
+			if (!product) {
+				return { success: false, error: `Unknown eShop product: ${productId}` }
+			}
+
+			const sectionId = getEshopSectionForProduct(productId)
+			const path = `/eshop#${sectionId}`
+			useEshopStore.getState().closeCart()
+			navigateTo(path)
+
+			window.setTimeout(() => {
+				const sectionElement = document.getElementById(sectionId)
+				if (sectionElement) {
+					sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+				}
+
+				window.setTimeout(() => {
+					const productElement = document.getElementById(`eshop-product-${productId}`)
+					if (productElement) {
+						productElement.scrollIntoView({
+							behavior: 'smooth',
+							block: 'center',
+							inline: 'center',
+						})
+						highlight(`#eshop-product-${productId}`, 3)
+					} else {
+						emitToolEvent('scrollToEshopProduct', { productId })
+					}
+				}, 180)
+			}, 120)
+
+			return {
+				success: true,
+				navigatedTo: path,
+				productId,
+				productName: product.name,
+				sectionId,
+			}
 		}
 
 		case 'addEshopProductToCart': {
@@ -389,6 +437,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: true, ...buildEshopCartSummary() }
 
 		case 'openEshopCheckout':
+			useEshopStore.getState().closeCart()
 			navigateTo('/eshop/checkout')
 			return { success: true, navigatedTo: '/eshop/checkout', ...buildEshopCartSummary() }
 

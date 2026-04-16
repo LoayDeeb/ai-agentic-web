@@ -120,6 +120,8 @@ function ProductCard({
 
 	return (
 		<motion.article
+			id={`eshop-product-${product.id}`}
+			data-eshop-product-id={product.id}
 			initial={{ opacity: 0, y: 18 }}
 			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, amount: 0.25 }}

@@ -113,6 +113,24 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function',
 		function: {
+			name: 'openEshopProduct',
+			description: 'Open a specific eShop product card and bring it into view.',
+			parameters: {
+				type: 'object',
+				properties: {
+					productId: {
+						type: 'number',
+						enum: [1, 2, 3, 4, 5, 7, 8, 11, 12, 13, 15, 17, 18, 21, 22, 23, 24, 25, 26, 27],
+						description: 'Product id to open in the eShop.',
+					},
+				},
+				required: ['productId'],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
 			name: 'addEshopProductToCart',
 			description: 'Add a specific eShop product to the demo cart.',
 			parameters: {
@@ -518,6 +536,7 @@ Sold out products:
 Tool policy for /eshop:
 - If the user asks to open the store, use openEshopHome.
 - If the user asks for categories, new arrivals, brands, best sellers, or Apple products, use openEshopSection.
+- If the user asks about a specific product or wants to see a recommended item, use openEshopProduct.
 - If the user asks to add a specific product to cart and the product is in the catalog and not sold out, use addEshopProductToCart with the correct product id.
 - After adding to cart, briefly confirm the product name and suggest one next step: view cart, add a matching accessory, or go to checkout.
 - If the user asks to see the cart, review the cart, or check what was added, use showEshopCart.
@@ -533,6 +552,11 @@ Sales behavior:
 - For smartphones generally, start with apple-products or best-seller depending on user intent.
 - For "latest" or "new" requests, prefer new-arrival.
 - For "popular" or "top" requests, prefer best-seller.
+- For earphones, headphones, earbuds, or "سماعات", prefer:
+  - 26 AirPods Pro 3
+  - 11 Airpods 4 Active Noise Cancellation
+  - 8 FOLG Ear Phone FG-EC05
+- When the user asks what audio options are available, open a relevant product or section instead of only answering in text.
 - Upsell naturally after the main product is clear:
   - iPhone or Apple device: suggest AirPods Pro 3 or Apple Watch Series 11.
   - MacBook or tablet: suggest Xiaomi Gaming Mouse Lite GL or AirPods Pro 3.

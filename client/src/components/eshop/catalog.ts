@@ -251,6 +251,16 @@ export function getEshopProductById(productId: number) {
 	return eshopProductMap.get(productId)
 }
 
+export function getEshopSectionForProduct(productId: number): EshopSectionId {
+	if (appleProducts.some((product) => product.id === productId)) {
+		return eshopSectionIds.appleProducts
+	}
+	if (bestSellerProducts.some((product) => product.id === productId)) {
+		return eshopSectionIds.bestSeller
+	}
+	return eshopSectionIds.newArrival
+}
+
 const upsellPairs: Record<number, number[]> = {
 	1: [5, 7],
 	11: [25, 26],

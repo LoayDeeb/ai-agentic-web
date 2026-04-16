@@ -76,6 +76,12 @@ export default function EshopHome() {
 					element.scrollIntoView({ behavior: 'smooth', block: 'start' })
 				}
 			}
+			if (tool === 'scrollToEshopProduct' && args.productId) {
+				const element = document.getElementById(`eshop-product-${String(args.productId)}`)
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+				}
+			}
 		})
 
 		return unsubscribe
