@@ -35,7 +35,7 @@ export function EshopCartDrawer({
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
 						onClick={onClose}
-						className="fixed inset-0 z-40 bg-slate-950/35 backdrop-blur-[2px]"
+						className="fixed inset-0 z-40 bg-slate-950/35"
 					/>
 					<motion.aside
 						initial={{ x: '100%' }}
