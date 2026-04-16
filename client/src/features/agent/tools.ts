@@ -2,6 +2,7 @@ import { navigateTo } from './navigator'
 import { highlight } from './spotlight'
 import i18n from '../../i18n'
 import { useFormStore } from '../../store/formStore'
+import { useEshopStore } from '../../store/eshopStore'
 
 export type AgentTool = {
 	tool: string
@@ -319,6 +320,36 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 		case 'openEshopHome':
 			navigateTo('/eshop')
 			return { success: true, navigatedTo: '/eshop' }
+
+		case 'openEshopSection': {
+			const sectionId = String(args.sectionId || '')
+			const path = `/eshop#${sectionId}`
+			navigateTo(path)
+			window.setTimeout(() => {
+				const element = document.getElementById(sectionId)
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+					highlight(`#${sectionId}`, 3)
+				} else {
+					emitToolEvent('scrollToEshopSection', { sectionId })
+				}
+			}, 120)
+			return { success: true, navigatedTo: path, sectionId }
+		}
+
+		case 'addEshopProductToCart': {
+			const productId = Number(args.productId)
+			const result = useEshopStore.getState().addItem(productId)
+			return { success: result.success, ...result, productId }
+		}
+
+		case 'showEshopCart': {
+			navigateTo('/eshop')
+			useEshopStore.getState().openCart()
+			const itemCount = useEshopStore.getState().getItemCount()
+			const cartTotal = useEshopStore.getState().getCartTotal()
+			return { success: true, itemCount, cartTotal, navigatedTo: '/eshop' }
+		}
 
 		case 'openZainFiber':
 			navigateTo('/zain/fiber')

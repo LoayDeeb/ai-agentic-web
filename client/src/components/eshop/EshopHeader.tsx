@@ -50,7 +50,12 @@ function ZainWordmark({ compact = false }: { compact?: boolean }) {
 	)
 }
 
-export function EshopHeader() {
+type EshopHeaderProps = {
+	itemCount?: number
+	onCartClick?: () => void
+}
+
+export function EshopHeader({ itemCount = 0, onCartClick }: EshopHeaderProps) {
 	const [searchValue, setSearchValue] = useState('')
 	const [accountOpen, setAccountOpen] = useState(false)
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -145,13 +150,19 @@ export function EshopHeader() {
 							) : null}
 						</div>
 
-						<a
-							href="#"
+						<button
+							type="button"
+							onClick={onCartClick}
 							aria-label="Shopping cart"
-							className="rounded-full p-2 transition-colors hover:bg-white/10"
+							className="relative rounded-full p-2 transition-colors hover:bg-white/10"
 						>
 							<ShoppingCart size={22} strokeWidth={1.7} />
-						</a>
+							{itemCount > 0 ? (
+								<span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#d12b8a] px-1 text-[11px] font-bold text-white">
+									{itemCount}
+								</span>
+							) : null}
+						</button>
 					</div>
 				</div>
 
@@ -178,13 +189,19 @@ export function EshopHeader() {
 							>
 								<Heart size={20} strokeWidth={1.7} />
 							</a>
-							<a
-								href="#"
+							<button
+								type="button"
+								onClick={onCartClick}
 								aria-label="Shopping cart"
-								className="rounded-full p-2 transition-colors hover:bg-white/10"
+								className="relative rounded-full p-2 transition-colors hover:bg-white/10"
 							>
 								<ShoppingCart size={20} strokeWidth={1.7} />
-							</a>
+								{itemCount > 0 ? (
+									<span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#d12b8a] px-1 text-[11px] font-bold text-white">
+										{itemCount}
+									</span>
+								) : null}
+							</button>
 						</div>
 					</div>
 

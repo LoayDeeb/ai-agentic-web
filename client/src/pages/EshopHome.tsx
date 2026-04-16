@@ -1,241 +1,21 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 import { ArrowRight, CreditCard, Gift, ShieldCheck, Smartphone, Wifi } from 'lucide-react'
 import {
 	EshopBrandStrip,
+	EshopCartDrawer,
 	EshopCategories,
 	EshopHeader,
 	EshopProductCarousel,
-	type EshopProduct,
 } from '../components/eshop'
-
-const newArrivalProducts: EshopProduct[] = [
-	{
-		id: 1,
-		name: 'Samsung Galaxy Tab A11 LTE - 8GB',
-		price: '164.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0081592_samsung-galaxy-tab-a11-lte-8gb_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0081593_samsung-galaxy-tab-a11-lte-8gb_360.webp',
-		badge: 'New arrival',
-		badgeTone: 'teal',
-	},
-	{
-		id: 2,
-		name: 'Xiaomi Mi Vacuum Cleaner Mini EU',
-		price: '45.01',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0081544_xiaomi-mi-vacuum-cleaner-mini-eu_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0081545_xiaomi-mi-vacuum-cleaner-mini-eu_360.webp',
-		rating: 2,
-		reviewCount: 4,
-		badge: 'New arrival',
-		badgeTone: 'teal',
-	},
-	{
-		id: 3,
-		name: 'Realme C75X',
-		price: '129.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0082342_realme-c75x_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0082343_realme-c75x_360.webp',
-		badge: 'New arrival',
-		badgeTone: 'teal',
-	},
-	{
-		id: 4,
-		name: 'Xiaomi Robot Vacuum S40C EU',
-		price: '229.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0081464_xiaomi-robot-vacuum-s40c-eu_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0081465_xiaomi-robot-vacuum-s40c-eu_360.webp',
-		badge: 'New arrival',
-		badgeTone: 'teal',
-	},
-	{
-		id: 5,
-		name: 'Xiaomi Gaming Mouse Lite GL',
-		price: '25.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080441_xiaomi-gaming-mouse-lite-gl_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080442_xiaomi-gaming-mouse-lite-gl_360.webp',
-		badge: 'New arrival',
-		badgeTone: 'teal',
-	},
-	{
-		id: 6,
-		name: 'Tapo C610 Solar-Powered Pan/Tilt Security Camera Kit',
-		price: '69.99',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0081727_tapo-c610-solar-powered-pantilt-security-camera-kit_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0081728_tapo-c610-solar-powered-pantilt-security-camera-kit_360.webp',
-		badge: 'New arrival',
-		badgeTone: 'teal',
-		soldOut: true,
-	},
-	{
-		id: 7,
-		name: 'TP-Link BE6500 Wi-Fi 7 High Gain Wireless USB Adapter',
-		price: '55.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080421_tp-link-be6500-wi-fi-7-high-gain-wireless-usb-adapter_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080422_tp-link-be6500-wi-fi-7-high-gain-wireless-usb-adapter_360.webp',
-		badge: 'New arrival',
-		badgeTone: 'teal',
-	},
-	{
-		id: 8,
-		name: 'FOLG Ear Phone FG-EC05',
-		price: '6.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080383_folg-ear-phone-fg-ec05_360.webp',
-		rating: 4,
-		reviewCount: 81,
-		badge: 'New arrival',
-		badgeTone: 'teal',
-	},
-]
-
-const bestSellerProducts: EshopProduct[] = [
-	{
-		id: 11,
-		name: 'Airpods 4 Active Noise Cancellation',
-		price: '179.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0069311_airpods-4-active-noise-cancellation_360.webp',
-		badge: 'Best Seller',
-	},
-	{
-		id: 12,
-		name: 'Apple Watch Series 11',
-		price: '415.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079603_apple-watch-series-11_360.webp',
-		badge: 'Best Seller',
-	},
-	{
-		id: 13,
-		name: 'Honor Pad X9',
-		price: '159.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0071578_honor-pad-x9_360.webp',
-		badge: 'Best Seller',
-	},
-	{
-		id: 14,
-		name: 'HUAWEI FreeBuds SE 4',
-		price: '36.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080130_huawei-freebuds-se-4_360.webp',
-		badge: 'Best Seller',
-		soldOut: true,
-	},
-	{
-		id: 15,
-		name: 'iPhone 17 Pro Max',
-		price: '1,199.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079481_iphone-17-pro-max_360.webp',
-		badge: 'Best Seller',
-	},
-	{
-		id: 16,
-		name: 'Samsung Galaxy A06 5G - 4GB',
-		price: '49.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0077305_samsung-galaxy-a06-5g-4gb_360.webp',
-		badge: 'Best Seller',
-		soldOut: true,
-	},
-	{
-		id: 17,
-		name: 'Samsung Galaxy A36 5G',
-		price: '210.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0077389_samsung-galaxy-a36-5g_360.webp',
-		badge: 'Best Seller',
-	},
-	{
-		id: 18,
-		name: 'Samsung Galaxy S25 FE',
-		price: '399.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079661_samsung-galaxy-s25-fe_360.webp',
-		badge: 'Best Seller',
-	},
-]
-
-const appleProducts: EshopProduct[] = [
-	{
-		id: 21,
-		name: 'iPhone 17',
-		price: '799.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079484_iphone-17_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079485_iphone-17_360.webp',
-		rating: 4.5,
-		reviewCount: 30,
-	},
-	{
-		id: 22,
-		name: 'iPhone 17 Pro',
-		price: '1099.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079478_iphone-17-pro_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079480_iphone-17-pro_360.webp',
-		rating: 4.7,
-		reviewCount: 21,
-	},
-	{
-		id: 23,
-		name: 'iPhone 17 Pro Max',
-		price: '1199.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079481_iphone-17-pro-max_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079482_iphone-17-pro-max_360.webp',
-		rating: 4.6,
-		reviewCount: 54,
-		badge: 'Best Seller',
-	},
-	{
-		id: 24,
-		name: 'iPhone Air',
-		price: '999.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079495_iphone-air_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079494_iphone-air_360.webp',
-	},
-	{
-		id: 25,
-		name: 'Apple Watch Series 11',
-		price: '415.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079603_apple-watch-series-11_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079605_apple-watch-series-11_360.webp',
-		rating: 5,
-		reviewCount: 11,
-		badge: 'Best Seller',
-	},
-	{
-		id: 26,
-		name: 'AirPods Pro 3',
-		price: '229.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079526_airpods-pro-3_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079527_airpods-pro-3_360.webp',
-		rating: 5,
-		reviewCount: 1,
-	},
-	{
-		id: 27,
-		name: 'MacBook Air 13-in (M4)',
-		price: '849.00',
-		currency: 'JOD',
-		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080012_macbook-air-13-in-m4_360.webp',
-		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080013_macbook-air-13-in-m4_360.webp',
-		rating: 5,
-		reviewCount: 4,
-	},
-]
+import {
+	appleProducts,
+	bestSellerProducts,
+	eshopSectionIds,
+	newArrivalProducts,
+} from '../components/eshop/catalog'
+import { onToolEvent } from '../features/agent/tools'
+import { useEshopStore } from '../store/eshopStore'
 
 const quickHighlights = [
 	{
@@ -262,9 +42,47 @@ const signals = [
 ]
 
 export default function EshopHome() {
+	const location = useLocation()
+	const items = useEshopStore((state) => state.items)
+	const isCartOpen = useEshopStore((state) => state.isCartOpen)
+	const addItem = useEshopStore((state) => state.addItem)
+	const openCart = useEshopStore((state) => state.openCart)
+	const closeCart = useEshopStore((state) => state.closeCart)
+	const removeItem = useEshopStore((state) => state.removeItem)
+	const itemCount = useEshopStore((state) => state.getItemCount())
+	const cartTotal = useEshopStore((state) => state.getCartTotal())
+
+	React.useEffect(() => {
+		const scrollToHash = (hash: string) => {
+			if (!hash) return
+			const element = document.getElementById(hash.replace(/^#/, ''))
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+			}
+		}
+
+		if (location.hash) {
+			const timer = window.setTimeout(() => scrollToHash(location.hash), 120)
+			return () => window.clearTimeout(timer)
+		}
+	}, [location.hash])
+
+	React.useEffect(() => {
+		const unsubscribe = onToolEvent((tool, args) => {
+			if (tool === 'scrollToEshopSection' && args.sectionId) {
+				const element = document.getElementById(String(args.sectionId))
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+				}
+			}
+		})
+
+		return unsubscribe
+	}, [])
+
 	return (
 		<div className="min-h-screen bg-[radial-gradient(circle_at_top,#efe6ff_0%,#f5f6fb_26%,#f8f9fc_60%,#f4f7fb_100%)] text-slate-900">
-			<EshopHeader />
+			<EshopHeader itemCount={itemCount} onCartClick={openCart} />
 
 			<main className="pb-16">
 				<section className="relative overflow-hidden bg-[linear-gradient(135deg,#1a0050_0%,#29006f_58%,#3a0b84_100%)] text-white">
@@ -284,13 +102,13 @@ export default function EshopHome() {
 
 							<div className="mt-8 flex flex-col gap-3 sm:flex-row">
 								<a
-									href="#categories"
+									href={`#${eshopSectionIds.categories}`}
 									className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#21005f] transition-transform hover:-translate-y-0.5"
 								>
 									Explore categories
 								</a>
 								<a
-									href="#apple-products"
+									href={`#${eshopSectionIds.appleProducts}`}
 									className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/8 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/14"
 								>
 									View Apple range
@@ -361,29 +179,38 @@ export default function EshopHome() {
 					</div>
 				</section>
 
-				<div id="categories">
+				<div id={eshopSectionIds.categories}>
 					<EshopCategories />
 				</div>
 
-				<EshopProductCarousel
-					title="New arrival"
-					description="Fresh devices, smart home gear, and newly listed accessories arranged in a launch-first rail."
-					products={newArrivalProducts}
-				/>
+				<div id={eshopSectionIds.newArrival}>
+					<EshopProductCarousel
+						title="New arrival"
+						description="Fresh devices, smart home gear, and newly listed accessories arranged in a launch-first rail."
+						products={newArrivalProducts}
+						onAddToCart={addItem}
+					/>
+				</div>
 
-				<EshopBrandStrip />
+				<div id={eshopSectionIds.brands}>
+					<EshopBrandStrip />
+				</div>
 
-				<EshopProductCarousel
-					title="Best seller"
-					description="A higher-conversion rail for the products customers return to most often."
-					products={bestSellerProducts}
-				/>
+				<div id={eshopSectionIds.bestSeller}>
+					<EshopProductCarousel
+						title="Best seller"
+						description="A higher-conversion rail for the products customers return to most often."
+						products={bestSellerProducts}
+						onAddToCart={addItem}
+					/>
+				</div>
 
-				<div id="apple-products">
+				<div id={eshopSectionIds.appleProducts}>
 					<EshopProductCarousel
 						title="Apple products"
 						description="A brand-led collection with hover image swaps and review signals for premium device browsing."
 						products={appleProducts}
+						onAddToCart={addItem}
 					/>
 				</div>
 			</main>
@@ -421,6 +248,14 @@ export default function EshopHome() {
 					</div>
 				</div>
 			</footer>
+
+			<EshopCartDrawer
+				items={items}
+				isOpen={isCartOpen}
+				onClose={closeCart}
+				onRemove={removeItem}
+				total={cartTotal}
+			/>
 		</div>
 	)
 }

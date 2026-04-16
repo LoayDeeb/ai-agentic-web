@@ -24,6 +24,10 @@ function selectAgentStream(url: string | undefined) {
 		logger.info({ url }, 'Using Zain Jordan Agent')
 		return streamZainAgentResponse
 	}
+	if (url?.startsWith('/eshop')) {
+		logger.info({ url }, 'Using Zain Jordan eShop Agent')
+		return streamZainAgentResponse
+	}
 	if (url?.startsWith('/gig')) {
 		logger.info({ url }, 'Using GIG Jordan Agent')
 		return streamGigAgentResponse
@@ -308,7 +312,7 @@ export function setupVoiceWebSocket(server: Server) {
 							// Select appropriate agent based on current URL
 							const agentStream = selectAgentStream(context.currentUrl)
 							const responseStream =
-								agentStream === streamAgentResponse
+								agentStream === streamAgentResponse || agentStream === streamZainAgentResponse
 									? agentStream(conversationHistory, context.currentUrl)
 									: agentStream(conversationHistory)
 
@@ -519,4 +523,3 @@ export function setupVoiceWebSocket(server: Server) {
 
 	logger.info('Voice WebSocket server initialized on /voice')
 }
-

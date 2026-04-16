@@ -1,5 +1,6 @@
 export { EshopHeader } from './EshopHeader'
 export { EshopCategories } from './EshopCategories'
 export { EshopBrandStrip } from './EshopBrandStrip'
+export { EshopCartDrawer } from './EshopCartDrawer'
 export { EshopProductCarousel } from './EshopProductCarousel'
 export type { EshopProduct } from './EshopProductCarousel'

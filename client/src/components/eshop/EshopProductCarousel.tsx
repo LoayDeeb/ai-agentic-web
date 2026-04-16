@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronRight, Star } from 'lucide-react'
+import { ChevronRight, ShoppingCart, Star } from 'lucide-react'
 
 export type EshopProduct = {
 	id: number
@@ -20,6 +20,7 @@ type EshopProductCarouselProps = {
 	title: string
 	description?: string
 	products: EshopProduct[]
+	onAddToCart?: (productId: number) => void
 }
 
 const badgeBackgrounds = {
@@ -31,6 +32,7 @@ export function EshopProductCarousel({
 	title,
 	description,
 	products,
+	onAddToCart,
 }: EshopProductCarouselProps) {
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const [scrollProgress, setScrollProgress] = useState(0)
@@ -80,7 +82,12 @@ export function EshopProductCarousel({
 				<div ref={scrollRef} className="hide-scrollbar mt-8 overflow-x-auto pb-2">
 					<div className="flex gap-4">
 						{products.map((product, index) => (
-							<ProductCard key={product.id} product={product} index={index} />
+							<ProductCard
+								key={product.id}
+								product={product}
+								index={index}
+								onAddToCart={onAddToCart}
+							/>
 						))}
 					</div>
 				</div>
@@ -99,7 +106,15 @@ export function EshopProductCarousel({
 	)
 }
 
-function ProductCard({ product, index }: { product: EshopProduct; index: number }) {
+function ProductCard({
+	product,
+	index,
+	onAddToCart,
+}: {
+	product: EshopProduct
+	index: number
+	onAddToCart?: (productId: number) => void
+}) {
 	const [hovered, setHovered] = useState(false)
 	const badgeTone = product.badgeTone ?? 'blue'
 
@@ -164,7 +179,18 @@ function ProductCard({ product, index }: { product: EshopProduct; index: number 
 						<span className="text-2xl font-bold text-black/90">{product.price}</span>
 						<span className="text-base text-black/80">{product.currency}</span>
 					</div>
-					{product.soldOut ? <div className="mt-1 text-sm text-[#dc362e]">Sold Out</div> : null}
+					{product.soldOut ? (
+						<div className="mt-1 text-sm text-[#dc362e]">Sold Out</div>
+					) : (
+						<button
+							type="button"
+							onClick={() => onAddToCart?.(product.id)}
+							className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1a0050] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2b0b73]"
+						>
+							<ShoppingCart size={16} />
+							Add to cart
+						</button>
+					)}
 				</div>
 			</div>
 		</motion.article>
