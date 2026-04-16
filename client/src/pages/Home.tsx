@@ -27,6 +27,18 @@ export default function Home() {
 					>
 						Browse Services
 					</Link>
+					<Link
+						to="/zain"
+						className="inline-block bg-[#1a0050] text-white rounded px-4 py-2 hover:bg-[#2a0a73]"
+					>
+						Open Zain Demo
+					</Link>
+					<Link
+						to="/eshop"
+						className="inline-block bg-[#d12b8a] text-white rounded px-4 py-2 hover:bg-[#b51f77]"
+					>
+						Open eShop Demo
+					</Link>
 				</div>
 			</div>
 		</div>

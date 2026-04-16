@@ -316,6 +316,10 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			navigateTo('/zain')
 			return { success: true, navigatedTo: '/zain' }
 
+		case 'openEshopHome':
+			navigateTo('/eshop')
+			return { success: true, navigatedTo: '/eshop' }
+
 		case 'openZainFiber':
 			navigateTo('/zain/fiber')
 			return { success: true, navigatedTo: '/zain/fiber' }
