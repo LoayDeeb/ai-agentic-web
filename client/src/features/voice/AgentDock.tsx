@@ -1,11 +1,9 @@
 import React from 'react'
 import { Mic, MicOff, X, Volume2, Send } from 'lucide-react'
-import { useLocation } from 'react-router-dom'
 import { createSpeechRecognition, SpeechRecognitionController } from './speechRecognition'
 import { connectVoiceSocket, VoiceSocketController } from './voiceSocket'
 import { createAudioQueue, AudioQueueController } from './audioQueue'
 import { executeActions } from '../agent/execute'
-import { useEshopStore } from '../../store/eshopStore'
 
 const DOCK_STATE_KEY = 'voice.dock.state'
 
@@ -56,7 +54,6 @@ function readPersistedDockState(): PersistedDockState {
 }
 
 export function AgentDock() {
-	const location = useLocation()
 	const persistedState = React.useMemo(() => readPersistedDockState(), [])
 	const [open, setOpen] = React.useState(false)
 	const [connecting, setConnecting] = React.useState(false)
@@ -73,8 +70,6 @@ export function AgentDock() {
 	const dropIncomingRef = React.useRef(false)
 	const sessionIdRef = React.useRef(persistedState.sessionId)
 	const unloadingRef = React.useRef(false)
-	const isEshopRoute = location.pathname.startsWith('/eshop')
-	const isCartOpen = useEshopStore((state) => state.isCartOpen)
 
 	const getCurrentPageContext = React.useCallback(() => ({
 		url: window.location.pathname,
@@ -382,28 +377,26 @@ export function AgentDock() {
 
 	return (
 		<div
-			className="fixed bottom-4"
+			className="fixed bottom-3 left-3 z-40 sm:bottom-4 sm:left-4"
 			style={{
-				zIndex: isEshopRoute ? 35 : 50,
-				left: isEshopRoute ? '1rem' : 'auto',
-				right: isEshopRoute ? (isCartOpen ? 'auto' : '1rem') : '1rem',
+				right: 'auto',
 			}}
 		>
 			{open ? (
-				<div className="flex max-h-[70vh] w-[340px] max-w-[calc(100vw-1rem)] flex-col rounded-2xl border bg-white p-4 shadow-lg">
-					<div className="flex items-center justify-between mb-3">
-						<h3 className="font-semibold text-lg">Voice Assistant</h3>
-						<button className="p-2 hover:bg-gray-100 rounded" onClick={() => setOpen(false)}>
+				<div className="flex max-h-[58vh] w-[300px] max-w-[calc(100vw-1.5rem)] flex-col rounded-2xl border bg-white p-3 shadow-xl sm:w-[320px]">
+					<div className="mb-2 flex items-center justify-between">
+						<h3 className="text-base font-semibold">Voice Assistant</h3>
+						<button className="rounded p-1.5 hover:bg-gray-100" onClick={() => setOpen(false)}>
 							<X className="w-5 h-5" />
 						</button>
 					</div>
 
-					<div className="space-y-3 flex-1 flex flex-col min-h-0">
+					<div className="flex min-h-0 flex-1 flex-col space-y-2.5">
 						{/* Control buttons */}
 						<div className="flex gap-2 shrink-0">
 							{!isListening ? (
 								<button
-									className="flex-1 bg-[#1B8354] text-white rounded-lg px-4 py-3 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+									className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#1B8354] px-3 py-2.5 text-sm font-medium text-white disabled:opacity-50"
 									onClick={start}
 									disabled={connecting || isListening}
 								>
@@ -413,7 +406,7 @@ export function AgentDock() {
 							) : (
 								<>
 									<button
-										className="flex-1 bg-red-500 text-white rounded-lg px-4 py-3 font-medium flex items-center justify-center gap-2"
+										className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-red-500 px-3 py-2.5 text-sm font-medium text-white"
 										onClick={stop}
 									>
 										<MicOff className="w-5 h-5" />
@@ -421,7 +414,7 @@ export function AgentDock() {
 									</button>
 									{isSpeaking && (
 										<button
-											className="bg-orange-500 text-white rounded-lg px-4 py-3 font-medium flex items-center justify-center gap-2"
+											className="flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-3 py-2.5 text-sm font-medium text-white"
 											onClick={interrupt}
 										>
 											<Volume2 className="w-5 h-5" />
@@ -433,7 +426,7 @@ export function AgentDock() {
 						</div>
 
 						{/* Status indicators */}
-						<div className="flex items-center gap-3 text-sm shrink-0">
+						<div className="flex shrink-0 items-center gap-3 text-xs">
 							<div className="flex items-center gap-1">
 								<div
 									className={`w-2 h-2 rounded-full ${isListening ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`}
@@ -454,13 +447,13 @@ export function AgentDock() {
 
 						{/* Interim text */}
 						{interimText && (
-							<div className="bg-gray-50 rounded p-2 text-sm text-gray-500 italic shrink-0">
+							<div className="shrink-0 rounded bg-gray-50 p-2 text-sm italic text-gray-500">
 								{interimText}...
 							</div>
 						)}
 
 						{/* Transcript */}
-						<div className="flex-1 overflow-y-auto space-y-2 border rounded-lg p-3 bg-gray-50 min-h-[200px]">
+						<div className="min-h-[150px] flex-1 space-y-2 overflow-y-auto rounded-lg border bg-gray-50 p-2.5">
 							{transcript.length === 0 ? (
 								<p className="text-gray-400 text-sm text-center py-4">
 									Click "Start Voice" or type below to begin
@@ -491,20 +484,20 @@ export function AgentDock() {
 								onChange={(e) => setTextInput(e.target.value)}
 								onKeyDown={(e) => e.key === 'Enter' && handleSend()}
 								placeholder="Type a message..."
-								className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+								className="flex-1 rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
 								disabled={connecting}
 							/>
 							<button 
 								onClick={handleSend}
 								disabled={!textInput.trim() || connecting}
-								className="bg-green-600 text-white p-2 rounded-lg disabled:opacity-50 hover:bg-green-700"
+								className="rounded-lg bg-green-600 p-2 text-white disabled:opacity-50 hover:bg-green-700"
 							>
 								<Send className="w-5 h-5" />
 							</button>
 						</div>
 
 						{/* Help text */}
-						<p className="text-xs text-gray-500 text-center shrink-0">
+						<p className="shrink-0 text-center text-[11px] text-gray-500">
 							{isListening
 								? 'Speak naturally. I will respond when you pause.'
 								: 'Try asking about financing services...'}
@@ -513,11 +506,11 @@ export function AgentDock() {
 				</div>
 			) : (
 				<button
-					className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#1B8354] text-white shadow-lg transition-colors hover:bg-[#156b45]"
+					className="relative flex h-12 w-12 items-center justify-center rounded-full bg-[#1B8354] text-white shadow-lg transition-colors hover:bg-[#156b45] sm:h-13 sm:w-13"
 					onClick={() => setOpen(true)}
 					title="Open voice assistant"
 				>
-					<Mic className="w-7 h-7" />
+					<Mic className="h-6 w-6" />
 					{hasActiveSession ? (
 						<span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#d12b8a] px-1 text-[10px] font-bold text-white">
 							{Math.min(transcript.length, 9)}
