@@ -10,6 +10,7 @@ import {
 } from '../../store/eshopCheckoutStore'
 import {
 	getEshopProductById,
+	getEshopProductDetailById,
 	getRecommendedUpsells,
 	getEshopSectionForProduct,
 } from '../../components/eshop/catalog'
@@ -418,6 +419,24 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 				productId,
 				productName: product.name,
 				sectionId,
+			}
+		}
+
+		case 'openEshopProductDetail': {
+			const productId = Number(args.productId)
+			const detailProduct = getEshopProductDetailById(productId)
+			if (!detailProduct) {
+				return { success: false, error: `No detail page for eShop product: ${productId}` }
+			}
+
+			useEshopStore.getState().closeCart()
+			const path = `/eshop/product/${detailProduct.slug}`
+			navigateTo(path)
+			return {
+				success: true,
+				navigatedTo: path,
+				productId,
+				productName: detailProduct.name,
 			}
 		}
 

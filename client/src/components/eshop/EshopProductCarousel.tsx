@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronRight, ShoppingCart, Star } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { getEshopProductDetailById } from './catalog'
 
 export type EshopProduct = {
 	id: number
@@ -117,6 +119,7 @@ function ProductCard({
 }) {
 	const [hovered, setHovered] = useState(false)
 	const badgeTone = product.badgeTone ?? 'blue'
+	const detailProduct = getEshopProductDetailById(product.id)
 
 	return (
 		<motion.article
@@ -171,7 +174,16 @@ function ProductCard({
 						overflow: 'hidden',
 					}}
 				>
-					{product.name}
+					{detailProduct ? (
+						<Link
+							to={`/eshop/product/${detailProduct.slug}`}
+							className="transition-colors hover:text-[#2b0b73]"
+						>
+							{product.name}
+						</Link>
+					) : (
+						product.name
+					)}
 				</h3>
 
 				<div className="mt-2">{renderRating(product.rating ?? 0, product.reviewCount ?? 0)}</div>
@@ -184,14 +196,24 @@ function ProductCard({
 					{product.soldOut ? (
 						<div className="mt-1 text-sm text-[#dc362e]">Sold Out</div>
 					) : (
-						<button
-							type="button"
-							onClick={() => onAddToCart?.(product.id)}
-							className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1a0050] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2b0b73]"
-						>
-							<ShoppingCart size={16} />
-							Add to cart
-						</button>
+						<div className="mt-3 flex gap-2">
+							{detailProduct ? (
+								<Link
+									to={`/eshop/product/${detailProduct.slug}`}
+									className="inline-flex flex-1 items-center justify-center rounded-full border border-[#1a0050] px-4 py-2 text-sm font-semibold text-[#1a0050] transition-colors hover:bg-[#f2edff]"
+								>
+									View details
+								</Link>
+							) : null}
+							<button
+								type="button"
+								onClick={() => onAddToCart?.(product.id)}
+								className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#1a0050] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2b0b73]"
+							>
+								<ShoppingCart size={16} />
+								Add to cart
+							</button>
+						</div>
 					)}
 				</div>
 			</div>

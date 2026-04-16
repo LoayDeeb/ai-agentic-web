@@ -5,10 +5,28 @@ export const eshopSectionIds = {
 	newArrival: 'new-arrival',
 	brands: 'brands',
 	bestSeller: 'best-seller',
+	audio: 'audio',
 	appleProducts: 'apple-products',
 } as const
 
 export type EshopSectionId = (typeof eshopSectionIds)[keyof typeof eshopSectionIds]
+
+export type EshopProductDetail = {
+	slug: 'iphone-17' | 'iphone-17-pro'
+	productId: number
+	name: string
+	price: string
+	currency: string
+	heroImage: string
+	gallery: string[]
+	tagline: string
+	finishLabel: string
+	finishes: string[]
+	heroDescription: string
+	highlights: string[]
+	specCards: Array<{ label: string; value: string }>
+	inTheBox: string[]
+}
 
 export const newArrivalProducts: EshopProduct[] = [
 	{
@@ -239,9 +257,115 @@ export const appleProducts: EshopProduct[] = [
 	},
 ]
 
+export const audioProducts: EshopProduct[] = [
+	{
+		id: 26,
+		name: 'AirPods Pro 3',
+		price: '229.00',
+		currency: 'JOD',
+		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079526_airpods-pro-3_360.webp',
+		image2: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079527_airpods-pro-3_360.webp',
+		rating: 5,
+		reviewCount: 1,
+		badge: 'Top pick',
+	},
+	{
+		id: 11,
+		name: 'Airpods 4 Active Noise Cancellation',
+		price: '179.00',
+		currency: 'JOD',
+		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0069311_airpods-4-active-noise-cancellation_360.webp',
+		rating: 4.7,
+		reviewCount: 18,
+		badge: 'Best Seller',
+	},
+	{
+		id: 8,
+		name: 'FOLG Ear Phone FG-EC05',
+		price: '6.00',
+		currency: 'JOD',
+		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080383_folg-ear-phone-fg-ec05_360.webp',
+		rating: 4,
+		reviewCount: 81,
+		badge: 'Value pick',
+		badgeTone: 'teal',
+	},
+	{
+		id: 14,
+		name: 'HUAWEI FreeBuds SE 4',
+		price: '36.00',
+		currency: 'JOD',
+		image: 'https://cdn-eshop.jo.zain.com/images/thumbs/0080130_huawei-freebuds-se-4_360.webp',
+		badge: 'Sold Out',
+		soldOut: true,
+	},
+]
+
+export const eshopProductDetails: EshopProductDetail[] = [
+	{
+		slug: 'iphone-17',
+		productId: 21,
+		name: 'iPhone 17',
+		price: '799.00',
+		currency: 'JOD',
+		heroImage: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079484_iphone-17_360.webp',
+		gallery: [
+			'https://cdn-eshop.jo.zain.com/images/thumbs/0079484_iphone-17_360.webp',
+			'https://cdn-eshop.jo.zain.com/images/thumbs/0079485_iphone-17_360.webp',
+		],
+		tagline: 'Everyday flagship',
+		finishLabel: 'Available finishes',
+		finishes: ['Ultramarine', 'Silver', 'Graphite'],
+		heroDescription:
+			'iPhone 17 brings the cleanest balance of performance, camera quality, and all-day battery for customers who want the Apple experience without jumping to the Pro tier.',
+		highlights: [
+			'6.1-inch display sized for one-hand comfort and daily streaming.',
+			'Dual-camera system that keeps photos sharp in daylight and indoors.',
+			'Strong battery performance for messaging, maps, and video all day.',
+		],
+		specCards: [
+			{ label: 'Display', value: '6.1-inch Super Retina' },
+			{ label: 'Storage', value: '128GB base configuration' },
+			{ label: 'Camera', value: 'Advanced dual-camera system' },
+			{ label: 'Battery', value: 'All-day battery life' },
+		],
+		inTheBox: ['iPhone 17', 'USB-C charge cable', 'Documentation'],
+	},
+	{
+		slug: 'iphone-17-pro',
+		productId: 22,
+		name: 'iPhone 17 Pro',
+		price: '1099.00',
+		currency: 'JOD',
+		heroImage: 'https://cdn-eshop.jo.zain.com/images/thumbs/0079478_iphone-17-pro_360.webp',
+		gallery: [
+			'https://cdn-eshop.jo.zain.com/images/thumbs/0079478_iphone-17-pro_360.webp',
+			'https://cdn-eshop.jo.zain.com/images/thumbs/0079480_iphone-17-pro_360.webp',
+		],
+		tagline: 'Pro performance, pro camera',
+		finishLabel: 'Premium finishes',
+		finishes: ['Natural Titanium', 'Black Titanium', 'Desert Titanium'],
+		heroDescription:
+			'iPhone 17 Pro is for buyers who want the lighter titanium body, stronger camera flexibility, and a sharper performance ceiling for content, travel, and work.',
+		highlights: [
+			'Pro-class camera setup for zoom, portraits, and low-light capture.',
+			'Titanium build for a lighter in-hand feel with a premium finish.',
+			'Extra headroom for gaming, editing, and long-term device use.',
+		],
+		specCards: [
+			{ label: 'Display', value: '6.3-inch ProMotion display' },
+			{ label: 'Frame', value: 'Titanium design' },
+			{ label: 'Camera', value: 'Triple-camera Pro system' },
+			{ label: 'Performance', value: 'High-efficiency Pro chip' },
+		],
+		inTheBox: ['iPhone 17 Pro', 'USB-C charge cable', 'Documentation'],
+	},
+]
+
 export const allEshopProducts = [
 	...newArrivalProducts,
 	...bestSellerProducts,
+	...audioProducts,
 	...appleProducts,
 ]
 
@@ -251,7 +375,18 @@ export function getEshopProductById(productId: number) {
 	return eshopProductMap.get(productId)
 }
 
+export function getEshopProductDetailBySlug(slug: string) {
+	return eshopProductDetails.find((product) => product.slug === slug)
+}
+
+export function getEshopProductDetailById(productId: number) {
+	return eshopProductDetails.find((product) => product.productId === productId)
+}
+
 export function getEshopSectionForProduct(productId: number): EshopSectionId {
+	if (audioProducts.some((product) => product.id === productId)) {
+		return eshopSectionIds.audio
+	}
 	if (appleProducts.some((product) => product.id === productId)) {
 		return eshopSectionIds.appleProducts
 	}

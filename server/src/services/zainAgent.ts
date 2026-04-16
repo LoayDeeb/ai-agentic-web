@@ -102,7 +102,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				properties: {
 					sectionId: {
 						type: 'string',
-						enum: ['categories', 'new-arrival', 'brands', 'best-seller', 'apple-products'],
+						enum: ['categories', 'new-arrival', 'brands', 'best-seller', 'audio', 'apple-products'],
 						description: 'The eShop section to open.',
 					},
 				},
@@ -114,7 +114,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		type: 'function',
 		function: {
 			name: 'openEshopProduct',
-			description: 'Open a specific eShop product card and bring it into view.',
+			description: 'Open a specific eShop product card and bring it into view. Use this before saying you opened, showed, or brought a product in front of the user.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -122,6 +122,24 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 						type: 'number',
 						enum: [1, 2, 3, 4, 5, 7, 8, 11, 12, 13, 15, 17, 18, 21, 22, 23, 24, 25, 26, 27],
 						description: 'Product id to open in the eShop.',
+					},
+				},
+				required: ['productId'],
+			},
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'openEshopProductDetail',
+			description: 'Open the dedicated product detail page for a supported eShop product. Use this when the user asks for details, specs, or to learn more about iPhone 17 or iPhone 17 Pro.',
+			parameters: {
+				type: 'object',
+				properties: {
+					productId: {
+						type: 'number',
+						enum: [21, 22],
+						description: 'Supported detail page product id.',
 					},
 				},
 				required: ['productId'],
@@ -504,6 +522,7 @@ Available eShop sections:
 - new-arrival
 - brands
 - best-seller
+- audio
 - apple-products
 
 eShop product reference:
@@ -537,6 +556,9 @@ Tool policy for /eshop:
 - If the user asks to open the store, use openEshopHome.
 - If the user asks for categories, new arrivals, brands, best sellers, or Apple products, use openEshopSection.
 - If the user asks about a specific product or wants to see a recommended item, use openEshopProduct.
+- If the user asks for details, specs, or to know more about iPhone 17 or iPhone 17 Pro, use openEshopProductDetail.
+- Never say you opened, showed, highlighted, or brought a product or section into view unless you actually used the matching tool in that same turn.
+- If you intend to say "I opened it", "it is in front of you", or similar, you must first call openEshopProduct, openEshopProductDetail, openEshopSection, showEshopCart, or openEshopCheckout.
 - If the user asks to add a specific product to cart and the product is in the catalog and not sold out, use addEshopProductToCart with the correct product id.
 - After adding to cart, briefly confirm the product name and suggest one next step: view cart, add a matching accessory, or go to checkout.
 - If the user asks to see the cart, review the cart, or check what was added, use showEshopCart.
@@ -549,14 +571,19 @@ Tool policy for /eshop:
 Sales behavior:
 - Recommend the closest matching rail or section based on intent.
 - For Apple requests, prefer apple-products.
+- For these exact Apple products, use:
+  - openEshopProductDetail with 21 for iPhone 17 details or specs
+  - openEshopProductDetail with 22 for iPhone 17 Pro details or specs
+  - openEshopProduct with 21 or 22 only if the user just wants to see the product card in the rail
+  - 23 for iPhone 17 Pro Max
+  - 24 for iPhone Air
+  - 25 for Apple Watch Series 11
+  - 26 for AirPods Pro 3
 - For smartphones generally, start with apple-products or best-seller depending on user intent.
 - For "latest" or "new" requests, prefer new-arrival.
 - For "popular" or "top" requests, prefer best-seller.
-- For earphones, headphones, earbuds, or "سماعات", prefer:
-  - 26 AirPods Pro 3
-  - 11 Airpods 4 Active Noise Cancellation
-  - 8 FOLG Ear Phone FG-EC05
-- When the user asks what audio options are available, open a relevant product or section instead of only answering in text.
+- For earphones, headphones, earbuds, or "سماعات", open the audio section first.
+- Only use openEshopProduct for audio if the user asks for one specific item such as AirPods Pro 3.
 - Upsell naturally after the main product is clear:
   - iPhone or Apple device: suggest AirPods Pro 3 or Apple Watch Series 11.
   - MacBook or tablet: suggest Xiaomi Gaming Mouse Lite GL or AirPods Pro 3.

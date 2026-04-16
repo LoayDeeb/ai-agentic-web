@@ -9,6 +9,7 @@ import {
 	EshopProductCarousel,
 } from '../components/eshop'
 import {
+	audioProducts,
 	appleProducts,
 	bestSellerProducts,
 	eshopSectionIds,
@@ -177,9 +178,9 @@ export default function EshopHome() {
 								<p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/55">
 									Merch flow
 								</p>
-								<div className="mt-4 text-4xl font-bold">3 rails</div>
+								<div className="mt-4 text-4xl font-bold">4 rails</div>
 								<p className="mt-2 text-sm leading-6 text-white/70">
-									New arrivals, best sellers, and Apple-specific inventory using reusable carousel logic.
+									New arrivals, best sellers, audio picks, and Apple-specific inventory using reusable carousel logic.
 								</p>
 							</div>
 						</div>
@@ -208,6 +209,15 @@ export default function EshopHome() {
 						title="Best seller"
 						description="A higher-conversion rail for the products customers return to most often."
 						products={bestSellerProducts}
+						onAddToCart={addItem}
+					/>
+				</div>
+
+				<div id={eshopSectionIds.audio}>
+					<EshopProductCarousel
+						title="Audio picks"
+						description="All earphones, earbuds, and audio add-ons grouped into one clean section for easier comparison."
+						products={audioProducts}
 						onAddToCart={addItem}
 					/>
 				</div>
