@@ -21,6 +21,11 @@ export function AgentDock() {
 	const isSpeakingRef = React.useRef(false)
 	const dropIncomingRef = React.useRef(false)
 
+	const getCurrentPageContext = React.useCallback(() => ({
+		url: window.location.pathname,
+		title: document.title
+	}), [])
+
 	React.useEffect(() => {
 		isSpeakingRef.current = isSpeaking
 	}, [isSpeaking])
@@ -32,8 +37,7 @@ export function AgentDock() {
 		const sendPageState = () => {
 			socketRef.current?.send({
 				type: 'page_state',
-				url: window.location.pathname,
-				title: document.title
+				...getCurrentPageContext()
 			})
 		}
 		
@@ -103,8 +107,7 @@ export function AgentDock() {
 					// Send page state immediately on connection
 					socketRef.current?.send({
 						type: 'page_state',
-						url: window.location.pathname,
-						title: document.title
+						...getCurrentPageContext()
 					})
 					console.log('[AgentDock] Sent initial page state:', window.location.pathname)
 				},
@@ -194,7 +197,8 @@ export function AgentDock() {
 							type: 'transcript',
 							text,
 							isFinal: true,
-							lang
+							lang,
+							...getCurrentPageContext()
 						})
 					} else {
 						setInterimText(text)
@@ -268,7 +272,8 @@ export function AgentDock() {
 			type: 'transcript',
 			text,
 			isFinal: true,
-			lang
+			lang,
+			...getCurrentPageContext()
 		})
 	}
 

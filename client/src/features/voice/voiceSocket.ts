@@ -1,7 +1,14 @@
 // WebSocket client for voice communication with server
 
 export type VoiceMessage =
-	| { type: 'transcript'; text: string; isFinal: boolean; lang: string }
+	| {
+			type: 'transcript'
+			text: string
+			isFinal: boolean
+			lang: string
+			url?: string
+			title?: string
+	  }
 	| { type: 'interrupt' }
 	| { type: 'tool_result'; id: string; result: any }
 	| { type: 'page_state'; url: string; title?: string; context?: any }
@@ -76,4 +83,3 @@ export function connectVoiceSocket(
 		isConnected: () => ws.readyState === WebSocket.OPEN
 	}
 }
-

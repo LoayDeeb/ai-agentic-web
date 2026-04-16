@@ -276,6 +276,13 @@ export function setupVoiceWebSocket(server: Server) {
 					const userText = msg.text.trim()
 					if (!userText) return
 
+					if (typeof msg.url === 'string' && msg.url.length > 0) {
+						context.currentUrl = msg.url
+					}
+					if (typeof msg.title === 'string' && msg.title.length > 0) {
+						context.currentPage = msg.title
+					}
+
 					// Extract entities from user speech
 					const entities = extractEntities(userText)
 					if (Object.keys(entities).length > 0) {
