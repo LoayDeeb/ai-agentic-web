@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
 import { AgentDock } from './features/voice/AgentDock'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { setNavigator } from './features/agent/navigator'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import EshopCheckout from './pages/EshopCheckout'
@@ -58,9 +58,18 @@ export default function App() {
 		}, [navigate])
 		return null
 	}
+	const ScrollManager = () => {
+		const location = useLocation()
+		React.useEffect(() => {
+			if (location.hash) return
+			window.scrollTo(0, 0)
+		}, [location.pathname, location.search, location.hash])
+		return null
+	}
 	return (
 		<div className="min-h-screen text-[#1F2A37]">
-			<NavSetter />
+				<NavSetter />
+				<ScrollManager />
 			<React.Suspense fallback={<div className="p-6">Loading…</div>}>
 				<Routes>
 					<Route path="/" element={<Home />} />
