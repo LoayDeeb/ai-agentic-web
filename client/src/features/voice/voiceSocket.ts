@@ -9,6 +9,7 @@ export type VoiceMessage =
 			url?: string
 			title?: string
 	  }
+	| { type: 'resume_session'; sessionId: string; url?: string; title?: string }
 	| { type: 'interrupt' }
 	| { type: 'tool_result'; id: string; result: any }
 	| { type: 'page_state'; url: string; title?: string; context?: any }

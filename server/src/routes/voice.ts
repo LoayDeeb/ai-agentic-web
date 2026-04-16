@@ -10,6 +10,34 @@ import { streamMoinAgentResponse } from '../services/moinAgent.js'
 import { streamGigAgentResponse } from '../services/gigAgent.js'
 import { streamTTS } from '../services/tts.js'
 
+type VoiceConversationContext = {
+	userGoal?: string
+	gatheredData: Record<string, any>
+	currentPage?: string
+	currentUrl?: string
+	isAuthenticated?: boolean
+}
+
+type VoiceSessionState = {
+	conversationHistory: AgentMessage[]
+	turnCounter: number
+	context: VoiceConversationContext
+	updatedAt: number
+}
+
+const voiceSessions = new Map<string, VoiceSessionState>()
+
+function createVoiceSessionState(): VoiceSessionState {
+	return {
+		conversationHistory: [],
+		turnCounter: 0,
+		context: {
+			gatheredData: {},
+		},
+		updatedAt: Date.now(),
+	}
+}
+
 // Helper to select the appropriate agent based on current URL
 function selectAgentStream(url: string | undefined) {
 	if (url?.startsWith('/moin')) {
@@ -51,7 +79,8 @@ export function setupVoiceWebSocket(server: Server) {
 	wss.on('connection', (ws: WebSocket) => {
 		logger.info('Voice WebSocket client connected')
 
-		const conversationHistory: AgentMessage[] = []
+		let currentSessionId: string | null = null
+		let conversationHistory: AgentMessage[] = []
 		let turnCounter = 0
 		let currentTurn: { id: number; aborted: boolean } | null = null
 		
@@ -60,19 +89,46 @@ export function setupVoiceWebSocket(server: Server) {
 		let waitingForToolResults = false
 		
 		// Conversation context for intelligent form filling
-		const context: {
-			userGoal?: string
-			gatheredData: Record<string, any>
-			currentPage?: string
-			currentUrl?: string
-			isAuthenticated?: boolean
-		} = {
+		let context: VoiceConversationContext = {
 			gatheredData: {}
+		}
+
+		const syncSession = () => {
+			if (!currentSessionId) return
+			voiceSessions.set(currentSessionId, {
+				conversationHistory,
+				turnCounter,
+				context,
+				updatedAt: Date.now(),
+			})
+		}
+
+		const resumeSession = (sessionId: string) => {
+			const existing = voiceSessions.get(sessionId)
+			if (existing) {
+				conversationHistory = existing.conversationHistory
+				turnCounter = existing.turnCounter
+				context = existing.context
+				existing.updatedAt = Date.now()
+				logger.info(
+					{ sessionId, historyLength: conversationHistory.length },
+					'Voice session resumed'
+				)
+			} else {
+				const freshState = createVoiceSessionState()
+				conversationHistory = freshState.conversationHistory
+				turnCounter = freshState.turnCounter
+				context = freshState.context
+				logger.info({ sessionId }, 'Voice session created')
+			}
+			currentSessionId = sessionId
+			syncSession()
 		}
 
 		const startNewTurn = () => {
 			if (currentTurn) currentTurn.aborted = true
 			currentTurn = { id: ++turnCounter, aborted: false }
+			syncSession()
 			return currentTurn
 		}
 
@@ -265,10 +321,23 @@ export function setupVoiceWebSocket(server: Server) {
 					logger.info({ id: msg.id, result: msg.result }, 'Received tool result from client')
 					pendingToolResults.set(msg.id, msg.result)
 					return
+				} else if (msg.type === 'resume_session') {
+					if (typeof msg.sessionId === 'string' && msg.sessionId.length > 0) {
+						resumeSession(msg.sessionId)
+					}
+					if (typeof msg.url === 'string' && msg.url.length > 0) {
+						context.currentUrl = msg.url
+					}
+					if (typeof msg.title === 'string' && msg.title.length > 0) {
+						context.currentPage = msg.title
+					}
+					syncSession()
+					return
 				} else if (msg.type === 'page_state') {
 					// Update context with current page
 					context.currentPage = msg.title
 					context.currentUrl = msg.url
+					syncSession()
 					logger.info({ url: msg.url, title: msg.title }, 'Page state updated')
 					return
 				} else if (msg.type === 'transcript' && msg.isFinal) {
@@ -288,9 +357,11 @@ export function setupVoiceWebSocket(server: Server) {
 					if (Object.keys(entities).length > 0) {
 						logger.info({ entities }, 'Extracted entities from user speech')
 						Object.assign(context.gatheredData, entities)
+						syncSession()
 					}
 
 					conversationHistory.push({ role: 'user', content: userText })
+					syncSession()
 
 					try {
 						let speaking = false
@@ -414,6 +485,7 @@ export function setupVoiceWebSocket(server: Server) {
 										role: 'assistant',
 										content: text
 									})
+									syncSession()
 								}
 								logger.info(
 									{ pass, responseLength: text.length },
@@ -441,6 +513,7 @@ export function setupVoiceWebSocket(server: Server) {
 									}
 								}))
 							})
+							syncSession()
 
 							// Wait for tool results (with timeout)
 							waitingForToolResults = true
@@ -469,6 +542,7 @@ export function setupVoiceWebSocket(server: Server) {
 									content: JSON.stringify(result),
 									tool_call_id: tc.id
 								})
+								syncSession()
 								
 								logger.info(
 									{ id: tc.id, tool: tc.tool, result, pass },

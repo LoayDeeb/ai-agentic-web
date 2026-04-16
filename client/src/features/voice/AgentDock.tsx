@@ -6,8 +6,62 @@ import { createAudioQueue, AudioQueueController } from './audioQueue'
 import { executeActions } from '../agent/execute'
 import { useLocaleStore } from '../../store/locale'
 
+const DOCK_STATE_KEY = 'voice.dock.state'
+
+type PersistedDockState = {
+	open: boolean
+	transcript: string[]
+	sessionId: string
+	hasActiveSession: boolean
+}
+
+function createSessionId() {
+	if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+		return crypto.randomUUID()
+	}
+	return `voice-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+}
+
+function readPersistedDockState(): PersistedDockState {
+	if (typeof window === 'undefined') {
+		return {
+			open: false,
+			transcript: [],
+			sessionId: createSessionId(),
+			hasActiveSession: false,
+		}
+	}
+
+	try {
+		const raw = window.sessionStorage.getItem(DOCK_STATE_KEY)
+		if (!raw) {
+			return {
+				open: false,
+				transcript: [],
+				sessionId: createSessionId(),
+				hasActiveSession: false,
+			}
+		}
+		const parsed = JSON.parse(raw)
+		return {
+			open: Boolean(parsed.open),
+			transcript: Array.isArray(parsed.transcript) ? parsed.transcript.filter((line: unknown) => typeof line === 'string') : [],
+			sessionId: typeof parsed.sessionId === 'string' && parsed.sessionId.length > 0 ? parsed.sessionId : createSessionId(),
+			hasActiveSession: Boolean(parsed.hasActiveSession),
+		}
+	} catch {
+		return {
+			open: false,
+			transcript: [],
+			sessionId: createSessionId(),
+			hasActiveSession: false,
+		}
+	}
+}
+
 export function AgentDock() {
-	const [open, setOpen] = React.useState(false)
+	const persistedState = React.useMemo(() => readPersistedDockState(), [])
+	const [open, setOpen] = React.useState(persistedState.open)
 	const [connecting, setConnecting] = React.useState(false)
 	const [isListening, setIsListening] = React.useState(false)
 	const [isSpeaking, setIsSpeaking] = React.useState(false)
@@ -15,11 +69,14 @@ export function AgentDock() {
 	const recognitionRef = React.useRef<SpeechRecognitionController | null>(null)
 	const socketRef = React.useRef<VoiceSocketController | null>(null)
 	const audioQueueRef = React.useRef<AudioQueueController | null>(null)
-	const [transcript, setTranscript] = React.useState<string[]>([])
+	const [transcript, setTranscript] = React.useState<string[]>(persistedState.transcript)
 	const [interimText, setInterimText] = React.useState('')
+	const [hasActiveSession, setHasActiveSession] = React.useState(persistedState.hasActiveSession)
 	const { lang: locale } = useLocaleStore()
 	const isSpeakingRef = React.useRef(false)
 	const dropIncomingRef = React.useRef(false)
+	const sessionIdRef = React.useRef(persistedState.sessionId)
+	const unloadingRef = React.useRef(false)
 
 	const getCurrentPageContext = React.useCallback(() => ({
 		url: window.location.pathname,
@@ -29,6 +86,36 @@ export function AgentDock() {
 	React.useEffect(() => {
 		isSpeakingRef.current = isSpeaking
 	}, [isSpeaking])
+
+	React.useEffect(() => {
+		window.sessionStorage.setItem(
+			DOCK_STATE_KEY,
+			JSON.stringify({
+				open,
+				transcript,
+				sessionId: sessionIdRef.current,
+				hasActiveSession,
+			} satisfies PersistedDockState)
+		)
+	}, [open, transcript, hasActiveSession])
+
+	React.useEffect(() => {
+		if (!persistedState.hasActiveSession) return
+		void initializeSession()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	React.useEffect(() => {
+		const markUnloading = () => {
+			unloadingRef.current = true
+		}
+		window.addEventListener('beforeunload', markUnloading)
+		window.addEventListener('pagehide', markUnloading)
+		return () => {
+			window.removeEventListener('beforeunload', markUnloading)
+			window.removeEventListener('pagehide', markUnloading)
+		}
+	}, [])
 	
 	// Send page state updates to server
 	React.useEffect(() => {
@@ -104,6 +191,11 @@ export function AgentDock() {
 			socketRef.current = connectVoiceSocket({
 				onOpen: () => {
 					console.log('[AgentDock] WebSocket connected')
+					socketRef.current?.send({
+						type: 'resume_session',
+						sessionId: sessionIdRef.current,
+						...getCurrentPageContext(),
+					})
 					// Send page state immediately on connection
 					socketRef.current?.send({
 						type: 'page_state',
@@ -151,7 +243,9 @@ export function AgentDock() {
 				},
 				onClose: () => {
 					console.warn('[AgentDock] WebSocket closed unexpectedly')
-					setTranscript((prev) => [...prev, 'Connection lost. Please restart voice.'])
+					if (!unloadingRef.current) {
+						setTranscript((prev) => [...prev, 'Connection lost. Please restart voice.'])
+					}
 					// Mark as disconnected but don't auto-stop recognition
 					socketRef.current = null
 				},
@@ -162,6 +256,7 @@ export function AgentDock() {
 
 			// Wait a bit for WebSocket to connect
 			await new Promise((resolve) => setTimeout(resolve, 500))
+			setHasActiveSession(true)
 			return true
 		} catch (e: any) {
 			console.error('[AgentDock] Failed to init:', e)
@@ -175,6 +270,7 @@ export function AgentDock() {
 	const start = async () => {
 		const success = await initializeSession()
 		if (!success) return
+		setHasActiveSession(true)
 
 		try {
 			// Start speech recognition - forcing Arabic language
@@ -236,6 +332,16 @@ export function AgentDock() {
 		setIsListening(false)
 		setIsSpeaking(false)
 		setInterimText('')
+		setHasActiveSession(false)
+		window.sessionStorage.setItem(
+			DOCK_STATE_KEY,
+			JSON.stringify({
+				open,
+				transcript,
+				sessionId: sessionIdRef.current,
+				hasActiveSession: false,
+			} satisfies PersistedDockState)
+		)
 	}
 
 	const interrupt = () => {
@@ -252,6 +358,7 @@ export function AgentDock() {
 		// Ensure session is initialized
 		const success = await initializeSession()
 		if (!success) return
+		setHasActiveSession(true)
 
 		// Wait for socket to be OPEN
 		if (socketRef.current && socketRef.current.readyState !== WebSocket.OPEN) {
