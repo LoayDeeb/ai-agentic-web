@@ -4,6 +4,9 @@ import { AgentDock } from './features/voice/AgentDock'
 import { useNavigate } from 'react-router-dom'
 import { setNavigator } from './features/agent/navigator'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import EshopCheckout from './pages/EshopCheckout'
+import EshopHome from './pages/EshopHome'
+import EshopProductDetail from './pages/EshopProductDetail'
 
 const Home = React.lazy(() => import('./pages/Home'))
 const Login = React.lazy(() => import('./pages/Login'))
@@ -37,10 +40,6 @@ const GigCrownFamily = React.lazy(() => import('./pages/GigCrownFamily'))
 const GigSubmitRequest = React.lazy(() => import('./pages/GigSubmitRequest'))
 const GigAdvisorRequest = React.lazy(() => import('./pages/GigAdvisorRequest'))
 const GigInsuranceDestination = React.lazy(() => import('./pages/GigInsuranceDestination'))
-const EshopHome = React.lazy(() => import('./pages/EshopHome'))
-const EshopCheckout = React.lazy(() => import('./pages/EshopCheckout'))
-const EshopProductDetail = React.lazy(() => import('./pages/EshopProductDetail'))
-
 // MOIN (Ministry of Investment) Pages
 const MoinServices = React.lazy(() => import('./pages/MoinServices'))
 const MoinServiceDetail = React.lazy(() => import('./pages/MoinServiceDetail'))
