@@ -8,6 +8,7 @@ import { streamZainAgentResponse } from '../services/zainAgent.js'
 import { streamMawhibaAgentResponse } from '../services/mawhibaAgent.js'
 import { streamMoinAgentResponse } from '../services/moinAgent.js'
 import { streamGigAgentResponse } from '../services/gigAgent.js'
+import { streamTamkeenBahrainAgentResponse } from '../services/tamkeenBahrainAgent.js'
 import { streamTTS } from '../services/tts.js'
 
 type VoiceConversationContext = {
@@ -59,6 +60,10 @@ function selectAgentStream(url: string | undefined) {
 	if (url?.startsWith('/gig')) {
 		logger.info({ url }, 'Using GIG Jordan Agent')
 		return streamGigAgentResponse
+	}
+	if (url?.startsWith('/tamkeenbahrain')) {
+		logger.info({ url }, 'Using Tamkeen Bahrain Agent')
+		return streamTamkeenBahrainAgentResponse
 	}
 	if (url?.startsWith('/ef-ar')) {
 		logger.info({ url }, 'Using EF Arabic Agent')

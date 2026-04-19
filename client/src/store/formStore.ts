@@ -104,6 +104,29 @@ export type FormData = {
 	moinEmployeesCount: string
 	moinActivityType: string
 	moinTermsAccepted: boolean
+	// Tamkeen Bahrain Loan Fields
+	tamkeenLoanFullName: string
+	tamkeenLoanNationalId: string
+	tamkeenLoanPhone: string
+	tamkeenLoanEmail: string
+	tamkeenLoanEmploymentType: string
+	tamkeenLoanMonthlyIncome: string
+	tamkeenLoanVehicleType: string
+	tamkeenLoanRequestedAmount: string
+	tamkeenLoanPreferredTerm: string
+	tamkeenLoanDownPayment: string
+	tamkeenLoanTermsAccepted: boolean
+	// Tamkeen Bahrain Card Fields
+	tamkeenCardFullName: string
+	tamkeenCardNationalId: string
+	tamkeenCardPhone: string
+	tamkeenCardEmail: string
+	tamkeenCardEmploymentStatus: string
+	tamkeenCardMonthlyIncome: string
+	tamkeenCardType: string
+	tamkeenCardCreditLimit: string
+	tamkeenCardDeliveryPreference: string
+	tamkeenCardTermsAccepted: boolean
 }
 
 type FormStore = {
@@ -220,7 +243,30 @@ const initialFormData: FormData = {
 	moinCapitalShare: '',
 	moinEmployeesCount: '',
 	moinActivityType: '',
-	moinTermsAccepted: false
+	moinTermsAccepted: false,
+	// Tamkeen Bahrain Loan Fields
+	tamkeenLoanFullName: '',
+	tamkeenLoanNationalId: '',
+	tamkeenLoanPhone: '',
+	tamkeenLoanEmail: '',
+	tamkeenLoanEmploymentType: '',
+	tamkeenLoanMonthlyIncome: '',
+	tamkeenLoanVehicleType: '',
+	tamkeenLoanRequestedAmount: '',
+	tamkeenLoanPreferredTerm: '',
+	tamkeenLoanDownPayment: '',
+	tamkeenLoanTermsAccepted: false,
+	// Tamkeen Bahrain Card Fields
+	tamkeenCardFullName: '',
+	tamkeenCardNationalId: '',
+	tamkeenCardPhone: '',
+	tamkeenCardEmail: '',
+	tamkeenCardEmploymentStatus: '',
+	tamkeenCardMonthlyIncome: '',
+	tamkeenCardType: '',
+	tamkeenCardCreditLimit: '',
+	tamkeenCardDeliveryPreference: '',
+	tamkeenCardTermsAccepted: false
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({
@@ -292,6 +338,33 @@ export const useFormStore = create<FormStore>((set, get) => ({
 				'gigAdvisorTermsAccepted'
 			]
 		}
+		if (path.startsWith('/tamkeenbahrain/loans/car-loan/apply')) {
+			required = [
+				'tamkeenLoanFullName',
+				'tamkeenLoanNationalId',
+				'tamkeenLoanPhone',
+				'tamkeenLoanEmail',
+				'tamkeenLoanEmploymentType',
+				'tamkeenLoanMonthlyIncome',
+				'tamkeenLoanVehicleType',
+				'tamkeenLoanRequestedAmount',
+				'tamkeenLoanPreferredTerm',
+				'tamkeenLoanTermsAccepted'
+			]
+		}
+		if (path.startsWith('/tamkeenbahrain/cards/apply')) {
+			required = [
+				'tamkeenCardFullName',
+				'tamkeenCardNationalId',
+				'tamkeenCardPhone',
+				'tamkeenCardEmail',
+				'tamkeenCardEmploymentStatus',
+				'tamkeenCardMonthlyIncome',
+				'tamkeenCardType',
+				'tamkeenCardDeliveryPreference',
+				'tamkeenCardTermsAccepted'
+			]
+		}
 		return required.filter((field) => !data[field as keyof FormData])
 	},
 
@@ -316,7 +389,6 @@ if (typeof window !== 'undefined') {
 		setCurrentStep: (step: number) => useFormStore.getState().setCurrentStep(step)
 	}
 }
-
 
 
 

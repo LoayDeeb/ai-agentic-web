@@ -49,6 +49,12 @@ const MoinSubmitRequest = React.lazy(() => import('./pages/MoinSubmitRequest'))
 const ZainHome = React.lazy(() => import('./pages/ZainHome'))
 const ZainFiber = React.lazy(() => import('./pages/ZainFiber'))
 const ZainSubscribe = React.lazy(() => import('./pages/ZainSubscribe'))
+const TamkeenBahrainHome = React.lazy(() => import('./pages/TamkeenBahrainHome'))
+const TamkeenBahrainCarLoan = React.lazy(() => import('./pages/TamkeenBahrainCarLoan'))
+const TamkeenBahrainCards = React.lazy(() => import('./pages/TamkeenBahrainCards'))
+const TamkeenBahrainWorldCard = React.lazy(() => import('./pages/TamkeenBahrainWorldCard'))
+const TamkeenBahrainLoanApply = React.lazy(() => import('./pages/TamkeenBahrainLoanApply'))
+const TamkeenBahrainCardApply = React.lazy(() => import('./pages/TamkeenBahrainCardApply'))
 
 export default function App() {
 	const NavSetter = () => {
@@ -113,6 +119,12 @@ export default function App() {
 					<Route path="/zain" element={<ZainHome />} />
 					<Route path="/zain/fiber" element={<ZainFiber />} />
 					<Route path="/zain/subscribe" element={<ZainSubscribe />} />
+					<Route path="/tamkeenbahrain" element={<TamkeenBahrainHome />} />
+					<Route path="/tamkeenbahrain/loans/car-loan" element={<TamkeenBahrainCarLoan />} />
+					<Route path="/tamkeenbahrain/loans/car-loan/apply" element={<TamkeenBahrainLoanApply />} />
+					<Route path="/tamkeenbahrain/cards/imtiaz" element={<TamkeenBahrainCards />} />
+					<Route path="/tamkeenbahrain/cards/world" element={<TamkeenBahrainWorldCard />} />
+					<Route path="/tamkeenbahrain/cards/apply" element={<TamkeenBahrainCardApply />} />
 					<Route path="/eshop" element={<EshopHome />} />
 					<Route path="/eshop/checkout" element={<EshopCheckout />} />
 					<Route path="/eshop/product/:slug" element={<EshopProductDetail />} />

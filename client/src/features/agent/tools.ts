@@ -550,6 +550,46 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: true, navigatedTo: `/zain/subscribe${packageParam}` }
 		}
 
+		case 'openTamkeenHome':
+			navigateTo('/tamkeenbahrain')
+			return { success: true, navigatedTo: '/tamkeenbahrain' }
+
+		case 'openTamkeenCarLoan':
+			navigateTo('/tamkeenbahrain/loans/car-loan')
+			return { success: true, navigatedTo: '/tamkeenbahrain/loans/car-loan' }
+
+		case 'openTamkeenCards':
+			navigateTo('/tamkeenbahrain/cards/imtiaz')
+			return { success: true, navigatedTo: '/tamkeenbahrain/cards/imtiaz' }
+
+		case 'openTamkeenWorldCard':
+			navigateTo('/tamkeenbahrain/cards/world')
+			return { success: true, navigatedTo: '/tamkeenbahrain/cards/world' }
+
+		case 'openTamkeenLoanApplication':
+			navigateTo('/tamkeenbahrain/loans/car-loan/apply')
+			return { success: true, navigatedTo: '/tamkeenbahrain/loans/car-loan/apply' }
+
+		case 'openTamkeenCardApplication': {
+			const cardType = String(args.cardType || 'imtiaz')
+			const query = cardType ? `?card=${encodeURIComponent(cardType)}` : ''
+			navigateTo(`/tamkeenbahrain/cards/apply${query}`)
+			return { success: true, navigatedTo: `/tamkeenbahrain/cards/apply${query}`, cardType }
+		}
+
+		case 'scrollToTamkeenSection': {
+			const sectionId = String(args.sectionId || '')
+			emitToolEvent('scrollToTamkeenSection', { sectionId })
+			window.setTimeout(() => {
+				const element = document.getElementById(sectionId) || document.getElementById(`tamkeen-world-${sectionId}`)
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+					highlight(`#${element.id}`, 3)
+				}
+			}, 120)
+			return { success: true, scrolledTo: sectionId }
+		}
+
 		// MOIN (Ministry of Investment) Tools
 		case 'openMoinServices':
 			navigateTo('/moin')
