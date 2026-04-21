@@ -24,7 +24,15 @@ export default function SasoImportedVehicleSubmit() {
       const { tool, args } = (e as CustomEvent).detail
 
       if (tool === 'fillFormField') {
-        setField(args.fieldName, args.value)
+        const value = args.value === 'true' ? true : args.value === 'false' ? false : args.value
+        setField(args.fieldName, value)
+        if (args.fieldName === 'sasoTermsAccepted' && value) {
+          setErrors((prev) => {
+            const next = { ...prev }
+            delete next.sasoTermsAccepted
+            return next
+          })
+        }
         setTimeout(() => {
           const input = document.querySelector(`[name="${args.fieldName}"]`) as HTMLElement
           if (input) {
@@ -42,7 +50,7 @@ export default function SasoImportedVehicleSubmit() {
           highlight(`[name="${args.fieldName}"]`, args.duration || 3)
         }
       } else if (tool === 'submitForm') {
-        if (currentStep === 3) handleSubmit()
+        if (useFormStore.getState().currentStep === 3) handleSubmit()
       }
     }
 
@@ -89,7 +97,7 @@ export default function SasoImportedVehicleSubmit() {
   }
 
   const handleSubmit = () => {
-    if (validateStep(currentStep)) {
+    if (validateStep(useFormStore.getState().currentStep)) {
       setSubmitted(true)
     }
   }
@@ -259,7 +267,17 @@ export default function SasoImportedVehicleSubmit() {
                   type="checkbox"
                   name="sasoTermsAccepted"
                   checked={formData.sasoTermsAccepted}
-                  onChange={(e) => setField('sasoTermsAccepted', e.target.checked)}
+                  onChange={(e) => {
+                    const checked = e.target.checked
+                    setField('sasoTermsAccepted', checked)
+                    if (checked) {
+                      setErrors((prev) => {
+                        const next = { ...prev }
+                        delete next.sasoTermsAccepted
+                        return next
+                      })
+                    }
+                  }}
                   className="w-5 h-5 mt-1 text-[#1B8354] rounded focus:ring-[#1B8354]"
                 />
                 <span className="text-[#1F2A37]">
