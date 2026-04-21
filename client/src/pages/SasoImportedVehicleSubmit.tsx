@@ -57,18 +57,19 @@ export default function SasoImportedVehicleSubmit() {
   ]
 
   const validateStep = (step: number): boolean => {
+    const latestFormData = useFormStore.getState().formData
     const newErrors: Record<string, string> = {}
 
     if (step === 1) {
-      if (!formData.sasoApplicantName) newErrors.sasoApplicantName = 'الاسم مطلوب'
-      if (!formData.sasoNationalId) newErrors.sasoNationalId = 'رقم الهوية مطلوب'
-      if (!formData.sasoMobile) newErrors.sasoMobile = 'رقم الجوال مطلوب'
+      if (!latestFormData.sasoApplicantName) newErrors.sasoApplicantName = 'الاسم مطلوب'
+      if (!latestFormData.sasoNationalId) newErrors.sasoNationalId = 'رقم الهوية مطلوب'
+      if (!latestFormData.sasoMobile) newErrors.sasoMobile = 'رقم الجوال مطلوب'
     } else if (step === 2) {
-      if (!formData.sasoChassisNumber) newErrors.sasoChassisNumber = 'رقم الهيكل مطلوب'
-      if (!formData.sasoCustomsNumber) newErrors.sasoCustomsNumber = 'رقم البيان الجمركي مطلوب'
-      if (!formData.sasoVehicleType) newErrors.sasoVehicleType = 'نوع المركبة مطلوب'
+      if (!latestFormData.sasoChassisNumber) newErrors.sasoChassisNumber = 'رقم الهيكل مطلوب'
+      if (!latestFormData.sasoCustomsNumber) newErrors.sasoCustomsNumber = 'رقم البيان الجمركي مطلوب'
+      if (!latestFormData.sasoVehicleType) newErrors.sasoVehicleType = 'نوع المركبة مطلوب'
     } else if (step === 3) {
-      if (!formData.sasoTermsAccepted) newErrors.sasoTermsAccepted = 'يجب الموافقة على الشروط والأحكام'
+      if (!latestFormData.sasoTermsAccepted) newErrors.sasoTermsAccepted = 'يجب الموافقة على الشروط والأحكام'
     }
 
     setErrors(newErrors)
