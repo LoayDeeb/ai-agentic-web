@@ -36,7 +36,7 @@ export const eshopCheckoutFieldLabels: Record<EshopCheckoutFieldName, string> = 
 }
 
 const initialFormData: EshopCheckoutFormData = {
-	fullName: '',
+	fullName: 'Malak Abu Rizq',
 	phone: '',
 	email: '',
 	city: '',

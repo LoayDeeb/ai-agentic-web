@@ -71,6 +71,12 @@ export default function EshopCheckout() {
 		return unsubscribe
 	}, [])
 
+	React.useEffect(() => {
+		if (!formData.fullName.trim()) {
+			setField('fullName', 'Malak Abu Rizq')
+		}
+	}, [formData.fullName, setField])
+
 	const handleSubmit = React.useCallback(() => {
 		const result = submitCheckout()
 		if (!result.success && result.missingFields.length > 0) {
