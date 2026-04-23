@@ -124,7 +124,7 @@ export default function TamkeenBahrainCardApply() {
 						</div>
 						<div>
 							<button
-								onClick={() => navigate('/tamkeenbahrain/cards/imtiaz')}
+								onClick={() => navigate('/BahrainCredit/cards/imtiaz')}
 								className="rounded-full px-6 py-3 text-white"
 								style={{ backgroundColor: TAMKEEN_PRIMARY }}
 							>
@@ -144,11 +144,11 @@ export default function TamkeenBahrainCardApply() {
 				<nav className="mb-3">
 					<ul className="m-0 flex list-none flex-wrap items-center p-0 text-[13px] text-[rgb(153,153,153)]">
 						<li className="inline-flex items-center">
-							<Link to="/tamkeenbahrain" className="no-underline text-[rgb(153,153,153)]">Home</Link>
+							<Link to="/BahrainCredit" className="no-underline text-[rgb(153,153,153)]">Home</Link>
 							<ChevronRight size={12} className="mx-1" />
 						</li>
 						<li className="inline-flex items-center">
-							<Link to="/tamkeenbahrain/cards/imtiaz" className="no-underline text-[rgb(153,153,153)]">Cards</Link>
+							<Link to="/BahrainCredit/cards/imtiaz" className="no-underline text-[rgb(153,153,153)]">Cards</Link>
 							<ChevronRight size={12} className="mx-1" />
 						</li>
 						<li>Apply</li>
@@ -159,7 +159,7 @@ export default function TamkeenBahrainCardApply() {
 					<div className="mb-8 flex flex-col gap-4 border-b border-slate-100 pb-8 md:flex-row md:items-end md:justify-between">
 						<div>
 							<p className="text-sm font-semibold uppercase tracking-[0.25em]" style={{ color: TAMKEEN_PRIMARY }}>
-								Tamkeen Bahrain
+								BahrainCredit
 							</p>
 							<h1 className="mt-3 text-4xl font-bold text-slate-900">Apply for IMTIAZ Card</h1>
 							<p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">

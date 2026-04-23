@@ -338,7 +338,10 @@ export const useFormStore = create<FormStore>((set, get) => ({
 				'gigAdvisorTermsAccepted'
 			]
 		}
-		if (path.startsWith('/tamkeenbahrain/loans/car-loan/apply')) {
+		if (
+			path.startsWith('/BahrainCredit/loans/car-loan/apply') ||
+			path.startsWith('/tamkeenbahrain/loans/car-loan/apply')
+		) {
 			required = [
 				'tamkeenLoanFullName',
 				'tamkeenLoanNationalId',
@@ -352,7 +355,7 @@ export const useFormStore = create<FormStore>((set, get) => ({
 				'tamkeenLoanTermsAccepted'
 			]
 		}
-		if (path.startsWith('/tamkeenbahrain/cards/apply')) {
+		if (path.startsWith('/BahrainCredit/cards/apply') || path.startsWith('/tamkeenbahrain/cards/apply')) {
 			required = [
 				'tamkeenCardFullName',
 				'tamkeenCardNationalId',
@@ -389,6 +392,5 @@ if (typeof window !== 'undefined') {
 		setCurrentStep: (step: number) => useFormStore.getState().setCurrentStep(step)
 	}
 }
-
 
 

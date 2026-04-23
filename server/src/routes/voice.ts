@@ -61,7 +61,7 @@ function selectAgentStream(url: string | undefined) {
 		logger.info({ url }, 'Using GIG Jordan Agent')
 		return streamGigAgentResponse
 	}
-	if (url?.startsWith('/tamkeenbahrain')) {
+	if (url?.startsWith('/BahrainCredit') || url?.startsWith('/tamkeenbahrain')) {
 		logger.info({ url }, 'Using Tamkeen Bahrain Agent')
 		return streamTamkeenBahrainAgentResponse
 	}

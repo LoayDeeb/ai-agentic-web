@@ -6,6 +6,8 @@ import { TamkeenHeader } from '../components/tamkeenbahrain/TamkeenHeader'
 import {
 	domainChangeSteps,
 	homeFeatureLinks,
+	officialBahrainFacts,
+	officialSourceLinks,
 	TAMKEEN_DARK,
 	TAMKEEN_GOLD,
 	TAMKEEN_PRIMARY,
@@ -118,7 +120,7 @@ export default function TamkeenBahrainHome() {
 									color: '#FF6B80',
 								}}
 							>
-								Tamkeen Bahrain Banking Demo
+								BahrainCredit Banking Demo
 							</motion.div>
 
 							<motion.h1
@@ -153,7 +155,7 @@ export default function TamkeenBahrainHome() {
 							>
 								<button
 									type="button"
-									onClick={() => navigate('/tamkeenbahrain/loans/car-loan')}
+									onClick={() => navigate('/BahrainCredit/loans/car-loan')}
 									className="inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:opacity-90 sm:text-base"
 									style={{ backgroundColor: TAMKEEN_RED }}
 								>
@@ -162,7 +164,7 @@ export default function TamkeenBahrainHome() {
 								</button>
 								<button
 									type="button"
-									onClick={() => navigate('/tamkeenbahrain/cards/imtiaz')}
+									onClick={() => navigate('/BahrainCredit/cards/imtiaz')}
 									className="inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-sm font-semibold transition-all duration-200 hover:opacity-90 sm:text-base"
 									style={{ border: `2px solid ${TAMKEEN_GOLD}`, color: TAMKEEN_GOLD }}
 								>
@@ -275,6 +277,61 @@ export default function TamkeenBahrainHome() {
 
 			<section id="products" className="bg-white px-4 py-16">
 				<div className="mx-auto max-w-6xl">
+					<div className="mb-16 rounded-[32px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f7fafc_100%)] p-8 shadow-[0_18px_50px_rgba(25,58,133,0.08)]">
+						<div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+							<div>
+								<p className="text-sm font-semibold uppercase tracking-[0.28em]" style={{ color: TAMKEEN_PRIMARY }}>
+									Official knowledge base
+								</p>
+								<h2 className="mt-3 text-3xl font-bold text-slate-900 sm:text-4xl">
+									Real Bahrain Credit facts for the agent to answer from
+								</h2>
+								<p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+									The BahrainCredit assistant is now meant to rely on official product pages and the
+									2024 BCFC annual report, so it can answer with grounded facts instead of generic
+									demo copy.
+								</p>
+								<div className="mt-6 flex flex-wrap gap-3">
+									{officialSourceLinks.map((source) => (
+										<a
+											key={source.label}
+											href={source.url}
+											target="_blank"
+											rel="noreferrer"
+											className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-50"
+											style={{ borderColor: '#cbd5e1', color: TAMKEEN_PRIMARY }}
+										>
+											{source.label}
+											<ExternalLink size={14} />
+										</a>
+									))}
+								</div>
+							</div>
+
+							<div className="grid gap-4 sm:grid-cols-2">
+								{officialBahrainFacts.map((fact) => (
+									<div
+										key={fact.title}
+										className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)]"
+									>
+										<h3 className="text-lg font-semibold text-slate-900">{fact.title}</h3>
+										<p className="mt-3 text-sm leading-7 text-slate-600">{fact.description}</p>
+										<a
+											href={fact.sourceUrl}
+											target="_blank"
+											rel="noreferrer"
+											className="mt-4 inline-flex items-center gap-2 text-sm font-semibold"
+											style={{ color: TAMKEEN_PRIMARY }}
+										>
+											{fact.sourceLabel}
+											<ExternalLink size={14} />
+										</a>
+									</div>
+								))}
+							</div>
+						</div>
+					</div>
+
 					<div className="mb-10 max-w-3xl">
 						<p className="text-sm font-semibold uppercase tracking-[0.28em]" style={{ color: TAMKEEN_PRIMARY }}>
 							Product map
@@ -322,12 +379,16 @@ export default function TamkeenBahrainHome() {
 			>
 				<p className="text-sm font-medium text-white sm:text-base">
 					For assistance, contact{' '}
-					<a href="#" onClick={(e) => e.preventDefault()} className="underline" style={{ color: TAMKEEN_GOLD }}>
-						support@bahraincredit.com.bh
+					<a
+						href="mailto:bcfcinfo@bahraincredit.com.bh"
+						className="underline"
+						style={{ color: TAMKEEN_GOLD }}
+					>
+						bcfcinfo@bahraincredit.com.bh
 					</a>{' '}
 					or call{' '}
-					<a href="#" onClick={(e) => e.preventDefault()} className="underline" style={{ color: TAMKEEN_GOLD }}>
-						+973 17 111 111
+					<a href="tel:80008000" className="underline" style={{ color: TAMKEEN_GOLD }}>
+						80008000
 					</a>
 				</p>
 				<p className="mt-3 text-xs text-gray-400">© {new Date().getFullYear()} Bahrain Credit — All Rights Reserved.</p>

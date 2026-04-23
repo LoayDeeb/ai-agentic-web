@@ -40,10 +40,10 @@ export default function Home() {
 						Open eShop Demo
 					</Link>
 					<Link
-						to="/tamkeenbahrain"
+						to="/BahrainCredit"
 						className="inline-block rounded bg-[#193a85] px-4 py-2 text-white hover:bg-[#142f6b]"
 					>
-						Open Tamkeen Bahrain Demo
+						Open BahrainCredit Demo
 					</Link>
 				</div>
 			</div>

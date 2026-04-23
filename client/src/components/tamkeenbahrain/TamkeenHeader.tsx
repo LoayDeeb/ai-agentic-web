@@ -152,7 +152,7 @@ export function TamkeenHeader() {
 			`}</style>
 			<div className="flex w-full items-center px-4">
 				<div className="inline-block shrink-0 py-[10px] pr-[30px] align-middle">
-					<Link to="/tamkeenbahrain">
+					<Link to="/BahrainCredit">
 						<LogoSvg />
 					</Link>
 				</div>
@@ -162,7 +162,7 @@ export function TamkeenHeader() {
 						<ul className="m-0 flex list-none items-center p-0">
 							{tamkeenNavItems.map((item, idx) => {
 								const isActive = item.path
-									? item.path === '/tamkeenbahrain'
+									? item.path === '/BahrainCredit'
 										? location.pathname === item.path
 										: location.pathname === item.path || location.pathname.startsWith(`${item.path}/`)
 									: false
@@ -175,7 +175,7 @@ export function TamkeenHeader() {
 										onMouseEnter={() => handleMouseEnter(idx)}
 										onMouseLeave={handleMouseLeave}
 										onNavigate={goTo}
-										isActive={isActive || Boolean(item.active && location.pathname === '/tamkeenbahrain')}
+										isActive={isActive || Boolean(item.active && location.pathname === '/BahrainCredit')}
 									/>
 								)
 							})}
@@ -204,7 +204,7 @@ export function TamkeenHeader() {
 						{tamkeenNavItems.map((item, idx) => {
 							const hasChildren = Boolean(item.subItems?.length)
 							const isActive = item.path
-								? item.path === '/tamkeenbahrain'
+								? item.path === '/BahrainCredit'
 									? location.pathname === item.path
 									: location.pathname === item.path || location.pathname.startsWith(`${item.path}/`)
 								: false

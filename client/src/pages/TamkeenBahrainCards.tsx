@@ -42,7 +42,7 @@ export default function TamkeenBahrainCards() {
 
 	const handleCardAction = (label: string) => {
 		if (label === 'Apply for IMTIAZ') {
-			navigate('/tamkeenbahrain/cards/apply?card=imtiaz')
+			navigate('/BahrainCredit/cards/apply?card=imtiaz')
 		}
 	}
 
@@ -108,7 +108,7 @@ export default function TamkeenBahrainCards() {
 							<nav className="mb-2">
 								<ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
 									<li className="flex items-center gap-1">
-										<Link to="/tamkeenbahrain" className="flex items-center gap-1 text-xs text-gray-400 no-underline">
+										<Link to="/BahrainCredit" className="flex items-center gap-1 text-xs text-gray-400 no-underline">
 											<Home size={12} />
 											<span>Home</span>
 										</Link>

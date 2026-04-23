@@ -119,6 +119,12 @@ export default function App() {
 					<Route path="/zain" element={<ZainHome />} />
 					<Route path="/zain/fiber" element={<ZainFiber />} />
 					<Route path="/zain/subscribe" element={<ZainSubscribe />} />
+					<Route path="/BahrainCredit" element={<TamkeenBahrainHome />} />
+					<Route path="/BahrainCredit/loans/car-loan" element={<TamkeenBahrainCarLoan />} />
+					<Route path="/BahrainCredit/loans/car-loan/apply" element={<TamkeenBahrainLoanApply />} />
+					<Route path="/BahrainCredit/cards/imtiaz" element={<TamkeenBahrainCards />} />
+					<Route path="/BahrainCredit/cards/world" element={<TamkeenBahrainWorldCard />} />
+					<Route path="/BahrainCredit/cards/apply" element={<TamkeenBahrainCardApply />} />
 					<Route path="/tamkeenbahrain" element={<TamkeenBahrainHome />} />
 					<Route path="/tamkeenbahrain/loans/car-loan" element={<TamkeenBahrainCarLoan />} />
 					<Route path="/tamkeenbahrain/loans/car-loan/apply" element={<TamkeenBahrainLoanApply />} />
