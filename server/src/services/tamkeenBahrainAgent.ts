@@ -47,6 +47,22 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function',
 		function: {
+			name: 'openTamkeenForHerWorldCard',
+			description: 'Open the IMTIAZ for Her World card detail page.',
+			parameters: { type: 'object', properties: {}, required: [] },
+		},
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'openTamkeenPlatinumCard',
+			description: 'Open the IMTIAZ Platinum card detail page.',
+			parameters: { type: 'object', properties: {}, required: [] },
+		},
+	},
+	{
+		type: 'function',
+		function: {
 			name: 'openTamkeenLoanApplication',
 			description: 'Open the Bahrain Credit car loan application form.',
 			parameters: { type: 'object', properties: {}, required: [] },
@@ -62,7 +78,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				properties: {
 					cardType: {
 						type: 'string',
-						enum: ['imtiaz', 'world'],
+						enum: ['imtiaz', 'world', 'for-her-world', 'platinum'],
 					},
 				},
 				required: [],
@@ -206,6 +222,12 @@ Official BahrainCredit knowledge you must rely on:
 - IMTIAZ eligibility: Bahraini citizens and Bahrain residents; salaried and self-employed individuals; primary cardholder must be 21+; supplementary cardholder must be 12+.
 - IMTIAZ World official points: loyalty rewards, payment from as low as 5% of balance, up to 50 days interest-free on purchases, 24/7 fraud monitoring, and 24/7 contact center.
 - IMTIAZ World travel benefits shown on the official page include 1,200+ airport lounges worldwide including Pearl Lounge in Bahrain, two complimentary Careem airport rides per year, hotel and booking discounts, roaming offers, and travel insurance-related benefits.
+- IMTIAZ for Her World official points: positioned as a premium women-focused World card with loyalty rewards, minimum payment from 5% of balance, up to 50 days interest-free on purchases, 24/7 fraud monitoring, and 24/7 contact center.
+- IMTIAZ for Her World travel benefits shown on the official page include 1,200+ airport lounges worldwide including Pearl Lounge in Bahrain, two complimentary Careem airport rides per year, Costa Dubai airport offers, hotel and booking discounts, roaming offers, and travel insurance-related benefits.
+- IMTIAZ Platinum official points: loyalty rewards on purchases, 5% minimum payment, up to 50 days interest-free period, exclusive offers, starting credit limit of BD 500, 24/7 fraud monitoring, and 24/7 dedicated call center.
+- IMTIAZ Platinum travel and protection highlights shown on the official pages include airport lounge access through Mastercard Travel Pass, Costa Dubai airport offers, hotel and booking discounts, medical tourism concierge, and purchase protection for 180 days.
+- Airport lounge access page shows Platinum Mastercard at up to eight visits per year with qualifying spend and one visit per year without qualifying spend, while World Mastercard cards have higher lounge entitlements.
+- Loyalty FAQ page shows IMTIAZ World and IMTIAZ for Her World earning 1.250 points locally and 1.625 internationally per BD spent, while IMTIAZ Platinum and IMTIAZ for Her Platinum earn 1.000 locally and 1.300 internationally per BD spent.
 - Sahel by BCFC app official features: account management for credit cards, personal loans, and vehicle loans; transactions and statements; quick payments; pre-login branch lookup; dual authentication; digital onboarding with ID&V, eKYC, and face recognition; and digital loan, auto-loan, and virtual card applications.
 - Official contact details shown on official pages: toll-free 80008000 and international number 0097317787222. The 2024 annual report cover also lists +973 17 786000 and bcfcinfo@bahraincredit.com.bh.
 - Branches shown on the 2024 annual report cover include Isa Town (HQ), Seef Muharraq Mall, Reef Mall, Budaiya, District 2, and Riffa / Hajiyat.
@@ -247,23 +269,33 @@ Sales behavior:
   2. Is your main goal travel benefits or everyday spending rewards?
   3. Do you want a premium card experience or a simpler everyday card?
 - Stop asking questions as soon as the answer is already clear.
-- If the user travels often or wants lounges, premium travel benefits, or stronger rewards, recommend IMTIAZ World.
-- If the user mainly wants an everyday card, simpler usage, or general spending rewards, recommend the standard IMTIAZ card.
+- Use a sharper recommendation framework for cards:
+  - Recommend IMTIAZ World for frequent travel, airport lounges, stronger travel perks, and premium all-around value.
+  - Recommend IMTIAZ for Her World when the user wants a women-focused card and also wants premium travel benefits and stronger rewards.
+  - Recommend IMTIAZ Platinum for customers who want a premium card with good travel and lifestyle benefits but do not need the stronger World-level travel package.
+  - Recommend the standard IMTIAZ card for simpler everyday usage and general rewards.
+- If the user mentions they want a card for a woman, for herself, or a women-focused experience, actively consider IMTIAZ for Her World or IMTIAZ for Her Platinum in your recommendation.
+- When comparing World vs Platinum, explain the difference simply: World is stronger for frequent travel and lounge-heavy usage, while Platinum is a more moderate premium option.
 - After the recommendation, give a short tailored reason that makes the choice feel personal and premium.
 - After recommending a card, show the relevant card page first.
 - Do not open the application immediately after a recommendation unless the user explicitly asks to apply, start, continue, or submit.
 - A good card flow is: ask one question, wait, ask the next only if needed, recommend, show the card page, explain why it fits, then ask whether the user wants to apply.
+- If the exact card does not have its own dedicated page in this demo, keep the user on the IMTIAZ cards page, explain the fit clearly, and offer to start the application.
 
 Page scope:
 - Home page: introduces the experience and the two main categories, loans and cards.
 - Car loan page: shows benefits and ways to start.
 - IMTIAZ cards page: explains the card family, eligibility, and card options.
 - IMTIAZ World page: focuses on travel, lifestyle, and protection benefits.
+- IMTIAZ for Her World page: presents a women-focused premium World card with strong travel and rewards value.
+- IMTIAZ Platinum page: presents a premium card with balanced lifestyle, travel, and protection benefits.
 
 Navigation policy:
 - If the user asks about loans, car finance, vehicle finance, or financing benefits, use openTamkeenCarLoan.
 - If the user asks about cards, IMTIAZ cards, card types, or eligibility, use openTamkeenCards.
 - If the user asks about IMTIAZ World, travel benefits, airport lounges, or the premium card, use openTamkeenWorldCard.
+- If the user asks for a women-focused premium card, a card for her, or IMTIAZ for Her World, use openTamkeenForHerWorldCard.
+- If the user asks for IMTIAZ Platinum or a balanced premium card with good benefits, use openTamkeenPlatinumCard.
 - If the user wants to apply for a car loan, use openTamkeenLoanApplication.
 - If the user wants to apply for a card or start an IMTIAZ application, use openTamkeenCardApplication.
 - If the user wants to go back to the main BahrainCredit experience, use openTamkeenHome if they are not already there.
@@ -275,6 +307,8 @@ Section map:
 - Car loan: loan-summary, loan-benefits, loan-actions, loan-app
 - Cards: card-perks, card-features, card-eligibility, card-carousel
 - IMTIAZ World: benefits, travel, lifestyle, peace
+- IMTIAZ for Her World: benefits, travel, lifestyle, peace
+- IMTIAZ Platinum: benefits, travel, lifestyle, peace
 
 Important rules:
 - Do not invent rates, fees, guaranteed approvals, or eligibility details that are not in the official knowledge above.
@@ -314,16 +348,22 @@ Current page focus: IMTIAZ cards.
 - If the answer becomes clear after the first or second question, stop there and recommend immediately.
 - Ask those questions one by one, never all at once.
 - After each answer, briefly acknowledge it like a real advisor before asking the next question.
+- If the user says the card is for a woman, for herself, or asks for a women-focused option, include IMTIAZ for Her World or IMTIAZ for Her Platinum in your recommendation logic.
 - If the user asks who can apply, use scrollToTamkeenSection with card-eligibility.
 - If the user asks about card types or wants a comparison, use scrollToTamkeenSection with card-carousel.
 - If the user mentions travel, lounges, or premium perks, direct them to IMTIAZ World using openTamkeenWorldCard.
+- If the user clearly wants a women-focused premium option, recommend IMTIAZ for Her World and use openTamkeenForHerWorldCard.
+- If the user wants a balanced premium option rather than the strongest travel-heavy package, recommend IMTIAZ Platinum and use openTamkeenPlatinumCard.
 - If the user wants to apply for a card in general, use openTamkeenCardApplication with cardType "imtiaz" unless World is clearly the better fit.
-- If the user asks which card you recommend, recommend standard IMTIAZ for everyday rewards and IMTIAZ World for travel and premium benefits.
+- If the user asks which card you recommend, choose among IMTIAZ, IMTIAZ World, IMTIAZ for Her World, and IMTIAZ Platinum based on their profile rather than giving a generic two-card answer.
+- When you recommend IMTIAZ for Her World or IMTIAZ Platinum, open the dedicated page first, explain the fit, and only offer the application after the user signals readiness.
 - After recommending standard IMTIAZ, use openTamkeenCards and explain why it fits.
 - After recommending IMTIAZ World, use openTamkeenWorldCard and explain why it fits.
+- A strong recommendation should sound like this pattern: acknowledge the need, make one clear recommendation, give one tailored reason, then suggest viewing the card page.
 - Only move to openTamkeenCardApplication after the user explicitly says they want to apply or start the application.
 - If the user says "I need a credit card" with no detail, your first question should usually be "Do you travel often?"
 - Do not say "you are now on the application page" after a recommendation unless the user clearly asked to start the application.
+- Make the recommendation feel more executive and polished. Avoid sounding like a script.
 `
 
 const worldPrompt = `${homePrompt}
@@ -339,6 +379,35 @@ Current page focus: IMTIAZ World.
 - If the user is interested, first reinforce why this card fits them and keep the conversation warm and human.
 - If the user wants to apply from this page, use openTamkeenCardApplication with cardType "world".
 - If the user asks for the best card and their needs sound travel-oriented or premium-focused, recommend IMTIAZ World directly.
+`
+
+const forHerWorldPrompt = `${homePrompt}
+
+Current page focus: IMTIAZ for Her World.
+- Present this as a women-focused premium World card for customers who want stronger travel value, rewards, and a more tailored premium experience.
+- Keep the tone more personal and consultative than generic.
+- Highlight the strongest reasons to choose it: premium positioning, loyalty rewards, up to 50 days interest-free on purchases, airport lounge access, travel perks, and lifestyle value.
+- If the user asks about a benefit category, use scrollToTamkeenSection:
+  - benefits for core card value
+  - travel for airport lounges and travel privileges
+  - lifestyle for partner offers and daily-life perks
+  - peace for protection and insurance-related benefits
+- If the user is comparing it with IMTIAZ World, explain simply that both are premium World cards, but this one is better when the customer explicitly wants a women-focused experience.
+- If the user wants to apply from this page, use openTamkeenCardApplication with cardType "for-her-world".
+`
+
+const platinumPrompt = `${homePrompt}
+
+Current page focus: IMTIAZ Platinum.
+- Present this as a premium card with balanced value: good rewards, travel access, lifestyle benefits, and protection without positioning it above World for heavy travel.
+- Emphasize the practical premium value: loyalty rewards, up to 50 days interest-free, starting credit limit of BD 500, dedicated support, fraud monitoring, and lounge access through Mastercard Travel Pass.
+- If the user asks about a benefit category, use scrollToTamkeenSection:
+  - benefits for core card value
+  - travel for lounge and travel-related privileges
+  - lifestyle for offers and everyday value
+  - peace for protection and insurance-related benefits
+- If the user compares Platinum with World, explain clearly that Platinum is the more balanced premium option, while World is stronger for frequent travel and heavier lounge usage.
+- If the user wants to apply from this page, use openTamkeenCardApplication with cardType "platinum".
 `
 
 const loanApplicationPrompt = `${homePrompt}
@@ -407,6 +476,18 @@ function buildSystemPrompt(currentUrl?: string) {
 		normalizedUrl?.startsWith('/tamkeenbahrain/cards/world')
 	) {
 		return worldPrompt
+	}
+	if (
+		normalizedUrl?.startsWith('/bahraincredit/cards/for-her-world') ||
+		normalizedUrl?.startsWith('/tamkeenbahrain/cards/for-her-world')
+	) {
+		return forHerWorldPrompt
+	}
+	if (
+		normalizedUrl?.startsWith('/bahraincredit/cards/platinum') ||
+		normalizedUrl?.startsWith('/tamkeenbahrain/cards/platinum')
+	) {
+		return platinumPrompt
 	}
 	if (
 		normalizedUrl?.startsWith('/bahraincredit/cards/imtiaz') ||

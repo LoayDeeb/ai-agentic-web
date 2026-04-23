@@ -53,6 +53,8 @@ const TamkeenBahrainHome = React.lazy(() => import('./pages/TamkeenBahrainHome')
 const TamkeenBahrainCarLoan = React.lazy(() => import('./pages/TamkeenBahrainCarLoan'))
 const TamkeenBahrainCards = React.lazy(() => import('./pages/TamkeenBahrainCards'))
 const TamkeenBahrainWorldCard = React.lazy(() => import('./pages/TamkeenBahrainWorldCard'))
+const TamkeenBahrainForHerWorldCard = React.lazy(() => import('./pages/TamkeenBahrainForHerWorldCard'))
+const TamkeenBahrainPlatinumCard = React.lazy(() => import('./pages/TamkeenBahrainPlatinumCard'))
 const TamkeenBahrainLoanApply = React.lazy(() => import('./pages/TamkeenBahrainLoanApply'))
 const TamkeenBahrainCardApply = React.lazy(() => import('./pages/TamkeenBahrainCardApply'))
 
@@ -129,6 +131,10 @@ export default function App() {
 					<Route path="/bahraincredit/cards/imtiaz" element={<TamkeenBahrainCards />} />
 					<Route path="/BahrainCredit/cards/world" element={<TamkeenBahrainWorldCard />} />
 					<Route path="/bahraincredit/cards/world" element={<TamkeenBahrainWorldCard />} />
+					<Route path="/BahrainCredit/cards/for-her-world" element={<TamkeenBahrainForHerWorldCard />} />
+					<Route path="/bahraincredit/cards/for-her-world" element={<TamkeenBahrainForHerWorldCard />} />
+					<Route path="/BahrainCredit/cards/platinum" element={<TamkeenBahrainPlatinumCard />} />
+					<Route path="/bahraincredit/cards/platinum" element={<TamkeenBahrainPlatinumCard />} />
 					<Route path="/BahrainCredit/cards/apply" element={<TamkeenBahrainCardApply />} />
 					<Route path="/bahraincredit/cards/apply" element={<TamkeenBahrainCardApply />} />
 					<Route path="/tamkeenbahrain" element={<TamkeenBahrainHome />} />
@@ -136,6 +142,8 @@ export default function App() {
 					<Route path="/tamkeenbahrain/loans/car-loan/apply" element={<TamkeenBahrainLoanApply />} />
 					<Route path="/tamkeenbahrain/cards/imtiaz" element={<TamkeenBahrainCards />} />
 					<Route path="/tamkeenbahrain/cards/world" element={<TamkeenBahrainWorldCard />} />
+					<Route path="/tamkeenbahrain/cards/for-her-world" element={<TamkeenBahrainForHerWorldCard />} />
+					<Route path="/tamkeenbahrain/cards/platinum" element={<TamkeenBahrainPlatinumCard />} />
 					<Route path="/tamkeenbahrain/cards/apply" element={<TamkeenBahrainCardApply />} />
 					<Route path="/eshop" element={<EshopHome />} />
 					<Route path="/eshop/checkout" element={<EshopCheckout />} />

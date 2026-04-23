@@ -17,11 +17,15 @@ const steps = [
 const cardTypeMap: Record<string, string> = {
 	imtiaz: 'imtiaz',
 	world: 'imtiaz-world',
+	'for-her-world': 'imtiaz-for-her-world',
+	platinum: 'imtiaz-platinum',
 }
 
 const cardTypeLabelMap: Record<string, string> = {
 	imtiaz: 'IMTIAZ Mastercard',
 	'imtiaz-world': 'IMTIAZ World Mastercard',
+	'imtiaz-for-her-world': 'IMTIAZ for Her World Mastercard',
+	'imtiaz-platinum': 'IMTIAZ Platinum Mastercard',
 }
 
 export default function TamkeenBahrainCardApply() {
@@ -237,6 +241,8 @@ export default function TamkeenBahrainCardApply() {
 									options={[
 										{ value: 'imtiaz', label: 'IMTIAZ Mastercard' },
 										{ value: 'imtiaz-world', label: 'IMTIAZ World Mastercard' },
+										{ value: 'imtiaz-for-her-world', label: 'IMTIAZ for Her World Mastercard' },
+										{ value: 'imtiaz-platinum', label: 'IMTIAZ Platinum Mastercard' },
 									]}
 								/>
 							</FormField>

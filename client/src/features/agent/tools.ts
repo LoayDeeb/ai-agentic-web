@@ -566,6 +566,14 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			navigateTo('/bahraincredit/cards/world')
 			return { success: true, navigatedTo: '/bahraincredit/cards/world' }
 
+		case 'openTamkeenForHerWorldCard':
+			navigateTo('/bahraincredit/cards/for-her-world')
+			return { success: true, navigatedTo: '/bahraincredit/cards/for-her-world' }
+
+		case 'openTamkeenPlatinumCard':
+			navigateTo('/bahraincredit/cards/platinum')
+			return { success: true, navigatedTo: '/bahraincredit/cards/platinum' }
+
 		case 'openTamkeenLoanApplication':
 			navigateTo('/bahraincredit/loans/car-loan/apply')
 			return { success: true, navigatedTo: '/bahraincredit/loans/car-loan/apply' }
@@ -581,7 +589,11 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			const sectionId = String(args.sectionId || '')
 			emitToolEvent('scrollToTamkeenSection', { sectionId })
 			window.setTimeout(() => {
-				const element = document.getElementById(sectionId) || document.getElementById(`tamkeen-world-${sectionId}`)
+				const element =
+					document.getElementById(sectionId) ||
+					document.getElementById(`tamkeen-world-${sectionId}`) ||
+					document.getElementById(`tamkeen-for-her-${sectionId}`) ||
+					document.getElementById(`tamkeen-platinum-${sectionId}`)
 				if (element) {
 					element.scrollIntoView({ behavior: 'smooth', block: 'start' })
 					highlight(`#${element.id}`, 3)

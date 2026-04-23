@@ -88,8 +88,8 @@ export const tamkeenNavItems: NavItem[] = [
 		subItems: [
 			{ label: 'IMTIAZ', path: '/bahraincredit/cards/imtiaz' },
 			{ label: 'IMTIAZ World', path: '/bahraincredit/cards/world' },
-			{ label: 'IMTIAZ for Her' },
-			{ label: 'IMTIAZ Platinum' },
+			{ label: 'IMTIAZ for Her', path: '/bahraincredit/cards/for-her-world' },
+			{ label: 'IMTIAZ Platinum', path: '/bahraincredit/cards/platinum' },
 			{ label: 'IMTIAZ Prepaid' },
 			{ label: 'IMTIAZ Corporate' },
 			{ label: 'Loyalty Program' },
@@ -195,8 +195,8 @@ export const loanSidebarLinks: SidebarLink[] = [
 export const imtiazSidebarLinks: SidebarLink[] = [
 	{ label: 'IMTIAZ', path: '/bahraincredit/cards/imtiaz', active: true },
 	{ label: 'IMTIAZ World', path: '/bahraincredit/cards/world', active: false },
-	{ label: 'IMTIAZ for Her', active: false },
-	{ label: 'IMTIAZ Platinum', active: false },
+	{ label: 'IMTIAZ for Her World', path: '/bahraincredit/cards/for-her-world', active: false },
+	{ label: 'IMTIAZ Platinum', path: '/bahraincredit/cards/platinum', active: false },
 	{ label: 'IMTIAZ Prepaid', active: false },
 	{ label: 'IMTIAZ Corporate', active: false },
 	{ label: 'Loyalty Program', active: false },
@@ -210,6 +210,16 @@ export const worldSidebarLinks: SidebarLink[] = [
 		label: 'Mastercard UEFA Champions League Credit Card issued by IMTIAZ',
 		active: false,
 	},
+]
+
+export const forHerWorldSidebarLinks: SidebarLink[] = [
+	{ label: 'IMTIAZ for Her World', path: '/bahraincredit/cards/for-her-world', active: true },
+	{ label: 'IMTIAZ for Her Platinum', active: false },
+]
+
+export const platinumSidebarLinks: SidebarLink[] = [
+	{ label: 'IMTIAZ Platinum', path: '/bahraincredit/cards/platinum', active: true },
+	{ label: 'IMTIAZ World', path: '/bahraincredit/cards/world', active: false },
 ]
 
 export const footerButtons: FooterAction[] = [
@@ -382,14 +392,16 @@ export const creditCards = [
 		path: '/bahraincredit/cards/world',
 	},
 	{
-		label: 'IMTIAZ for Her',
+		label: 'IMTIAZ for Her World',
 		img: 'https://www.bahraincredit.com.bh/Administrator/MediaHandler/ImageHandler/images/PhotoGallery/Thumbnails/IFHWorld.png',
 		alt: 'IMTIAZ for Her Card',
+		path: '/bahraincredit/cards/for-her-world',
 	},
 	{
 		label: 'IMTIAZ Platinum',
 		img: 'https://www.bahraincredit.com.bh/Administrator/MediaHandler/ImageHandler/images/PhotoGallery/Thumbnails/platinum.png',
 		alt: 'IMTIAZ Platinum Card',
+		path: '/bahraincredit/cards/platinum',
 	},
 	{
 		label: 'IMTIAZ Prepaid',
@@ -448,6 +460,102 @@ export const worldSections = [
 			'Travel medical insurance and inconvenience coverage for eligible card usage.',
 			'Confirmation letters and related support for visa or travel documentation.',
 			'Additional concierge and emergency assistance services for premium cardholders.',
+		],
+	},
+]
+
+export const forHerWorldSections = [
+	{
+		id: 'benefits',
+		icon: Star,
+		title: 'Exclusive Benefits for Her',
+		highlight: 'A premium women-focused World card blending travel privileges, rewards, and daily lifestyle value.',
+		items: [
+			'Earn loyalty rewards on eligible purchases through the IMTIAZ Loyalty Programme.',
+			'Pay from as low as 5% of the balance and enjoy up to 50 days interest-free on purchases.',
+			'Benefit from exclusive promotions, 24/7 fraud monitoring, and dedicated contact-center support.',
+			'Designed for customers who want premium travel-led value with a women-focused card proposition.',
+		],
+	},
+	{
+		id: 'travel',
+		icon: Plane,
+		title: 'Travel Benefits',
+		highlight: 'This card mirrors World-tier travel value with strong airport, ride, hotel, and roaming benefits.',
+		items: [
+			'Access over 1,200 airport lounges worldwide including Pearl Lounge in Bahrain.',
+			'Receive two complimentary Careem airport rides per year with the published promo benefit.',
+			'Use Mastercard Travel Pass for lounge eligibility and partner airport offers such as Costa in Dubai.',
+			'Unlock hotel, booking, car-rental, roaming, and curated travel marketplace discounts.',
+		],
+	},
+	{
+		id: 'lifestyle',
+		icon: Home,
+		title: 'Lifestyle Benefits',
+		highlight: 'The value proposition extends beyond travel with shopping, wellness, and digital lifestyle offers.',
+		items: [
+			'Access partner offers including retail, delivery, subscriptions, wellness, and entertainment perks.',
+			'Use the card globally while still benefiting from rewards and promotions tailored to everyday spend.',
+			'Positioned for customers who want premium convenience with a more tailored card identity.',
+		],
+	},
+	{
+		id: 'peace',
+		icon: Shield,
+		title: 'Peace of Mind Benefits',
+		highlight: 'Support and protection remain part of the premium experience when plans change.',
+		items: [
+			'Travel medical insurance and inconvenience coverage are listed among the World-tier protection benefits.',
+			'Get access to insurance confirmation support for travel documentation needs.',
+			'Stay covered by round-the-clock fraud monitoring and support channels.',
+		],
+	},
+]
+
+export const platinumSections = [
+	{
+		id: 'benefits',
+		icon: Star,
+		title: 'Exclusive Benefits for You',
+		highlight: 'A polished premium card option for customers who want stronger rewards and lifestyle value without going all the way to World tier.',
+		items: [
+			'Earn loyalty rewards on purchases and benefit from a 5% minimum payment structure.',
+			'Enjoy up to 50 days interest-free on purchases, subject to billing cycle terms.',
+			'Start from a published credit limit of BD 500 with exclusive offers and lifestyle promotions.',
+			'Stay supported with 24/7 fraud monitoring and a dedicated call center.',
+		],
+	},
+	{
+		id: 'travel',
+		icon: Plane,
+		title: 'Travel Benefits',
+		highlight: 'Platinum offers a solid premium travel package for customers who want travel perks without needing the highest lounge-heavy tier.',
+		items: [
+			'Use Mastercard Travel Pass for airport lounge access and selected airport beverage or food offers.',
+			'Access hotel, booking, shopping, and car-rental discounts through Mastercard partner campaigns.',
+			'Positioned below World tier on lounge entitlement, making it a strong mid-premium travel choice.',
+		],
+	},
+	{
+		id: 'lifestyle',
+		icon: Home,
+		title: 'Lifestyle Benefits',
+		highlight: 'Platinum keeps the experience premium through everyday merchant, subscription, and shopping value.',
+		items: [
+			'Benefit from Mastercard offers across shopping, food delivery, digital services, and lifestyle partners.',
+			'Good fit for customers who want a premium everyday card with practical travel upside.',
+		],
+	},
+	{
+		id: 'peace',
+		icon: Shield,
+		title: 'Peace of Mind Benefits',
+		highlight: 'Protection features strengthen the Platinum proposition for regular spenders and travellers.',
+		items: [
+			'Medical tourism concierge support is listed among the official protection-related benefits.',
+			'Purchase protection for up to 180 days is highlighted on the official Platinum page.',
+			'Fraud monitoring and support remain available around the clock.',
 		],
 	},
 ]
