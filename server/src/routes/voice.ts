@@ -10,6 +10,7 @@ import { streamMoinAgentResponse } from '../services/moinAgent.js'
 import { streamGigAgentResponse } from '../services/gigAgent.js'
 import { streamTamkeenBahrainAgentResponse } from '../services/tamkeenBahrainAgent.js'
 import { streamTTS } from '../services/tts.js'
+import type { TTSConfig } from '../services/tts.js'
 
 type VoiceConversationContext = {
 	userGoal?: string
@@ -77,6 +78,21 @@ function selectAgentStream(url: string | undefined) {
 	// Default to JICO/ZATCA agent
 	logger.info({ url }, 'Using default Agent (JICO/ZATCA)')
 	return streamAgentResponse
+}
+
+function isSasoUrl(url: string | undefined) {
+	return url?.toLowerCase().startsWith('/saso') ?? false
+}
+
+function resolveTtsConfigForUrl(url: string | undefined): TTSConfig {
+	if (isSasoUrl(url)) {
+		return {
+			voiceId: (process.env.SASO_ELEVENLABS_VOICE_ID || '').trim() || undefined,
+			modelId: (process.env.SASO_ELEVENLABS_MODEL || '').trim() || undefined,
+		}
+	}
+
+	return {}
 }
 
 export function setupVoiceWebSocket(server: Server) {
@@ -393,8 +409,9 @@ export function setupVoiceWebSocket(server: Server) {
 								toolCalls.push(tc)
 							})
 
-							// Select appropriate agent based on current URL
+							// Select appropriate agent and TTS voice based on current URL
 							const agentStream = selectAgentStream(context.currentUrl)
+							const ttsConfig = resolveTtsConfigForUrl(context.currentUrl)
 							const responseStream =
 								agentStream === streamAgentResponse || agentStream === streamZainAgentResponse
 									? agentStream(conversationHistory, context.currentUrl)
@@ -438,7 +455,7 @@ export function setupVoiceWebSocket(server: Server) {
 											speaking = true
 										}
 
-										for await (const audioChunk of streamTTS(textToSpeak.trim())) {
+										for await (const audioChunk of streamTTS(textToSpeak.trim(), ttsConfig)) {
 											if (currentTurn !== myTurn || myTurn.aborted) break
 											send({ type: 'audio_chunk', data: audioChunk.toString('base64') })
 										}
@@ -465,7 +482,7 @@ export function setupVoiceWebSocket(server: Server) {
 									send({ type: 'speaking_started' })
 									speaking = true
 								}
-								for await (const audioChunk of streamTTS(pendingText.trim())) {
+								for await (const audioChunk of streamTTS(pendingText.trim(), ttsConfig)) {
 									if (currentTurn !== myTurn || myTurn.aborted) break
 									send({ type: 'audio_chunk', data: audioChunk.toString('base64') })
 								}

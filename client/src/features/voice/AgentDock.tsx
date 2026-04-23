@@ -8,7 +8,9 @@ import { executeActions } from '../agent/execute'
 const DOCK_STATE_KEY = 'voice.dock.state'
 const ENV_SPEECH_LANG = String(import.meta.env.VITE_VOICE_INPUT_LANG || '').trim().toLowerCase()
 
-function resolveSpeechLang(): 'ar-SA' | 'en-US' {
+function resolveSpeechLang(pathname?: string): 'ar-SA' | 'en-US' {
+	const normalizedPath = (pathname || '').toLowerCase()
+	if (normalizedPath.startsWith('/saso')) return 'ar-SA'
 	if (ENV_SPEECH_LANG === 'ar' || ENV_SPEECH_LANG === 'ar-sa') return 'ar-SA'
 	if (ENV_SPEECH_LANG === 'en' || ENV_SPEECH_LANG === 'en-us') return 'en-US'
 	if (typeof window !== 'undefined' && window.navigator.language?.toLowerCase().startsWith('ar')) {
@@ -80,7 +82,10 @@ export function AgentDock() {
 	const dropIncomingRef = React.useRef(false)
 	const sessionIdRef = React.useRef(persistedState.sessionId)
 	const unloadingRef = React.useRef(false)
-	const speechLang = React.useMemo(() => resolveSpeechLang(), [])
+	const speechLang = React.useMemo(
+		() => resolveSpeechLang(typeof window !== 'undefined' ? window.location.pathname : ''),
+		[]
+	)
 
 	const getCurrentPageContext = React.useCallback(() => ({
 		url: window.location.pathname,
