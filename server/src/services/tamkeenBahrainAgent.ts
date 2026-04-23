@@ -367,33 +367,34 @@ const cardApplicationPrompt = `${homePrompt}
 `
 
 function buildSystemPrompt(currentUrl?: string) {
+	const normalizedUrl = currentUrl?.toLowerCase()
 	if (
-		currentUrl?.startsWith('/BahrainCredit/loans/car-loan/apply') ||
-		currentUrl?.startsWith('/tamkeenbahrain/loans/car-loan/apply')
+		normalizedUrl?.startsWith('/bahraincredit/loans/car-loan/apply') ||
+		normalizedUrl?.startsWith('/tamkeenbahrain/loans/car-loan/apply')
 	) {
 		return loanApplicationPrompt
 	}
 	if (
-		currentUrl?.startsWith('/BahrainCredit/cards/apply') ||
-		currentUrl?.startsWith('/tamkeenbahrain/cards/apply')
+		normalizedUrl?.startsWith('/bahraincredit/cards/apply') ||
+		normalizedUrl?.startsWith('/tamkeenbahrain/cards/apply')
 	) {
 		return cardApplicationPrompt
 	}
 	if (
-		currentUrl?.startsWith('/BahrainCredit/cards/world') ||
-		currentUrl?.startsWith('/tamkeenbahrain/cards/world')
+		normalizedUrl?.startsWith('/bahraincredit/cards/world') ||
+		normalizedUrl?.startsWith('/tamkeenbahrain/cards/world')
 	) {
 		return worldPrompt
 	}
 	if (
-		currentUrl?.startsWith('/BahrainCredit/cards/imtiaz') ||
-		currentUrl?.startsWith('/tamkeenbahrain/cards/imtiaz')
+		normalizedUrl?.startsWith('/bahraincredit/cards/imtiaz') ||
+		normalizedUrl?.startsWith('/tamkeenbahrain/cards/imtiaz')
 	) {
 		return cardsPrompt
 	}
 	if (
-		currentUrl?.startsWith('/BahrainCredit/loans/car-loan') ||
-		currentUrl?.startsWith('/tamkeenbahrain/loans/car-loan')
+		normalizedUrl?.startsWith('/bahraincredit/loans/car-loan') ||
+		normalizedUrl?.startsWith('/tamkeenbahrain/loans/car-loan')
 	) {
 		return loanPrompt
 	}

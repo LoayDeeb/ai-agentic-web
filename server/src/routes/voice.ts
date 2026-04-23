@@ -41,35 +41,36 @@ function createVoiceSessionState(): VoiceSessionState {
 
 // Helper to select the appropriate agent based on current URL
 function selectAgentStream(url: string | undefined) {
-	if (url?.startsWith('/moin')) {
+	const normalizedUrl = url?.toLowerCase()
+	if (normalizedUrl?.startsWith('/moin')) {
 		logger.info({ url }, 'Using MOIN Agent')
 		return streamMoinAgentResponse
 	}
-	if (url?.startsWith('/mawhiba')) {
+	if (normalizedUrl?.startsWith('/mawhiba')) {
 		logger.info({ url }, 'Using Mawhiba Agent')
 		return streamMawhibaAgentResponse
 	}
-	if (url?.startsWith('/zain')) {
+	if (normalizedUrl?.startsWith('/zain')) {
 		logger.info({ url }, 'Using Zain Jordan Agent')
 		return streamZainAgentResponse
 	}
-	if (url?.startsWith('/eshop')) {
+	if (normalizedUrl?.startsWith('/eshop')) {
 		logger.info({ url }, 'Using Zain Jordan eShop Agent')
 		return streamZainAgentResponse
 	}
-	if (url?.startsWith('/gig')) {
+	if (normalizedUrl?.startsWith('/gig')) {
 		logger.info({ url }, 'Using GIG Jordan Agent')
 		return streamGigAgentResponse
 	}
-	if (url?.startsWith('/BahrainCredit') || url?.startsWith('/tamkeenbahrain')) {
+	if (normalizedUrl?.startsWith('/bahraincredit') || normalizedUrl?.startsWith('/tamkeenbahrain')) {
 		logger.info({ url }, 'Using Tamkeen Bahrain Agent')
 		return streamTamkeenBahrainAgentResponse
 	}
-	if (url?.startsWith('/ef-ar')) {
+	if (normalizedUrl?.startsWith('/ef-ar')) {
 		logger.info({ url }, 'Using EF Arabic Agent')
 		return streamEFAgentArResponse
 	}
-	if (url?.startsWith('/ef')) {
+	if (normalizedUrl?.startsWith('/ef')) {
 		logger.info({ url }, 'Using EF Agent')
 		return streamEFAgentResponse
 	}

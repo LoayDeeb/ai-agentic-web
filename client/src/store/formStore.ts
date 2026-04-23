@@ -294,6 +294,7 @@ export const useFormStore = create<FormStore>((set, get) => ({
 	getMissingFields: () => {
 		const data = get().formData
 		const path = typeof window !== 'undefined' ? window.location.pathname : ''
+		const normalizedPath = path.toLowerCase()
 		let required = [
 			'tin',
 			'vatEntityType',
@@ -339,8 +340,8 @@ export const useFormStore = create<FormStore>((set, get) => ({
 			]
 		}
 		if (
-			path.startsWith('/BahrainCredit/loans/car-loan/apply') ||
-			path.startsWith('/tamkeenbahrain/loans/car-loan/apply')
+			normalizedPath.startsWith('/bahraincredit/loans/car-loan/apply') ||
+			normalizedPath.startsWith('/tamkeenbahrain/loans/car-loan/apply')
 		) {
 			required = [
 				'tamkeenLoanFullName',
@@ -355,7 +356,10 @@ export const useFormStore = create<FormStore>((set, get) => ({
 				'tamkeenLoanTermsAccepted'
 			]
 		}
-		if (path.startsWith('/BahrainCredit/cards/apply') || path.startsWith('/tamkeenbahrain/cards/apply')) {
+		if (
+			normalizedPath.startsWith('/bahraincredit/cards/apply') ||
+			normalizedPath.startsWith('/tamkeenbahrain/cards/apply')
+		) {
 			required = [
 				'tamkeenCardFullName',
 				'tamkeenCardNationalId',
@@ -392,5 +396,4 @@ if (typeof window !== 'undefined') {
 		setCurrentStep: (step: number) => useFormStore.getState().setCurrentStep(step)
 	}
 }
-
 
