@@ -10,7 +10,7 @@ type SasoHeaderProps = {
 const navItems = [
   { label: 'عن الهيئة' },
   { label: 'قطاعات الهيئة' },
-  { label: 'الأنظمة واللوائح' },
+  { label: 'الأنظمة واللوائح', href: '/saso/regulations' },
   { label: 'توعية المستهلك' },
   { label: 'المركز الإعلامي' },
   { label: 'المواقع الفرعية' },
