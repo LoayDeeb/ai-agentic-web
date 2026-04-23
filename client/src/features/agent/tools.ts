@@ -551,30 +551,30 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 		}
 
 		case 'openTamkeenHome':
-			navigateTo('/BahrainCredit')
-			return { success: true, navigatedTo: '/BahrainCredit' }
+			navigateTo('/bahraincredit')
+			return { success: true, navigatedTo: '/bahraincredit' }
 
 		case 'openTamkeenCarLoan':
-			navigateTo('/BahrainCredit/loans/car-loan')
-			return { success: true, navigatedTo: '/BahrainCredit/loans/car-loan' }
+			navigateTo('/bahraincredit/loans/car-loan')
+			return { success: true, navigatedTo: '/bahraincredit/loans/car-loan' }
 
 		case 'openTamkeenCards':
-			navigateTo('/BahrainCredit/cards/imtiaz')
-			return { success: true, navigatedTo: '/BahrainCredit/cards/imtiaz' }
+			navigateTo('/bahraincredit/cards/imtiaz')
+			return { success: true, navigatedTo: '/bahraincredit/cards/imtiaz' }
 
 		case 'openTamkeenWorldCard':
-			navigateTo('/BahrainCredit/cards/world')
-			return { success: true, navigatedTo: '/BahrainCredit/cards/world' }
+			navigateTo('/bahraincredit/cards/world')
+			return { success: true, navigatedTo: '/bahraincredit/cards/world' }
 
 		case 'openTamkeenLoanApplication':
-			navigateTo('/BahrainCredit/loans/car-loan/apply')
-			return { success: true, navigatedTo: '/BahrainCredit/loans/car-loan/apply' }
+			navigateTo('/bahraincredit/loans/car-loan/apply')
+			return { success: true, navigatedTo: '/bahraincredit/loans/car-loan/apply' }
 
 		case 'openTamkeenCardApplication': {
 			const cardType = String(args.cardType || 'imtiaz')
 			const query = cardType ? `?card=${encodeURIComponent(cardType)}` : ''
-			navigateTo(`/BahrainCredit/cards/apply${query}`)
-			return { success: true, navigatedTo: `/BahrainCredit/cards/apply${query}`, cardType }
+			navigateTo(`/bahraincredit/cards/apply${query}`)
+			return { success: true, navigatedTo: `/bahraincredit/cards/apply${query}`, cardType }
 		}
 
 		case 'scrollToTamkeenSection': {

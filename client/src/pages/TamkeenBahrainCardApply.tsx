@@ -124,7 +124,7 @@ export default function TamkeenBahrainCardApply() {
 						</div>
 						<div>
 							<button
-								onClick={() => navigate('/BahrainCredit/cards/imtiaz')}
+								onClick={() => navigate('/bahraincredit/cards/imtiaz')}
 								className="rounded-full px-6 py-3 text-white"
 								style={{ backgroundColor: TAMKEEN_PRIMARY }}
 							>
@@ -144,11 +144,11 @@ export default function TamkeenBahrainCardApply() {
 				<nav className="mb-3">
 					<ul className="m-0 flex list-none flex-wrap items-center p-0 text-[13px] text-[rgb(153,153,153)]">
 						<li className="inline-flex items-center">
-							<Link to="/BahrainCredit" className="no-underline text-[rgb(153,153,153)]">Home</Link>
+							<Link to="/bahraincredit" className="no-underline text-[rgb(153,153,153)]">Home</Link>
 							<ChevronRight size={12} className="mx-1" />
 						</li>
 						<li className="inline-flex items-center">
-							<Link to="/BahrainCredit/cards/imtiaz" className="no-underline text-[rgb(153,153,153)]">Cards</Link>
+							<Link to="/bahraincredit/cards/imtiaz" className="no-underline text-[rgb(153,153,153)]">Cards</Link>
 							<ChevronRight size={12} className="mx-1" />
 						</li>
 						<li>Apply</li>

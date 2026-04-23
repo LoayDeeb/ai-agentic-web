@@ -18,7 +18,7 @@ export default function TamkeenBahrainCarLoan() {
 
 		const handleLoanAction = (label: string) => {
 		if (label === 'Apply Now') {
-			navigate('/BahrainCredit/loans/car-loan/apply')
+			navigate('/bahraincredit/loans/car-loan/apply')
 		}
 	}
 
@@ -89,7 +89,7 @@ export default function TamkeenBahrainCarLoan() {
 									<li key={crumb} className="inline-flex items-center">
 										{index < array.length - 1 ? (
 											<>
-												<Link to="/BahrainCredit" className="no-underline text-[rgb(153,153,153)]">
+												<Link to="/bahraincredit" className="no-underline text-[rgb(153,153,153)]">
 													{crumb}
 												</Link>
 												<ChevronRight size={12} className="mx-1 text-[rgb(153,153,153)]" />

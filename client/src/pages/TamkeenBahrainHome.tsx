@@ -155,7 +155,7 @@ export default function TamkeenBahrainHome() {
 							>
 								<button
 									type="button"
-									onClick={() => navigate('/BahrainCredit/loans/car-loan')}
+									onClick={() => navigate('/bahraincredit/loans/car-loan')}
 									className="inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:opacity-90 sm:text-base"
 									style={{ backgroundColor: TAMKEEN_RED }}
 								>
@@ -164,7 +164,7 @@ export default function TamkeenBahrainHome() {
 								</button>
 								<button
 									type="button"
-									onClick={() => navigate('/BahrainCredit/cards/imtiaz')}
+									onClick={() => navigate('/bahraincredit/cards/imtiaz')}
 									className="inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-sm font-semibold transition-all duration-200 hover:opacity-90 sm:text-base"
 									style={{ border: `2px solid ${TAMKEEN_GOLD}`, color: TAMKEEN_GOLD }}
 								>

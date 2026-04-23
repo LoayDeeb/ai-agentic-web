@@ -63,7 +63,7 @@ export const TAMKEEN_GOLD = '#d4af37'
 export const TAMKEEN_DARK = '#1a1a2e'
 
 export const tamkeenNavItems: NavItem[] = [
-	{ label: 'Home', active: true, path: '/BahrainCredit' },
+	{ label: 'Home', active: true, path: '/bahraincredit' },
 	{
 		label: 'Islamic Window',
 		subItems: [
@@ -74,9 +74,9 @@ export const tamkeenNavItems: NavItem[] = [
 	},
 	{
 		label: 'Loans',
-		path: '/BahrainCredit/loans/car-loan',
+		path: '/bahraincredit/loans/car-loan',
 		subItems: [
-			{ label: 'Car Loan', path: '/BahrainCredit/loans/car-loan' },
+			{ label: 'Car Loan', path: '/bahraincredit/loans/car-loan' },
 			{ label: 'Personal Loan' },
 			{ label: 'Mortgage Loan' },
 			{ label: 'Installment Deferral Program' },
@@ -84,10 +84,10 @@ export const tamkeenNavItems: NavItem[] = [
 	},
 	{
 		label: 'Cards',
-		path: '/BahrainCredit/cards/imtiaz',
+		path: '/bahraincredit/cards/imtiaz',
 		subItems: [
-			{ label: 'IMTIAZ', path: '/BahrainCredit/cards/imtiaz' },
-			{ label: 'IMTIAZ World', path: '/BahrainCredit/cards/world' },
+			{ label: 'IMTIAZ', path: '/bahraincredit/cards/imtiaz' },
+			{ label: 'IMTIAZ World', path: '/bahraincredit/cards/world' },
 			{ label: 'IMTIAZ for Her' },
 			{ label: 'IMTIAZ Platinum' },
 			{ label: 'IMTIAZ Prepaid' },
@@ -186,15 +186,15 @@ export const carLoanBenefits: BenefitCard[] = [
 ]
 
 export const loanSidebarLinks: SidebarLink[] = [
-	{ label: 'Car Loan', path: '/BahrainCredit/loans/car-loan', active: true },
+	{ label: 'Car Loan', path: '/bahraincredit/loans/car-loan', active: true },
 	{ label: 'Personal Loan', active: false },
 	{ label: 'Mortgage Loan', active: false },
 	{ label: 'Installment Deferral Program', active: false },
 ]
 
 export const imtiazSidebarLinks: SidebarLink[] = [
-	{ label: 'IMTIAZ', path: '/BahrainCredit/cards/imtiaz', active: true },
-	{ label: 'IMTIAZ World', path: '/BahrainCredit/cards/world', active: false },
+	{ label: 'IMTIAZ', path: '/bahraincredit/cards/imtiaz', active: true },
+	{ label: 'IMTIAZ World', path: '/bahraincredit/cards/world', active: false },
 	{ label: 'IMTIAZ for Her', active: false },
 	{ label: 'IMTIAZ Platinum', active: false },
 	{ label: 'IMTIAZ Prepaid', active: false },
@@ -205,7 +205,7 @@ export const imtiazSidebarLinks: SidebarLink[] = [
 ]
 
 export const worldSidebarLinks: SidebarLink[] = [
-	{ label: 'IMTIAZ World Credit Card', path: '/BahrainCredit/cards/world', active: true },
+	{ label: 'IMTIAZ World Credit Card', path: '/bahraincredit/cards/world', active: true },
 	{
 		label: 'Mastercard UEFA Champions League Credit Card issued by IMTIAZ',
 		active: false,
@@ -379,7 +379,7 @@ export const creditCards = [
 		label: 'IMTIAZ World',
 		img: 'https://www.bahraincredit.com.bh/Administrator/MediaHandler/ImageHandler/images/PhotoGallery/Thumbnails/world.png',
 		alt: 'IMTIAZ World Card',
-		path: '/BahrainCredit/cards/world',
+		path: '/bahraincredit/cards/world',
 	},
 	{
 		label: 'IMTIAZ for Her',
@@ -456,19 +456,19 @@ export const homeFeatureLinks = [
 	{
 		title: 'Loans That Move Fast',
 		description: 'Explore vehicle finance with a guided path to benefits, charges, and application support.',
-		path: '/BahrainCredit/loans/car-loan',
+		path: '/bahraincredit/loans/car-loan',
 		icon: Car,
 	},
 	{
 		title: 'Cards Built Around Lifestyle',
 		description: 'Compare IMTIAZ card families and jump into the right rewards profile for your needs.',
-		path: '/BahrainCredit/cards/imtiaz',
+		path: '/bahraincredit/cards/imtiaz',
 		icon: CreditCard,
 	},
 	{
 		title: 'Premium World Benefits',
 		description: 'Open the IMTIAZ World experience for travel, lounge access, and concierge-style benefits.',
-		path: '/BahrainCredit/cards/world',
+		path: '/bahraincredit/cards/world',
 		icon: Globe,
 	},
 ]

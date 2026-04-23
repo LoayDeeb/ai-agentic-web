@@ -14,9 +14,9 @@ import {
 import { onToolEvent } from '../features/agent/tools'
 
 const breadcrumbs = [
-	{ label: 'Home', href: '/BahrainCredit' },
-	{ label: 'Cards', href: '/BahrainCredit/cards/imtiaz' },
-	{ label: 'IMTIAZ World', href: '/BahrainCredit/cards/world' },
+	{ label: 'Home', href: '/bahraincredit' },
+	{ label: 'Cards', href: '/bahraincredit/cards/imtiaz' },
+	{ label: 'IMTIAZ World', href: '/bahraincredit/cards/world' },
 	{ label: 'IMTIAZ World Credit Card', href: null },
 ]
 
@@ -239,7 +239,7 @@ export default function TamkeenBahrainWorldCard() {
 										onClick={(e) => {
 											e.preventDefault()
 											if (button.label === 'Apply for IMTIAZ') {
-												navigate('/BahrainCredit/cards/apply?card=world')
+												navigate('/bahraincredit/cards/apply?card=world')
 											}
 										}}
 										className="flex items-center gap-2 rounded-full border-2 px-4 py-2 text-sm font-medium no-underline transition-all duration-300 hover:-translate-y-0.5"
