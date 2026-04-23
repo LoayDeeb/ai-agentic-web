@@ -9,6 +9,10 @@ export type TTSConfig = {
 	voiceId?: string
 	modelId?: string
 	speed?: number
+	textReplacements?: Array<{
+		from: string
+		to: string
+	}>
 }
 
 const legacyVoiceId = 'Mf4F6aozsBEFAtuBhiIf'
@@ -25,10 +29,20 @@ function resolveTtsProvider() {
 	return (process.env.TTS_PROVIDER || 'elevenlabs').trim().toLowerCase()
 }
 
+function normalizeTextForTTS(text: string, config: TTSConfig) {
+	if (!config.textReplacements?.length) return text
+
+	return config.textReplacements.reduce((current, replacement) => {
+		if (!replacement.from) return current
+		return current.replace(new RegExp(replacement.from, 'gi'), replacement.to)
+	}, text)
+}
+
 async function* streamWithElevenLabs(
 	text: string,
 	config: TTSConfig = {}
 ): AsyncGenerator<Buffer> {
+	const spokenText = normalizeTextForTTS(text, config)
 	const envVoiceId = process.env.ELEVENLABS_VOICE_ID
 	const voiceId = resolveElevenLabsVoiceId(config)
 	const modelId = config.modelId || process.env.ELEVENLABS_MODEL || 'eleven_multilingual_v2'
@@ -40,10 +54,10 @@ async function* streamWithElevenLabs(
 		)
 	}
 
-	logger.info({ provider: 'external', text, voiceId, modelId }, 'Streaming TTS request')
+	logger.info({ provider: 'external', text: spokenText, voiceId, modelId }, 'Streaming TTS request')
 
 	const audioStream = await elevenLabsClient.textToSpeech.stream(voiceId, {
-		text,
+		text: spokenText,
 		modelId,
 		outputFormat: 'mp3_44100_128'
 	})
@@ -64,6 +78,7 @@ async function* streamWithNabrah(
 	text: string,
 	config: TTSConfig = {}
 ): AsyncGenerator<Buffer> {
+	const spokenText = normalizeTextForTTS(text, config)
 	const primaryProjectId = (process.env.NABRAH_PROJECT_ID || '').trim()
 	const fallbackProjectId =
 		(process.env.NABRAH_PROJECT_ID_FALLBACK || '').trim() || primaryProjectId
@@ -91,7 +106,7 @@ async function* streamWithNabrah(
 	logger.info(
 		{
 			provider: 'external',
-			text,
+			text: spokenText,
 			voiceId,
 			modelId,
 			speed,
@@ -114,7 +129,7 @@ async function* streamWithNabrah(
 				},
 				body: JSON.stringify({
 					model: modelId,
-					input: text,
+					input: spokenText,
 					voice: voiceId,
 					response_format: 'mp3',
 					speed

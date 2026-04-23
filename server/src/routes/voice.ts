@@ -84,11 +84,28 @@ function isSasoUrl(url: string | undefined) {
 	return url?.toLowerCase().startsWith('/saso') ?? false
 }
 
+function isBahrainCreditUrl(url: string | undefined) {
+	return (
+		url?.toLowerCase().startsWith('/bahraincredit') ||
+		url?.toLowerCase().startsWith('/tamkeenbahrain')
+	) ?? false
+}
+
 function resolveTtsConfigForUrl(url: string | undefined): TTSConfig {
 	if (isSasoUrl(url)) {
 		return {
 			voiceId: (process.env.SASO_ELEVENLABS_VOICE_ID || '').trim() || undefined,
 			modelId: (process.env.SASO_ELEVENLABS_MODEL || '').trim() || undefined,
+		}
+	}
+
+	if (isBahrainCreditUrl(url)) {
+		return {
+			textReplacements: [
+				{ from: '\\bIMTIAZ\\b', to: 'Emtiaz' },
+				{ from: '\\bIMTIAZ World\\b', to: 'Emtiaz World' },
+				{ from: '\\bIMTIAZ Platinum\\b', to: 'Emtiaz Platinum' },
+			],
 		}
 	}
 
