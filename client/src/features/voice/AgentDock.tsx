@@ -6,12 +6,21 @@ import { createAudioQueue, AudioQueueController } from './audioQueue'
 import { executeActions } from '../agent/execute'
 
 const DOCK_STATE_KEY = 'voice.dock.state'
+const ENV_SPEECH_LANG = String(import.meta.env.VITE_VOICE_INPUT_LANG || '').trim().toLowerCase()
+
+function resolveSpeechLang(): 'ar-SA' | 'en-US' {
+	if (ENV_SPEECH_LANG === 'ar' || ENV_SPEECH_LANG === 'ar-sa') return 'ar-SA'
+	if (ENV_SPEECH_LANG === 'en' || ENV_SPEECH_LANG === 'en-us') return 'en-US'
+	if (typeof window !== 'undefined' && window.navigator.language?.toLowerCase().startsWith('ar')) {
+		return 'ar-SA'
+	}
+	return 'en-US'
+}
 
 type PersistedDockState = {
 	transcript: string[]
 	sessionId: string
 	hasActiveSession: boolean
-	speechLang: 'ar-SA' | 'en-US'
 }
 
 function createSessionId() {
@@ -27,7 +36,6 @@ function readPersistedDockState(): PersistedDockState {
 			transcript: [],
 			sessionId: createSessionId(),
 			hasActiveSession: false,
-			speechLang: navigator.language?.toLowerCase().startsWith('ar') ? 'ar-SA' : 'en-US',
 		}
 	}
 
@@ -38,7 +46,6 @@ function readPersistedDockState(): PersistedDockState {
 				transcript: [],
 				sessionId: createSessionId(),
 				hasActiveSession: false,
-				speechLang: window.navigator.language?.toLowerCase().startsWith('ar') ? 'ar-SA' : 'en-US',
 			}
 		}
 		const parsed = JSON.parse(raw)
@@ -46,14 +53,12 @@ function readPersistedDockState(): PersistedDockState {
 			transcript: Array.isArray(parsed.transcript) ? parsed.transcript.filter((line: unknown) => typeof line === 'string') : [],
 			sessionId: typeof parsed.sessionId === 'string' && parsed.sessionId.length > 0 ? parsed.sessionId : createSessionId(),
 			hasActiveSession: Boolean(parsed.hasActiveSession),
-			speechLang: parsed.speechLang === 'ar-SA' || parsed.speechLang === 'en-US' ? parsed.speechLang : 'en-US',
 		}
 	} catch {
 		return {
 			transcript: [],
 			sessionId: createSessionId(),
 			hasActiveSession: false,
-			speechLang: window.navigator.language?.toLowerCase().startsWith('ar') ? 'ar-SA' : 'en-US',
 		}
 	}
 }
@@ -71,11 +76,11 @@ export function AgentDock() {
 	const [transcript, setTranscript] = React.useState<string[]>(persistedState.transcript)
 	const [interimText, setInterimText] = React.useState('')
 	const [hasActiveSession, setHasActiveSession] = React.useState(persistedState.hasActiveSession)
-	const [speechLang, setSpeechLang] = React.useState<'ar-SA' | 'en-US'>(persistedState.speechLang)
 	const isSpeakingRef = React.useRef(false)
 	const dropIncomingRef = React.useRef(false)
 	const sessionIdRef = React.useRef(persistedState.sessionId)
 	const unloadingRef = React.useRef(false)
+	const speechLang = React.useMemo(() => resolveSpeechLang(), [])
 
 	const getCurrentPageContext = React.useCallback(() => ({
 		url: window.location.pathname,
@@ -93,10 +98,9 @@ export function AgentDock() {
 				transcript,
 				sessionId: sessionIdRef.current,
 				hasActiveSession,
-				speechLang,
 			} satisfies PersistedDockState)
 		)
-	}, [transcript, hasActiveSession, speechLang])
+	}, [transcript, hasActiveSession])
 
 	React.useEffect(() => {
 		if (!persistedState.hasActiveSession) return
@@ -337,7 +341,6 @@ export function AgentDock() {
 				transcript,
 				sessionId: sessionIdRef.current,
 				hasActiveSession: false,
-				speechLang,
 			} satisfies PersistedDockState)
 		)
 	}
@@ -432,36 +435,6 @@ export function AgentDock() {
 							)}
 						</div>
 
-						<div className="flex shrink-0 items-center gap-2">
-							<button
-								type="button"
-								onClick={() => setSpeechLang('ar-SA')}
-								disabled={isListening}
-								className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-									speechLang === 'ar-SA'
-										? 'bg-slate-900 text-white'
-										: 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-								} disabled:cursor-not-allowed disabled:opacity-50`}
-							>
-								Arabic
-							</button>
-							<button
-								type="button"
-								onClick={() => setSpeechLang('en-US')}
-								disabled={isListening}
-								className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-									speechLang === 'en-US'
-										? 'bg-slate-900 text-white'
-										: 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-								} disabled:cursor-not-allowed disabled:opacity-50`}
-							>
-								English
-							</button>
-							<span className="text-[11px] text-gray-500">
-								{isListening ? 'Stop voice to switch language' : `Mic language: ${speechLang === 'ar-SA' ? 'Arabic' : 'English'}`}
-							</span>
-						</div>
-
 						{/* Status indicators */}
 						<div className="flex shrink-0 items-center gap-3 text-xs">
 							<div className="flex items-center gap-1">
@@ -539,7 +512,7 @@ export function AgentDock() {
 								? speechLang === 'ar-SA'
 									? 'Speak in Arabic naturally. I will respond when you pause.'
 									: 'Speak in English naturally. I will respond when you pause.'
-								: 'Try asking about loans or IMTIAZ cards...'}
+								: `Try asking about loans or IMTIAZ cards. Mic language: ${speechLang === 'ar-SA' ? 'Arabic' : 'English'}.`}
 						</p>
 					</div>
 				</div>
