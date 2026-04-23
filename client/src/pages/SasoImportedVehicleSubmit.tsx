@@ -20,6 +20,10 @@ export default function SasoImportedVehicleSubmit() {
   }, [])
 
   useEffect(() => {
+    document.title = submitted ? 'Application Submitted | SASO Demo' : 'Imported Vehicle Application | SASO Demo'
+  }, [submitted])
+
+  useEffect(() => {
     const handler = (e: Event) => {
       const { tool, args } = (e as CustomEvent).detail
 
