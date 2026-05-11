@@ -152,6 +152,30 @@ export default function BaptismGuidedTourRequest() {
 								</div>
 							</div>
 
+							<p style={{ fontSize: 11, fontWeight: 700, color: '#A58D67', textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 16px' }}>
+								Visitor details
+							</p>
+
+							<div style={{ background: '#F7F5F2', border: '1px solid #DDD5C5', borderRadius: 8, padding: '16px 18px', marginBottom: 20 }}>
+								<p style={{ fontSize: 12, fontWeight: 700, color: '#A58D67', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 14px' }}>
+									Visitor 1
+								</p>
+								<div className="baptism-guided-request-visitor-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0 14px' }}>
+									<div>
+										<label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#083B50', marginBottom: 6 }}>Full name</label>
+										<input type="text" value={visitors[0].name} readOnly style={{ ...inputStyle, color: '#6E6E6E', cursor: 'default' }} />
+									</div>
+									<div>
+										<label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#083B50', marginBottom: 6 }}>Nationality</label>
+										<input type="text" value={visitors[0].nationality} readOnly style={{ ...inputStyle, color: '#6E6E6E', cursor: 'default' }} />
+									</div>
+									<div>
+										<label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#083B50', marginBottom: 6 }}>Date of birth</label>
+										<input type="date" value={visitors[0].dateOfBirth} readOnly style={{ ...inputStyle, color: '#6E6E6E', cursor: 'default' }} />
+									</div>
+								</div>
+							</div>
+
 							<div style={{ marginTop: 8, marginBottom: 20 }}>
 								<label onClick={() => setAccessibility((value) => !value)} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, cursor: 'pointer', border: `1.5px solid ${accessibilityRequired ? '#083B50' : '#E0D9CE'}`, borderRadius: 8, padding: '16px 18px', background: accessibilityRequired ? '#F0F4F7' : '#FAFAF9', transition: 'all 0.2s', userSelect: 'none' }}>
 									<div style={{ width: 20, height: 20, borderRadius: 4, flexShrink: 0, marginTop: 2, border: `2px solid ${accessibilityRequired ? '#083B50' : '#C0B8B0'}`, background: accessibilityRequired ? '#083B50' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
