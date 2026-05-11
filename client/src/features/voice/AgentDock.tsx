@@ -89,6 +89,9 @@ function readPersistedDockState(): PersistedDockState {
 
 export function AgentDock() {
 	const persistedState = React.useMemo(() => readPersistedDockState(), [])
+	const [currentPath, setCurrentPath] = React.useState(() =>
+		typeof window !== 'undefined' ? window.location.pathname : ''
+	)
 	const [open, setOpen] = React.useState(false)
 	const [connecting, setConnecting] = React.useState(false)
 	const [isListening, setIsListening] = React.useState(false)
@@ -105,13 +108,14 @@ export function AgentDock() {
 	const sessionIdRef = React.useRef(persistedState.sessionId)
 	const unloadingRef = React.useRef(false)
 	const speechLang = React.useMemo(
-		() => resolveSpeechLang(typeof window !== 'undefined' ? window.location.pathname : ''),
-		[]
+		() => resolveSpeechLang(currentPath),
+		[currentPath]
 	)
 	const assistantHint = React.useMemo(
-		() => resolveAssistantHint(typeof window !== 'undefined' ? window.location.pathname : '', speechLang),
-		[speechLang]
+		() => resolveAssistantHint(currentPath, speechLang),
+		[currentPath, speechLang]
 	)
+	const isBaptismRoute = currentPath.toLowerCase().startsWith('/baptism')
 
 	const getCurrentPageContext = React.useCallback(() => ({
 		url: window.location.pathname,
@@ -132,6 +136,16 @@ export function AgentDock() {
 			} satisfies PersistedDockState)
 		)
 	}, [transcript, hasActiveSession])
+
+	React.useEffect(() => {
+		const updatePath = () => setCurrentPath(window.location.pathname)
+		const interval = window.setInterval(updatePath, 300)
+		window.addEventListener('popstate', updatePath)
+		return () => {
+			window.clearInterval(interval)
+			window.removeEventListener('popstate', updatePath)
+		}
+	}, [])
 
 	React.useEffect(() => {
 		if (!persistedState.hasActiveSession) return
@@ -418,15 +432,24 @@ export function AgentDock() {
 
 	return (
 		<div
-			className="fixed bottom-3 left-3 z-40 sm:bottom-4 sm:left-4"
+			className={`fixed bottom-3 z-40 sm:bottom-4 ${
+				isBaptismRoute ? 'right-3 sm:right-4' : 'left-3 sm:left-4'
+			}`}
 			style={{
-				right: 'auto',
+				left: isBaptismRoute ? 'auto' : undefined,
+				right: isBaptismRoute ? undefined : 'auto',
 			}}
 		>
 			{open ? (
-				<div className="flex max-h-[58vh] w-[300px] max-w-[calc(100vw-1.5rem)] flex-col rounded-2xl border bg-white p-3 shadow-xl sm:w-[320px]">
+				<div
+					className={`flex max-w-[calc(100vw-1.5rem)] flex-col rounded-2xl border bg-white p-3 shadow-xl ${
+						isBaptismRoute
+							? 'max-h-[44vh] w-[280px] sm:w-[300px] lg:max-h-[52vh]'
+							: 'max-h-[58vh] w-[300px] sm:w-[320px]'
+					}`}
+				>
 					<div className="mb-2 flex items-center justify-between">
-						<h3 className="text-base font-semibold">Voice Assistant</h3>
+						<h3 className="text-base font-semibold">{isBaptismRoute ? 'Trip Assistant' : 'Voice Assistant'}</h3>
 						<button className="rounded p-1.5 hover:bg-gray-100" onClick={() => setOpen(false)}>
 							<X className="w-5 h-5" />
 						</button>
@@ -494,7 +517,7 @@ export function AgentDock() {
 						)}
 
 						{/* Transcript */}
-						<div className="min-h-[150px] flex-1 space-y-2 overflow-y-auto rounded-lg border bg-gray-50 p-2.5">
+						<div className={`${isBaptismRoute ? 'min-h-[86px]' : 'min-h-[150px]'} flex-1 space-y-2 overflow-y-auto rounded-lg border bg-gray-50 p-2.5`}>
 							{transcript.length === 0 ? (
 								<p className="text-gray-400 text-sm text-center py-4">
 									Click "Start Voice" or type below to begin
