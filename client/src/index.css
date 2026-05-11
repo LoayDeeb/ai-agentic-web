@@ -1019,6 +1019,9 @@ html, body, #root {
 	height: 100%;
 	object-fit: cover;
 	transform: scale(1.01);
+	transform-origin: center center;
+	animation: homeHeroImageDrift 24s ease-in-out infinite alternate;
+	will-change: transform;
 }
 
 .home-hero-gradient {
@@ -1115,6 +1118,25 @@ html, body, #root {
 .home-hero-button:hover {
 	background: rgba(255, 255, 255, 0.12);
 	border-color: rgba(255, 255, 255, 0.86);
+}
+
+@keyframes homeHeroImageDrift {
+	0% {
+		transform: scale(1.02) translate3d(-0.8%, -0.4%, 0);
+	}
+	50% {
+		transform: scale(1.07) translate3d(0.7%, 0.5%, 0);
+	}
+	100% {
+		transform: scale(1.04) translate3d(0.4%, -0.6%, 0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.home-hero-video {
+		animation: none;
+		transform: scale(1.01);
+	}
 }
 
 .home-hero-scroll {

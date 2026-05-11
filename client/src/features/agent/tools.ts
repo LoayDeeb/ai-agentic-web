@@ -26,6 +26,17 @@ function buildGigInsurancePath(target: string) {
 
 const baptismTimeSlots = ['08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00']
 
+const baptismExperienceLabels: Record<string, string> = {
+	'general-visit': 'General Visit',
+	'biblical-package': 'Biblical Packages',
+	'baptism-renewal': 'Mass & Christian Events',
+}
+
+function getBaptismExperienceLabel(value: unknown) {
+	const key = String(value ?? '')
+	return baptismExperienceLabels[key] || key
+}
+
 function normalizeBaptismVisitTime(value: unknown) {
 	const raw = String(value ?? '').trim()
 	if (!raw) return raw
@@ -260,7 +271,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			const experienceId = String(args.experienceId || '')
 			useFormStore.getState().setField('baptismExperience', experienceId as any)
 			emitToolEvent('selectBaptismExperience', { experienceId })
-			return { success: true, selectedExperience: experienceId }
+			return { success: true, selectedExperience: getBaptismExperienceLabel(experienceId), selectedExperienceId: experienceId }
 		}
 
 		case 'scrollToBaptismSection':
@@ -413,7 +424,16 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			const store = useFormStore.getState()
 			const data = store.getFormData()
 			const missing = store.getMissingFields()
-			return { formData: data, missingFields: missing }
+			const displayFormData = {
+				...data,
+				baptismExperience: getBaptismExperienceLabel(data.baptismExperience),
+			}
+			return {
+				formData: data,
+				displayFormData,
+				selectedExperience: getBaptismExperienceLabel(data.baptismExperience),
+				missingFields: missing,
+			}
 		}
 
 		case 'highlightFormField':
