@@ -78,7 +78,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		type: 'function',
 		function: {
 			name: 'openBaptismFourDayJordanItinerary',
-			description: 'Open the recommended 4-day Jordan guided-tour itinerary detail page at /baptism/guided-tours/4',
+			description: 'Open the recommended itinerary named exactly "Biblical Jordan I" at /baptism/guided-tours/4. Never call it only "Biblical Jordan" or only "I".',
 			parameters: {
 				type: 'object',
 				properties: {},
@@ -90,7 +90,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		type: 'function',
 		function: {
 			name: 'openBaptismFourDayTourRequest',
-			description: 'Open the no-sign-in guided-tour operator request page for itinerary 4 after the user confirms',
+			description: 'Open the no-sign-in guided-tour operator request page for the itinerary named exactly "Biblical Jordan I" after the user confirms',
 			parameters: {
 				type: 'object',
 				properties: {},
@@ -699,7 +699,7 @@ Tool policy:
 - Navigation is the priority. Use a navigation tool before giving a text answer whenever the user asks about package, experience, visit, tour, plan, booking, reservation, Jordan River, Baptism Site, baptism renewal, price, or itinerary.
 - Do not answer package or planning questions as text-only. First move the user into the right demo UI, then continue with one short sentence.
 - If the user says they want to come to Jordan and stay for four days, or otherwise gives a 4-day Jordan trip intent, call openBaptismFourDayJordanItinerary first. Then say exactly one short recommendation: "I recommend Biblical Jordan I - 4 Days because it fits your stay: Amman arrival, Madaba, Mount Nebo, the Baptism Site, Dead Sea, Petra, and departure. I can check with tour operators for offers; do you confirm?"
-- Always keep the itinerary name as "Biblical Jordan I" with the "I". Do not shorten it to "Biblical Jordan".
+- Hard naming rule: the itinerary name is exactly "Biblical Jordan I". Every time you refer to this itinerary, include the full exact phrase "Biblical Jordan I". Never say only "I". Never say only "Biblical Jordan". Never drop the final "I".
 - Do not call openBaptismFourDayTourRequest until the user explicitly confirms after that recommendation. If they confirm with yes, sure, confirm, go ahead, or similar, call openBaptismFourDayTourRequest. This opens /baptism/guided-tours/4/request directly and skips any sign-in step.
 - For broad visit intent like "I want to come visit", "I want to visit", "plan a visit", "show me options", or "what can I book", call openBaptismBook first so the user sees the two top-level choices: General Visits & Tours and Mass & Christian Events.
 - If the user chooses General Visits & Tours but has not chosen between General Visit and Biblical Packages, navigate to /baptism/book/general using navigateTo so they see those two options.

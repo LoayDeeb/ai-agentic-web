@@ -243,7 +243,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 				document.querySelector('[data-itinerary-detail="4"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 				highlight('[data-itinerary-detail="4"]', 4)
 			}, 180)
-			return { success: true, navigatedTo: '/baptism/guided-tours/4', itineraryId: 4 }
+			return { success: true, navigatedTo: '/baptism/guided-tours/4', itineraryId: 4, itineraryName: 'Biblical Jordan I' }
 
 		case 'openBaptismFourDayTourRequest':
 			navigateTo('/baptism/guided-tours/4/request')
@@ -251,7 +251,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 				document.querySelector('[data-guided-request="4"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 				highlight('[data-guided-request="4"]', 4)
 			}, 180)
-			return { success: true, navigatedTo: '/baptism/guided-tours/4/request', itineraryId: 4 }
+			return { success: true, navigatedTo: '/baptism/guided-tours/4/request', itineraryId: 4, itineraryName: 'Biblical Jordan I' }
 
 		case 'openBaptismReligiousService':
 			navigateTo('/baptism/religious-service')
