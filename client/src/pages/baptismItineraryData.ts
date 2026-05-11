@@ -15,7 +15,7 @@ export type BaptismItinerary = {
 export const baptismGuidedItineraries: BaptismItinerary[] = [
 	{
 		id: 4,
-		title: 'Biblical Jordan I - 4 Days (Amman / Dead Sea / Petra)',
+		title: 'Biblical Jordan',
 		description: '2 nights Amman / 1 Night Dead Sea. Attractions: Madaba, Mount Nebo, Baptism Site, Dead Sea, Petra, Moses Springs.',
 		price: null,
 		tourType: 'group',
