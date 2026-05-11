@@ -51,6 +51,54 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 		},
 	},
 	{
+		type: 'function',
+		function: {
+			name: 'openBaptismTripPlanner',
+			description: 'Open the Baptism Site trip planning and booking demo at /baptism',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: []
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'selectBaptismExperience',
+			description: 'Select a Baptism Site booking experience in the trip planner',
+			parameters: {
+				type: 'object',
+				properties: {
+					experienceId: {
+						type: 'string',
+						enum: ['general-visit', 'biblical-package', 'baptism-renewal'],
+						description: 'The experience to select'
+					}
+				},
+				required: ['experienceId']
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'scrollToBaptismSection',
+			description: 'Scroll to a Baptism Site page section',
+			parameters: {
+				type: 'object',
+				properties: {
+					sectionId: {
+						type: 'string',
+						enum: ['hero', 'experience', 'booking'],
+						description: 'Section id without the baptism- prefix'
+					}
+				},
+				required: ['sectionId']
+			}
+		}
+	},
+	{
 		type: 'function', function: {
 			name: 'setLanguage',
 			description: 'Switch the application language',
@@ -126,7 +174,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				properties: {
 					fieldName: {
 						type: 'string',
-						description: 'The form field name. ZATCA fields: tin, taxPeriod, amountDue, requestedInstallments, justification, bankName, accountNumber, contactEmail, contactPhone. SASO fields: sasoApplicantName, sasoNationalId, sasoMobile, sasoChassisNumber, sasoCustomsNumber, sasoVehicleType, sasoTermsAccepted. JICO fields: insuranceFullName, insuranceNationalId, insuranceDateOfBirth, insurancePhone, insuranceEmail, insuranceAddress, insurancePlanType, insuranceCoverageClass, insuranceFamilyMembers, insuranceOccupation, insurancePreExisting, insuranceInsuranceTerms'
+						description: 'The form field name. ZATCA fields: tin, taxPeriod, amountDue, requestedInstallments, justification, bankName, accountNumber, contactEmail, contactPhone. SASO fields: sasoApplicantName, sasoNationalId, sasoMobile, sasoChassisNumber, sasoCustomsNumber, sasoVehicleType, sasoTermsAccepted. JICO fields: insuranceFullName, insuranceNationalId, insuranceDateOfBirth, insurancePhone, insuranceEmail, insuranceAddress, insurancePlanType, insuranceCoverageClass, insuranceFamilyMembers, insuranceOccupation, insurancePreExisting, insuranceInsuranceTerms. Baptism fields: baptismFullName, baptismEmail, baptismPhone, baptismCountry, baptismVisitDate, baptismGuests, baptismExperience, baptismLanguage, baptismPickup, baptismAddOns, baptismNotes, baptismTermsAccepted'
 					},
 					value: {
 						type: 'string',
@@ -140,15 +188,15 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function', function: {
 			name: 'goToFormStep',
-			description: 'Navigate to a specific step in the active multi-step form (1-3)',
+			description: 'Navigate to a specific step in the active multi-step form. Baptism uses steps 1-4; most other demos use 1-3.',
 			parameters: {
 				type: 'object',
 				properties: {
 					step: {
 						type: 'number',
-						description: 'Step number (1=initial information, 2=details, 3=review)',
+						description: 'Step number',
 						minimum: 1,
-						maximum: 3
+						maximum: 4
 					}
 				},
 				required: ['step']
@@ -569,12 +617,61 @@ Safety:
 - Do not provide legal or engineering guarantees.
 - If data is missing, ask one focused question.`
 
+const baptismSystemPrompt = `You are the virtual trip-planning assistant for The Baptism Site of Jesus Christ in Jordan.
+
+Role and behavior:
+- Reply in English.
+- Keep responses concise, warm, and practical.
+- Focus only on the Baptism Site demo route: /baptism.
+- Help tourists plan and book a meaningful visit to Bethany Beyond the Jordan.
+- Prefer UI actions using tools when they help the user complete the booking journey.
+- Do not invent confirmed availability, clergy confirmations, or payment completion. This demo submits a booking request for coordinator follow-up.
+
+Experience options:
+- general-visit: self-paced access to the main pilgrimage path, churches, river overlook, and visitor center.
+- biblical-package: guided route through Elijah Hill, John's Spring, ancient pools, and the Jordan River.
+- baptism-renewal: hosted visit with reserved prayer time and baptismal-vow renewal support.
+
+Tool policy:
+- If the user asks about the Baptism Site, planning a visit, booking a trip, a guided tour, or baptism renewal, use openBaptismTripPlanner.
+- Use selectBaptismExperience when the user chooses or implies one of the three experiences.
+- Use scrollToBaptismSection for hero, experience, or booking sections when helpful.
+- Use fillFormField, goToFormStep, getFormData, highlightFormField, clickNext, and submitForm to complete the booking form.
+
+Booking form fields:
+- Step one: baptismExperience.
+- Step two: baptismVisitDate, baptismGuests, baptismLanguage, baptismPickup, optional baptismAddOns.
+- Step three: baptismFullName, baptismCountry, baptismEmail, baptismPhone, optional baptismNotes.
+- Step four: baptismTermsAccepted.
+
+Guided booking flow:
+- Collect missing fields one focused question at a time.
+- If the user gives clear information, fill it immediately with fillFormField before replying.
+- After completing a step, call clickNext.
+- Before final submission, summarize the captured trip details briefly and ask for explicit confirmation.
+- Call submitForm only after the user confirms.
+
+Useful planning details:
+- The site is open daily from 8:00 AM to 4:00 PM.
+- It is about forty-five minutes from Amman.
+- Suggested stops include the Visitor Center, Elijah's Hill, John's Spring, ancient pools, the Jordan River, and the pilgrim chapel.
+- Pickup options in the demo are own transport, Amman hotel, Dead Sea hotel, and airport transfer request.
+
+Safety:
+- Do not provide formal religious, legal, or travel-entry advice.
+- If asked for live availability, visas, or pricing guarantees, explain that the demo can prepare a request and a coordinator must confirm details.`
+
 function resolveSystemPrompt(currentUrl?: string): string {
 	const normalizedUrl = (currentUrl || '/').toLowerCase()
 	const customDefaultPrompt = (process.env.DEFAULT_SYSTEM_PROMPT || '').trim()
 	const customZatcaPrompt = (process.env.ZATCA_SYSTEM_PROMPT || '').trim()
 	const customSasoPrompt = (process.env.SASO_SYSTEM_PROMPT || '').trim()
 	const customGascoPrompt = (process.env.GASCO_SYSTEM_PROMPT || '').trim()
+	const customBaptismPrompt = (process.env.BAPTISM_SYSTEM_PROMPT || '').trim()
+
+	if (normalizedUrl.startsWith('/baptism')) {
+		return customBaptismPrompt || customDefaultPrompt || baptismSystemPrompt
+	}
 
 	if (normalizedUrl.startsWith('/gasco')) {
 		return customGascoPrompt || customDefaultPrompt || gascoSystemPrompt

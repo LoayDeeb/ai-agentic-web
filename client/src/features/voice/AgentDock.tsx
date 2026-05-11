@@ -19,6 +19,28 @@ function resolveSpeechLang(pathname?: string): 'ar-SA' | 'en-US' {
 	return 'en-US'
 }
 
+function resolveAssistantHint(pathname: string, speechLang: 'ar-SA' | 'en-US') {
+	const normalizedPath = pathname.toLowerCase()
+	const micLanguage = speechLang === 'ar-SA' ? 'Arabic' : 'English'
+
+	if (normalizedPath.startsWith('/baptism')) {
+		return `Try asking to plan a guided visit or book a baptism renewal. Mic language: ${micLanguage}.`
+	}
+
+	if (
+		normalizedPath.startsWith('/bahraincredit') ||
+		normalizedPath.startsWith('/tamkeenbahrain')
+	) {
+		return `Try asking about loans or IMTIAZ cards. Mic language: ${micLanguage}.`
+	}
+
+	if (normalizedPath.startsWith('/eshop')) {
+		return `Try asking to compare products or checkout. Mic language: ${micLanguage}.`
+	}
+
+	return `Try asking for help with this page. Mic language: ${micLanguage}.`
+}
+
 type PersistedDockState = {
 	transcript: string[]
 	sessionId: string
@@ -85,6 +107,10 @@ export function AgentDock() {
 	const speechLang = React.useMemo(
 		() => resolveSpeechLang(typeof window !== 'undefined' ? window.location.pathname : ''),
 		[]
+	)
+	const assistantHint = React.useMemo(
+		() => resolveAssistantHint(typeof window !== 'undefined' ? window.location.pathname : '', speechLang),
+		[speechLang]
 	)
 
 	const getCurrentPageContext = React.useCallback(() => ({
@@ -517,7 +543,7 @@ export function AgentDock() {
 								? speechLang === 'ar-SA'
 									? 'Speak in Arabic naturally. I will respond when you pause.'
 									: 'Speak in English naturally. I will respond when you pause.'
-								: `Try asking about loans or IMTIAZ cards. Mic language: ${speechLang === 'ar-SA' ? 'Arabic' : 'English'}.`}
+								: assistantHint}
 						</p>
 					</div>
 				</div>

@@ -201,6 +201,21 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			navigateTo(`/services/${args.slug}`)
 			return { success: true, navigatedTo: `/services/${args.slug}` }
 
+		case 'openBaptismTripPlanner':
+			navigateTo('/baptism')
+			return { success: true, navigatedTo: '/baptism' }
+
+		case 'selectBaptismExperience': {
+			const experienceId = String(args.experienceId || '')
+			useFormStore.getState().setField('baptismExperience', experienceId as any)
+			emitToolEvent('selectBaptismExperience', { experienceId })
+			return { success: true, selectedExperience: experienceId }
+		}
+
+		case 'scrollToBaptismSection':
+			emitToolEvent('scrollToBaptismSection', args)
+			return { success: true, scrolledTo: args.sectionId }
+
 		case 'openMawhibaServices':
 			navigateTo('/mawhiba')
 			return { success: true, navigatedTo: '/mawhiba' }
@@ -358,7 +373,9 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			const store = useFormStore.getState()
 			const currentStep = store.currentStep
 			const path = typeof window !== 'undefined' ? window.location.pathname : ''
-			const maxStep = path.startsWith('/gig/advisor-request') ? 2 : 3
+			let maxStep = 3
+			if (path.startsWith('/gig/advisor-request')) maxStep = 2
+			if (path.startsWith('/baptism')) maxStep = 4
 			const nextStep = Math.min(currentStep + 1, maxStep)
 			store.setCurrentStep(nextStep)
 			emitToolEvent('goToFormStep', { step: nextStep })

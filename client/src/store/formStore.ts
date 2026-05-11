@@ -127,6 +127,19 @@ export type FormData = {
 	tamkeenCardCreditLimit: string
 	tamkeenCardDeliveryPreference: string
 	tamkeenCardTermsAccepted: boolean
+	// Baptism Site Trip Booking Fields
+	baptismFullName: string
+	baptismEmail: string
+	baptismPhone: string
+	baptismCountry: string
+	baptismVisitDate: string
+	baptismGuests: string
+	baptismExperience: string
+	baptismLanguage: string
+	baptismPickup: string
+	baptismAddOns: string
+	baptismNotes: string
+	baptismTermsAccepted: boolean
 }
 
 type FormStore = {
@@ -266,7 +279,20 @@ const initialFormData: FormData = {
 	tamkeenCardType: '',
 	tamkeenCardCreditLimit: '',
 	tamkeenCardDeliveryPreference: '',
-	tamkeenCardTermsAccepted: false
+	tamkeenCardTermsAccepted: false,
+	// Baptism Site Trip Booking Fields
+	baptismFullName: '',
+	baptismEmail: '',
+	baptismPhone: '',
+	baptismCountry: '',
+	baptismVisitDate: '',
+	baptismGuests: '',
+	baptismExperience: '',
+	baptismLanguage: '',
+	baptismPickup: '',
+	baptismAddOns: '',
+	baptismNotes: '',
+	baptismTermsAccepted: false
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({
@@ -372,6 +398,20 @@ export const useFormStore = create<FormStore>((set, get) => ({
 				'tamkeenCardTermsAccepted'
 			]
 		}
+		if (normalizedPath.startsWith('/baptism')) {
+			required = [
+				'baptismFullName',
+				'baptismEmail',
+				'baptismPhone',
+				'baptismCountry',
+				'baptismVisitDate',
+				'baptismGuests',
+				'baptismExperience',
+				'baptismLanguage',
+				'baptismPickup',
+				'baptismTermsAccepted'
+			]
+		}
 		return required.filter((field) => !data[field as keyof FormData])
 	},
 
@@ -396,4 +436,3 @@ if (typeof window !== 'undefined') {
 		setCurrentStep: (step: number) => useFormStore.getState().setCurrentStep(step)
 	}
 }
-

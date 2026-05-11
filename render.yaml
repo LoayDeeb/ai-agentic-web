@@ -1,15 +1,20 @@
 services:
   - type: web
-    name: ai-agentic-web
+    name: zatca-agentic-demos
     runtime: node
     plan: free
-    buildCommand: npm install && npm --prefix client install && npm --prefix server install && npm run build
+    region: oregon
+    autoDeploy: true
+    buildCommand: npm ci && npm run build
     startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 4000
+      - key: LOG_LEVEL
+        value: info
+      - key: NODE_VERSION
+        value: 20.18.0
       - key: OPENAI_API_KEY
         sync: false
       - key: OPENAI_MODEL
@@ -18,12 +23,22 @@ services:
         sync: false
       - key: ZATCA_SYSTEM_PROMPT
         sync: false
+      - key: SASO_SYSTEM_PROMPT
+        sync: false
+      - key: GASCO_SYSTEM_PROMPT
+        sync: false
+      - key: BAPTISM_SYSTEM_PROMPT
+        sync: false
       - key: ELEVENLABS_API_KEY
         sync: false
       - key: ELEVENLABS_VOICE_ID
         value: VjBRcaE3Sdto7eOqwIcc
       - key: ELEVENLABS_MODEL
         value: eleven_flash_v2_5
+      - key: SASO_ELEVENLABS_VOICE_ID
+        sync: false
+      - key: SASO_ELEVENLABS_MODEL
+        sync: false
       - key: TTS_PROVIDER
         value: elevenlabs
       - key: NABRAH_API_KEY
@@ -40,4 +55,3 @@ services:
         value: 87f4c7b0-d9b5-45aa-8c6c-9e2ccf941912
       - key: NABRAH_SPEED
         value: 0.9
-    healthCheckPath: /api/health

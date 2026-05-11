@@ -59,6 +59,7 @@ const TamkeenBahrainForHerWorldCard = React.lazy(() => import('./pages/TamkeenBa
 const TamkeenBahrainPlatinumCard = React.lazy(() => import('./pages/TamkeenBahrainPlatinumCard'))
 const TamkeenBahrainLoanApply = React.lazy(() => import('./pages/TamkeenBahrainLoanApply'))
 const TamkeenBahrainCardApply = React.lazy(() => import('./pages/TamkeenBahrainCardApply'))
+const BaptismTripPlanner = React.lazy(() => import('./pages/BaptismTripPlanner'))
 
 export default function App() {
 	const NavSetter = () => {
@@ -150,6 +151,7 @@ export default function App() {
 					<Route path="/eshop" element={<EshopHome />} />
 					<Route path="/eshop/checkout" element={<EshopCheckout />} />
 					<Route path="/eshop/product/:slug" element={<EshopProductDetail />} />
+					<Route path="/baptism" element={<BaptismTripPlanner />} />
 
 					{/* SASO Routes */}
 					<Route path="/saso" element={<SasoHome />} />

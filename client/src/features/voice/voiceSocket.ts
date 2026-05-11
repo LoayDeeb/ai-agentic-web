@@ -41,7 +41,8 @@ export function connectVoiceSocket(
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
 	const host = window.location.hostname
 	const port = import.meta.env.DEV ? '4000' : window.location.port
-	const url = `${protocol}//${host}:${port}/voice`
+	const hostWithPort = port ? `${host}:${port}` : host
+	const url = `${protocol}//${hostWithPort}/voice`
 
 	console.log('[VoiceSocket] Connecting to:', url)
 	const ws = new WebSocket(url)
