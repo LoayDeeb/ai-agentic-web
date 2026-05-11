@@ -1002,7 +1002,7 @@ html, body, #root {
 
 .home-hero {
 	position: relative;
-	min-height: 92vh;
+	min-height: 100vh;
 	overflow: hidden;
 	display: flex;
 	align-items: center;
@@ -1018,30 +1018,38 @@ html, body, #root {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	transform: scale(1.02);
+	transform: scale(1.01);
 }
 
 .home-hero-gradient {
 	position: absolute;
 	inset: 0;
-	background: linear-gradient(180deg, rgba(8, 59, 80, 0.55), rgba(8, 59, 80, 0.18) 38%, rgba(8, 59, 80, 0.78));
+	background: linear-gradient(180deg, rgba(14, 25, 31, 0.78), rgba(14, 25, 31, 0.42) 42%, rgba(14, 25, 31, 0.76));
 }
 
 .home-hero-radial {
 	position: absolute;
 	inset: 0;
-	background: radial-gradient(circle at center, rgba(165, 141, 103, 0.28), transparent 42%);
+	background: rgba(0, 0, 0, 0.12);
 }
 
 .home-hero-content {
 	position: relative;
 	z-index: 2;
-	width: min(940px, calc(100% - 48px));
+	width: min(1500px, calc(100% - 48px));
 	margin: 0 auto;
-	padding-top: 96px;
+	padding-top: 112px;
 }
 
-.home-hero-eyebrow,
+.home-hero-eyebrow {
+	font-size: 20px;
+	font-weight: 700;
+	letter-spacing: 0.32em;
+	text-transform: uppercase;
+	color: #a58d67;
+	margin: 0 0 16px;
+}
+
 .subtitle {
 	font-size: 13px;
 	font-weight: 700;
@@ -1053,25 +1061,29 @@ html, body, #root {
 
 .home-hero-title {
 	font-family: Georgia, 'Times New Roman', serif;
-	font-size: clamp(48px, 7vw, 88px);
-	line-height: 1.02;
-	font-weight: 500;
-	margin: 0 auto 22px;
-	max-width: 900px;
+	font-size: clamp(76px, 7.2vw, 142px);
+	line-height: 0.96;
+	font-weight: 400;
+	margin: 0 auto 34px;
+	max-width: 1500px;
 }
 
 .home-hero-quote {
 	font-family: Georgia, 'Times New Roman', serif;
-	font-size: clamp(21px, 2.1vw, 30px);
-	line-height: 1.45;
-	max-width: 760px;
-	margin: 0 auto 8px;
+	font-size: clamp(22px, 1.75vw, 34px);
+	font-style: italic;
+	line-height: 1.35;
+	max-width: 1040px;
+	margin: 0 auto 10px;
 }
 
 .home-hero-citation {
 	font-size: 15px;
+	font-weight: 700;
+	letter-spacing: 0.28em;
+	text-transform: uppercase;
 	color: rgba(255, 255, 255, 0.78);
-	margin-bottom: 34px;
+	margin-bottom: 48px;
 }
 
 .home-hero-actions {
@@ -1080,6 +1092,29 @@ html, body, #root {
 	justify-content: center;
 	gap: 16px;
 	flex-wrap: wrap;
+}
+
+.home-hero-button {
+	min-width: 266px;
+	min-height: 68px;
+	padding: 0 32px;
+	border: 1px solid rgba(255, 255, 255, 0.58);
+	background: rgba(255, 255, 255, 0.03);
+	color: #ffffff;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 18px;
+	font-weight: 800;
+	letter-spacing: 0;
+	transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.home-hero-button:hover {
+	background: rgba(255, 255, 255, 0.12);
+	border-color: rgba(255, 255, 255, 0.86);
 }
 
 .home-hero-scroll {

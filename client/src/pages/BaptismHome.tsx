@@ -60,13 +60,13 @@ export default function BaptismHome() {
 				<div className="home-hero-gradient" />
 				<div className="home-hero-radial" />
 				<div className="home-hero-content">
-					<div className="home-hero-eyebrow">Bethany Beyond the Jordan</div>
-					<h1 className="home-hero-title">The Baptism Site of Jesus Christ</h1>
-					<div className="home-hero-quote">Then Jesus came from Galilee to the Jordan to be baptized by John.</div>
-					<div className="home-hero-citation">Matthew 3:13</div>
+					<div className="home-hero-eyebrow">The Baptism Site of Jesus Christ</div>
+					<h1 className="home-hero-title">Bethany Beyond the Jordan</h1>
+					<div className="home-hero-quote">"These things were done in Bethany beyond the Jordan, where John was baptizing."</div>
+					<div className="home-hero-citation">(John 1:28)</div>
 					<div className="home-hero-actions">
-						<a className="cbtn1" href="/baptism/book">Plan Your Visit</a>
-						<a className="bbtn2" href="#baptism-history">Discover The Story</a>
+						<a className="home-hero-button" href="#baptism-history">Discover History</a>
+						<a className="home-hero-button" href="/baptism/book">Plan Your Visit</a>
 					</div>
 				</div>
 				<a className="home-hero-scroll" href="#baptism-experience" aria-label="Scroll to introduction">
