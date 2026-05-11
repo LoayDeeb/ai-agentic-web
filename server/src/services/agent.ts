@@ -53,8 +53,44 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function',
 		function: {
+			name: 'openBaptismBook',
+			description: 'Open the Baptism Site Book Your Trip page at /baptism/book',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: []
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'openBaptismGuidedTours',
+			description: 'Open the Baptism Site guided tours and Biblical Packages page',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: []
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'openBaptismReligiousService',
+			description: 'Open the Baptism Site Mass and Christian Events request page',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: []
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
 			name: 'openBaptismTripPlanner',
-			description: 'Open the Baptism Site trip planning and booking demo at /baptism',
+			description: 'Open the active Baptism Site general booking form at /baptism/book/general',
 			parameters: {
 				type: 'object',
 				properties: {},
@@ -624,7 +660,7 @@ Role and behavior:
 - Be conversational, proactive, warm, and practical.
 - Keep spoken replies short: usually one sentence, maximum two short sentences.
 - Do not explain the full process unless the user asks. Move the booking forward instead.
-- Focus only on the Baptism Site demo route: /baptism.
+- Focus only on the Baptism Site demo routes: /baptism, /baptism/book, /baptism/book/general, /baptism/guided-tours, /baptism/guided-tours/:id/request, and /baptism/religious-service.
 - Help tourists plan and book a meaningful visit to Bethany Beyond the Jordan.
 - Prefer UI actions using tools when they help the user complete the booking journey.
 - Do not invent confirmed availability, clergy confirmations, or payment completion. This demo submits a booking request for coordinator follow-up.
@@ -635,10 +671,12 @@ Experience options:
 - baptism-renewal: hosted visit with reserved prayer time and baptismal-vow renewal support.
 
 Tool policy:
-- Navigation is the priority. For package, experience, visit, tour, plan, booking, reservation, Jordan River, Baptism Site, baptism renewal, price, or itinerary questions, call openBaptismTripPlanner before giving a text answer.
-- Do not answer package or planning questions as text-only. First move the user into the demo UI, then continue with one short sentence.
-- If the user asks about packages, first call openBaptismTripPlanner, then explain the three package choices briefly only after the UI is open.
-- If the user is already on /baptism and asks to plan, book, compare packages, or choose an experience, use scrollToBaptismSection with sectionId "booking" before asking for details.
+- Navigation is the priority. Use a navigation tool before giving a text answer whenever the user asks about package, experience, visit, tour, plan, booking, reservation, Jordan River, Baptism Site, baptism renewal, price, or itinerary.
+- Do not answer package or planning questions as text-only. First move the user into the right demo UI, then continue with one short sentence.
+- For "Book Your Trip", general booking, tickets, reservation, or "start booking", call openBaptismTripPlanner first so the active form is visible.
+- For packages, Biblical Packages, guided tours, itinerary, price comparisons, or tour options, call openBaptismGuidedTours first. If the user chooses a guided package or asks to book it, call openBaptismTripPlanner, then selectBaptismExperience with biblical-package.
+- For Mass, Christian Events, church group, worship visit, clergy, prayer time, or baptism renewal, call openBaptismReligiousService first. If the user wants to request/book it, call openBaptismTripPlanner, then selectBaptismExperience with baptism-renewal.
+- For a user on /baptism who asks to plan, book, compare packages, or choose an experience, navigate to the correct route instead of only talking.
 - Use selectBaptismExperience when the user chooses or implies one of the three experiences.
 - Use scrollToBaptismSection for hero, experience, or booking sections when helpful.
 - Use fillFormField, goToFormStep, getFormData, highlightFormField, clickNext, and submitForm to complete the booking form.
@@ -651,7 +689,7 @@ Booking form fields:
 - Step five: baptismCardNumber, baptismCardName, baptismCardExpiry, baptismCardCvv.
 
 Guided booking flow:
-- Do not stop after opening /baptism. The form must become active and the booking journey must continue.
+- Do not stop after opening a route. If the user wants to book, the active form at /baptism/book/general must become visible and the booking journey must continue.
 - The ideal turn order is: tool call first, then a very short spoken line, then one next question.
 - When the user asks to plan or book, first move the UI to the booking area, then inspect missing data with getFormData.
 - If the user has not selected an experience, ask them to choose general visit, biblical package, or baptism renewal.

@@ -3,7 +3,7 @@ import { CheckCircle, ChevronDown, Menu, ShoppingBag, X } from 'lucide-react'
 import { highlight } from '../features/agent/spotlight'
 import { useFormStore } from '../store/formStore'
 
-const experiences = [
+export const experiences = [
 	{
 		id: 'general-visit',
 		title: 'General Visits',
@@ -44,20 +44,20 @@ const timeSlots = ['08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00', '
 
 const nationalities = ['Jordanian', 'American', 'British', 'French', 'Italian', 'Spanish', 'Canadian', 'Australian', 'German', 'Brazilian', 'Filipino']
 
-function Header() {
+export function Header() {
 	const [mobileOpen, setMobileOpen] = useState(false)
 
 	return (
 		<header className="baptism-site-header">
 			<div className="container-wide">
 				<div className="baptism-header-row">
-					<a href="#baptism-hero" aria-label="The Baptism Site">
+					<a href="/baptism" aria-label="The Baptism Site">
 						<img src="/logo.png" alt="The Baptism Site" className="baptism-logo" />
 					</a>
 
 					<nav className="baptism-nav">
 						{navLinks.map((item) => (
-							<a key={item} href={item === 'Book Your Trip' ? '#baptism-booking' : '#baptism-experience'}>
+							<a key={item} href={item === 'Book Your Trip' ? '/baptism/book' : item === 'Contact Us' ? '#baptism-contact' : '/baptism#baptism-experience'}>
 								{item}
 								{['History', 'Online Tour', 'Visitors Gallery', 'Information'].includes(item) ? <ChevronDown size={14} /> : null}
 							</a>
@@ -66,7 +66,7 @@ function Header() {
 
 					<div className="baptism-actions">
 						<ShoppingBag size={22} />
-						<a className="baptism-profile" href="#baptism-booking" aria-label="Sign in">
+						<a className="baptism-profile" href="/baptism/book/general#baptism-booking" aria-label="Sign in">
 							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
 								<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
 								<circle cx="12" cy="7" r="4" />
@@ -85,7 +85,7 @@ function Header() {
 						{navLinks.map((item) => (
 							<a
 								key={item}
-								href={item === 'Book Your Trip' ? '#baptism-booking' : '#baptism-experience'}
+								href={item === 'Book Your Trip' ? '/baptism/book' : item === 'Contact Us' ? '#baptism-contact' : '/baptism#baptism-experience'}
 								onClick={() => setMobileOpen(false)}
 							>
 								{item}
@@ -98,7 +98,7 @@ function Header() {
 	)
 }
 
-function Footer() {
+export function Footer() {
 	return (
 		<footer className="baptism-footer">
 			<div className="container-wide">
@@ -138,7 +138,7 @@ function Footer() {
 	)
 }
 
-function BookingStepIndicator({ currentStep, submitted }: { currentStep: number; submitted: boolean }) {
+export function BookingStepIndicator({ currentStep, submitted }: { currentStep: number; submitted: boolean }) {
 	return (
 		<div className="baptism-step-grid">
 			{stepItems.map((step, index) => {
@@ -163,7 +163,7 @@ function BookingStepIndicator({ currentStep, submitted }: { currentStep: number;
 	)
 }
 
-function Field({ label, required, error, children }: { label: string; required?: boolean; error?: string; children: React.ReactNode }) {
+export function Field({ label, required, error, children }: { label: string; required?: boolean; error?: string; children: React.ReactNode }) {
 	return (
 		<div className="fieldcol">
 			<label>{label} {required ? <span>*</span> : null}</label>
@@ -295,29 +295,6 @@ export default function BaptismTripPlanner() {
 					<div>
 						<h2 className="ctitle2">Book Your Trip</h2>
 						<p>Plan your visit to the Baptism Site of Jesus Christ, choose the experience that fits your group, and send a request for the visit team to confirm.</p>
-					</div>
-				</div>
-			</section>
-
-			<section id="baptism-experience" className="baptism-book-options">
-				<div className="container-mid">
-					<div className="baptism-book-card-grid">
-						<a href="#baptism-booking" className="booktripimg">
-							<img src="/booktrip-img1.webp" alt="General visits" />
-							<div className="bookinfo">
-								<h3>General Visits</h3>
-								<p>Reserve entry tickets and organize your date, guests, and transport details.</p>
-								<span className="bbtn1">Book General Visit</span>
-							</div>
-						</a>
-						<a href="#baptism-booking" className="booktripimg">
-							<img src="/booktrip-img2.webp" alt="Mass and Christian events" />
-							<div className="bookinfo">
-								<h3>Mass & Christian Events</h3>
-								<p>Request support for groups, worship visits, and baptism-renewal arrangements.</p>
-								<span className="bbtn1">Request Event</span>
-							</div>
-						</a>
 					</div>
 				</div>
 			</section>
