@@ -138,10 +138,18 @@ export function Footer() {
 	)
 }
 
-export function BookingStepIndicator({ currentStep, submitted }: { currentStep: number; submitted: boolean }) {
+export function BookingStepIndicator({
+	currentStep,
+	submitted,
+	items = stepItems,
+}: {
+	currentStep: number
+	submitted: boolean
+	items?: typeof stepItems
+}) {
 	return (
 		<div className="baptism-step-grid">
-			{stepItems.map((step, index) => {
+			{items.map((step, index) => {
 				const number = index + 1
 				const done = submitted || currentStep > number
 				const active = !submitted && currentStep === number
@@ -180,6 +188,12 @@ export default function BaptismTripPlanner() {
 	const setCurrentStep = useFormStore((s) => s.setCurrentStep)
 	const [submitted, setSubmitted] = useState(false)
 	const [errors, setErrors] = useState<Record<string, string>>({})
+	const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
+	const isDirectBookingRoute = pathname.startsWith('/baptism/book/general') || pathname.startsWith('/baptism/guided-tours/')
+	const minStep = isDirectBookingRoute ? 2 : 1
+	const activeStep = Math.max(currentStep, minStep)
+	const indicatorItems = isDirectBookingRoute ? stepItems.slice(1) : stepItems
+	const indicatorStep = isDirectBookingRoute ? Math.max(activeStep - 1, 1) : activeStep
 	const selectedExperience = experiences.find((item) => item.id === formData.baptismExperience) || experiences[0]
 	const guestCount = Math.max(Number(formData.baptismGuests || 0), 0)
 	const estimatedTotal = selectedExperience.price.includes('Request')
@@ -191,6 +205,17 @@ export default function BaptismTripPlanner() {
 		document.documentElement.dir = 'ltr'
 		document.documentElement.lang = 'en'
 	}, [])
+
+	useEffect(() => {
+		if (!isDirectBookingRoute) return
+		const defaultExperience = pathname.startsWith('/baptism/guided-tours/') ? 'biblical-package' : 'general-visit'
+		if (formData.baptismExperience !== defaultExperience) {
+			setField('baptismExperience', defaultExperience)
+		}
+		if (currentStep < 2) {
+			setCurrentStep(2)
+		}
+	}, [currentStep, formData.baptismExperience, isDirectBookingRoute, pathname, setCurrentStep, setField])
 
 	useEffect(() => {
 		const handler = (e: Event) => {
@@ -216,7 +241,7 @@ export default function BaptismTripPlanner() {
 				input?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 				if (input) highlight(`[name="${args.fieldName}"]`, args.duration || 3)
 			}
-			if (tool === 'submitForm' && currentStep === 5) handleSubmit()
+			if (tool === 'submitForm' && activeStep === 5) handleSubmit()
 			if (tool === 'scrollToBaptismSection') {
 				const id = `baptism-${args.sectionId}`
 				document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -226,7 +251,7 @@ export default function BaptismTripPlanner() {
 
 		window.addEventListener('agentTool', handler)
 		return () => window.removeEventListener('agentTool', handler)
-	}, [currentStep, setCurrentStep, setField])
+	}, [activeStep, setCurrentStep, setField])
 
 	const steps = useMemo(() => stepItems, [])
 
@@ -263,13 +288,13 @@ export default function BaptismTripPlanner() {
 	}
 
 	const handleNext = () => {
-		if (!validateStep(currentStep)) return
-		setCurrentStep(Math.min(currentStep + 1, 5))
+		if (!validateStep(activeStep)) return
+		setCurrentStep(Math.min(activeStep + 1, 5))
 		document.getElementById('baptism-booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 	}
 
 	const handleBack = () => {
-		setCurrentStep(Math.max(currentStep - 1, 1))
+		setCurrentStep(Math.max(activeStep - 1, minStep))
 		document.getElementById('baptism-booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 	}
 
@@ -285,7 +310,7 @@ export default function BaptismTripPlanner() {
 			<section id="baptism-hero" className="innerbanner2" style={{ backgroundImage: 'url(/inner-banner8.webp)' }}>
 				<div className="texts">
 					<div className="midcontainer">
-						<h1 className="ctitle2 text-center">Book Your Trip</h1>
+						<h1 className="ctitle2 text-center">{isDirectBookingRoute ? selectedExperience.title : 'Book Your Trip'}</h1>
 					</div>
 				</div>
 			</section>
@@ -293,19 +318,19 @@ export default function BaptismTripPlanner() {
 			<section className="baptism-book-intro">
 				<div className="container-mid">
 					<div>
-						<h2 className="ctitle2">Book Your Trip</h2>
-						<p>Plan your visit to the Baptism Site of Jesus Christ, choose the experience that fits your group, and send a request for the visit team to confirm.</p>
+						<h2 className="ctitle2">{isDirectBookingRoute ? `${selectedExperience.title} Booking` : 'Book Your Trip'}</h2>
+						<p>{isDirectBookingRoute ? 'Select your visit date, visitor details, confirmations, and demo payment information.' : 'Plan your visit to the Baptism Site of Jesus Christ, choose the experience that fits your group, and send a request for the visit team to confirm.'}</p>
 					</div>
 				</div>
 			</section>
 
 			<section id="baptism-booking" className="clssteps">
 				<div className="container-mid">
-					<BookingStepIndicator currentStep={currentStep} submitted={submitted} />
+					<BookingStepIndicator currentStep={indicatorStep} submitted={submitted} items={indicatorItems} />
 
 					<div className="baptism-form-shell">
 						<div className="baptism-form-main">
-							{!submitted && currentStep === 1 && (
+							{!submitted && activeStep === 1 && (
 								<div>
 									<div className="tabheading ctextinfo">
 										<h2 className="font30">Select Experience</h2>
@@ -338,7 +363,7 @@ export default function BaptismTripPlanner() {
 								</div>
 							)}
 
-							{!submitted && currentStep === 2 && (
+							{!submitted && activeStep === 2 && (
 								<div>
 									<div className="tabheading ctextinfo">
 										<h2 className="font30">Date & Trip Details</h2>
@@ -385,7 +410,7 @@ export default function BaptismTripPlanner() {
 								</div>
 							)}
 
-							{!submitted && currentStep === 3 && (
+							{!submitted && activeStep === 3 && (
 								<div>
 									<div className="tabheading ctextinfo">
 										<h2 className="font30">Visitor Details</h2>
@@ -431,7 +456,7 @@ export default function BaptismTripPlanner() {
 								</div>
 							)}
 
-							{!submitted && currentStep === 4 && (
+							{!submitted && activeStep === 4 && (
 								<div className="rcconts">
 									<div className="tabheading ctextinfo">
 										<h2 className="font30">Review & Confirm</h2>
@@ -482,7 +507,7 @@ export default function BaptismTripPlanner() {
 								</div>
 							)}
 
-							{!submitted && currentStep === 5 && (
+							{!submitted && activeStep === 5 && (
 								<div>
 									<div className="tabheading ctextinfo">
 										<h2 className="font30">Payment</h2>
@@ -526,8 +551,8 @@ export default function BaptismTripPlanner() {
 
 							{!submitted && (
 								<div className="baptism-button-row">
-									{currentStep > 1 ? <button className="bbtn2" onClick={handleBack}>Back</button> : <span />}
-									{currentStep < 5 ? (
+									{activeStep > minStep ? <button className="bbtn2" onClick={handleBack}>Back</button> : <span />}
+									{activeStep < 5 ? (
 										<button className="cbtn1" onClick={handleNext}>Next</button>
 									) : (
 										<button className="cbtn1 cbtn2" onClick={handleSubmit}>Pay & Complete Booking</button>
