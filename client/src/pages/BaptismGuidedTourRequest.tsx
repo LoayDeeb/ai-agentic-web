@@ -9,9 +9,8 @@ type Visitor = {
 	dateOfBirth: string
 }
 
-const emptyVisitor = (): Visitor => ({ name: '', nationality: '', dateOfBirth: '' })
-
-const nationalities = ['Jordanian', 'American', 'British', 'French', 'Italian', 'Spanish', 'Canadian', 'Australian', 'German', 'Brazilian', 'Filipino']
+const defaultVisitor: Visitor = { name: 'Malak', nationality: 'American', dateOfBirth: '1985-12-02' }
+const emptyVisitor = (): Visitor => ({ ...defaultVisitor })
 
 const inputStyle: React.CSSProperties = {
 	width: '100%',
@@ -40,7 +39,6 @@ export default function BaptismGuidedTourRequest() {
 	const itinerary = getBaptismGuidedItinerary(id)
 	const [preferredDate, setPreferredDate] = useState('')
 	const [groupSize, setGroupSize] = useState(1)
-	const [notes, setNotes] = useState('')
 	const [accessibilityRequired, setAccessibility] = useState(false)
 	const [visitors, setVisitors] = useState<Visitor[]>([emptyVisitor()])
 	const [error, setError] = useState<string | null>(null)
@@ -55,14 +53,6 @@ export default function BaptismGuidedTourRequest() {
 			return prev.slice(0, groupSize)
 		})
 	}, [groupSize])
-
-	function updateVisitor(index: number, field: keyof Visitor, value: string) {
-		setVisitors((prev) => {
-			const next = [...prev]
-			next[index] = { ...next[index], [field]: value }
-			return next
-		})
-	}
 
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault()
@@ -97,7 +87,7 @@ export default function BaptismGuidedTourRequest() {
 						{itinerary.title}
 					</h1>
 					<p style={{ color: '#B8C5CC', fontSize: 14, margin: 0 }}>
-						Share your preferred date and traveler details so operators can send suitable offers.
+						Choose your preferred date, group size, and accessibility needs so operators can send suitable offers.
 					</p>
 				</div>
 			</section>
@@ -120,7 +110,7 @@ export default function BaptismGuidedTourRequest() {
 								Your request for <strong>{itinerary.title}</strong> has been received.
 							</p>
 							<p style={{ color: '#6E6E6E', fontSize: 14, lineHeight: '22px', margin: '0 0 32px', maxWidth: 400, marginLeft: 'auto', marginRight: 'auto' }}>
-								Tour operators will review the details and prepare offers for your four-day Jordan visit.
+								Tour operators will review the request for {visitors[0].name} and prepare offers for your four-day Jordan visit.
 							</p>
 							<Link to="/baptism/guided-tours" style={{ color: '#A58D67', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>
 								Browse more tours
@@ -162,40 +152,6 @@ export default function BaptismGuidedTourRequest() {
 								</div>
 							</div>
 
-							<p style={{ fontSize: 11, fontWeight: 700, color: '#A58D67', textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 16px' }}>
-								Visitor details
-							</p>
-
-							{visitors.map((visitor, index) => (
-								<div key={index} style={{ background: index === 0 ? '#F7F5F2' : '#FAFCFF', border: `1px solid ${index === 0 ? '#DDD5C5' : '#D6D2CC'}`, borderRadius: 8, padding: '16px 18px', marginBottom: 12 }}>
-									<p style={{ fontSize: 12, fontWeight: 700, color: index === 0 ? '#A58D67' : '#6E7F8A', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 14px' }}>
-										{index === 0 ? 'Visitor 1' : `Visitor ${index + 1}`}
-									</p>
-									<div className="baptism-guided-request-visitor-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0 14px' }}>
-										<div>
-											<label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#083B50', marginBottom: 6 }}>Full name</label>
-											<input type="text" value={visitor.name} placeholder="Full name" onChange={(e) => updateVisitor(index, 'name', e.target.value)} style={inputStyle} onFocus={focus} onBlur={blur} autoComplete="new-password" />
-										</div>
-										<div>
-											<label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#083B50', marginBottom: 6 }}>Nationality</label>
-											<div style={{ position: 'relative' }}>
-												<select value={visitor.nationality} onChange={(e) => updateVisitor(index, 'nationality', e.target.value)} style={{ ...inputStyle, appearance: 'none', WebkitAppearance: 'none', paddingRight: 32, color: visitor.nationality ? '#083B50' : '#9E9E9E' }} onFocus={focus} onBlur={blur} autoComplete="off">
-													<option value="">Select nationality</option>
-													{nationalities.map((nationality) => <option key={nationality} value={nationality}>{nationality}</option>)}
-												</select>
-												<svg width="10" height="6" viewBox="0 0 12 8" style={{ position: 'absolute', right: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} fill="none">
-													<path d="M1 1L6 7L11 1" stroke="#6E6E6E" strokeWidth="1.5" strokeLinecap="round" />
-												</svg>
-											</div>
-										</div>
-										<div>
-											<label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#083B50', marginBottom: 6 }}>Date of birth</label>
-											<input type="date" value={visitor.dateOfBirth} max={new Date().toISOString().slice(0, 10)} onChange={(e) => updateVisitor(index, 'dateOfBirth', e.target.value)} style={inputStyle} onFocus={focus} onBlur={blur} autoComplete="new-password" />
-										</div>
-									</div>
-								</div>
-							))}
-
 							<div style={{ marginTop: 8, marginBottom: 20 }}>
 								<label onClick={() => setAccessibility((value) => !value)} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, cursor: 'pointer', border: `1.5px solid ${accessibilityRequired ? '#083B50' : '#E0D9CE'}`, borderRadius: 8, padding: '16px 18px', background: accessibilityRequired ? '#F0F4F7' : '#FAFAF9', transition: 'all 0.2s', userSelect: 'none' }}>
 									<div style={{ width: 20, height: 20, borderRadius: 4, flexShrink: 0, marginTop: 2, border: `2px solid ${accessibilityRequired ? '#083B50' : '#C0B8B0'}`, background: accessibilityRequired ? '#083B50' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
@@ -215,13 +171,6 @@ export default function BaptismGuidedTourRequest() {
 										</p>
 									</div>
 								</label>
-							</div>
-
-							<div style={{ marginBottom: 28 }}>
-								<label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#083B50', marginBottom: 7 }}>
-									Notes
-								</label>
-								<textarea value={notes} rows={3} placeholder="Any special requests, arrival details, or guide preferences." onChange={(e) => setNotes(e.target.value)} style={{ ...inputStyle, resize: 'vertical' }} onFocus={focus} onBlur={blur} />
 							</div>
 
 							<button type="submit" disabled={submitting} style={{ width: '100%', padding: 15, background: submitting ? '#C9B99A' : '#083B50', color: '#fff', border: 'none', borderRadius: 6, fontSize: 13, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: submitting ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}>
