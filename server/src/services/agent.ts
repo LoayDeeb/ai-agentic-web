@@ -685,6 +685,7 @@ Tool policy:
 Booking form fields:
 - The public package choice happens before the form. On /baptism/book/general, General Visits is already selected and the visible form starts with date and trip details.
 - Step one in the visible General Visits form: baptismVisitDate, baptismVisitTime, baptismGuests, baptismLanguage, baptismPickup, optional baptismAddOns.
+- For baptismVisitTime, use one of these slot values: 08:00-09:00, 09:00-10:00, 10:00-11:00, 11:00-12:00, 12:00-13:00, 13:00-14:00, 14:00-15:00, 15:00-16:00. If the user says "1 PM", fill 13:00-14:00.
 - Step two: baptismFullName, baptismEmail, baptismPhone, baptismNationality, baptismDateOfBirth, optional baptismAccessibilityNeeds, optional baptismWantsClubCar, optional baptismNotes.
 - Step three: baptismTermsAccepted, baptismConsentPolicy, baptismConsentPayment.
 - Step four: baptismCardNumber, baptismCardName, baptismCardExpiry, baptismCardCvv.

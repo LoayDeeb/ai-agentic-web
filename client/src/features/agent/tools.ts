@@ -24,6 +24,29 @@ function buildGigInsurancePath(target: string) {
 	return `/gig/insurance/${encodeURIComponent(target)}`
 }
 
+const baptismTimeSlots = ['08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00']
+
+function normalizeBaptismVisitTime(value: unknown) {
+	const raw = String(value ?? '').trim()
+	if (!raw) return raw
+	if (baptismTimeSlots.includes(raw)) return raw
+
+	const compact = raw.toLowerCase().replace(/\./g, '').replace(/\s+/g, ' ')
+	const hourMatch = compact.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/)
+	if (!hourMatch) return raw
+
+	let hour = Number(hourMatch[1])
+	const minute = Number(hourMatch[2] || '0')
+	const period = hourMatch[3]
+	if (period === 'pm' && hour < 12) hour += 12
+	if (period === 'am' && hour === 12) hour = 0
+	if (!period && hour < 8) hour += 12
+	if (minute >= 30) hour += 1
+
+	const slot = baptismTimeSlots.find((item) => Number(item.slice(0, 2)) === hour)
+	return slot || raw
+}
+
 const gigInsuranceLabels: Record<string, string> = {
 	gig_home: 'الرئيسية',
 	crown_family_overview: 'كراون عائلتي',
@@ -359,9 +382,13 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 		case 'fillFormField': {
 			const store = useFormStore.getState()
 			// Handle boolean values for checkboxes (like termsAccepted)
-			const val = args.value === 'true' ? true : args.value === 'false' ? false : args.value
+			let val = args.value === 'true' ? true : args.value === 'false' ? false : args.value
+			if (args.fieldName === 'baptismVisitTime') {
+				val = normalizeBaptismVisitTime(val)
+			}
+			const normalizedArgs = { ...args, value: val }
 			store.setField(args.fieldName as any, val)
-			emitToolEvent('fillFormField', args)
+			emitToolEvent('fillFormField', normalizedArgs)
 			return { success: true, field: args.fieldName, value: val }
 		}
 
