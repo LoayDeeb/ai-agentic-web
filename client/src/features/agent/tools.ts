@@ -380,7 +380,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			const path = typeof window !== 'undefined' ? window.location.pathname : ''
 			let maxStep = 3
 			if (path.startsWith('/gig/advisor-request')) maxStep = 2
-			if (path.startsWith('/baptism')) maxStep = 4
+			if (path.startsWith('/baptism')) maxStep = 5
 			const nextStep = Math.min(currentStep + 1, maxStep)
 			store.setCurrentStep(nextStep)
 			emitToolEvent('goToFormStep', { step: nextStep })

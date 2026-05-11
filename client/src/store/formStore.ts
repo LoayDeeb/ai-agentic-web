@@ -133,13 +133,24 @@ export type FormData = {
 	baptismPhone: string
 	baptismCountry: string
 	baptismVisitDate: string
+	baptismVisitTime: string
 	baptismGuests: string
 	baptismExperience: string
 	baptismLanguage: string
 	baptismPickup: string
+	baptismNationality: string
+	baptismDateOfBirth: string
+	baptismAccessibilityNeeds: string
+	baptismWantsClubCar: boolean
 	baptismAddOns: string
 	baptismNotes: string
 	baptismTermsAccepted: boolean
+	baptismConsentPolicy: boolean
+	baptismConsentPayment: boolean
+	baptismCardNumber: string
+	baptismCardName: string
+	baptismCardExpiry: string
+	baptismCardCvv: string
 }
 
 type FormStore = {
@@ -286,13 +297,24 @@ const initialFormData: FormData = {
 	baptismPhone: '',
 	baptismCountry: '',
 	baptismVisitDate: '',
+	baptismVisitTime: '',
 	baptismGuests: '',
 	baptismExperience: '',
 	baptismLanguage: '',
 	baptismPickup: '',
+	baptismNationality: '',
+	baptismDateOfBirth: '',
+	baptismAccessibilityNeeds: '',
+	baptismWantsClubCar: false,
 	baptismAddOns: '',
 	baptismNotes: '',
-	baptismTermsAccepted: false
+	baptismTermsAccepted: false,
+	baptismConsentPolicy: false,
+	baptismConsentPayment: false,
+	baptismCardNumber: '',
+	baptismCardName: '',
+	baptismCardExpiry: '',
+	baptismCardCvv: ''
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({
@@ -403,13 +425,21 @@ export const useFormStore = create<FormStore>((set, get) => ({
 				'baptismFullName',
 				'baptismEmail',
 				'baptismPhone',
-				'baptismCountry',
+				'baptismNationality',
+				'baptismDateOfBirth',
 				'baptismVisitDate',
+				'baptismVisitTime',
 				'baptismGuests',
 				'baptismExperience',
 				'baptismLanguage',
 				'baptismPickup',
-				'baptismTermsAccepted'
+				'baptismTermsAccepted',
+				'baptismConsentPolicy',
+				'baptismConsentPayment',
+				'baptismCardNumber',
+				'baptismCardName',
+				'baptismCardExpiry',
+				'baptismCardCvv'
 			]
 		}
 		return required.filter((field) => !data[field as keyof FormData])

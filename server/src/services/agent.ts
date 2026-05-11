@@ -174,7 +174,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 				properties: {
 					fieldName: {
 						type: 'string',
-						description: 'The form field name. ZATCA fields: tin, taxPeriod, amountDue, requestedInstallments, justification, bankName, accountNumber, contactEmail, contactPhone. SASO fields: sasoApplicantName, sasoNationalId, sasoMobile, sasoChassisNumber, sasoCustomsNumber, sasoVehicleType, sasoTermsAccepted. JICO fields: insuranceFullName, insuranceNationalId, insuranceDateOfBirth, insurancePhone, insuranceEmail, insuranceAddress, insurancePlanType, insuranceCoverageClass, insuranceFamilyMembers, insuranceOccupation, insurancePreExisting, insuranceInsuranceTerms. Baptism fields: baptismFullName, baptismEmail, baptismPhone, baptismCountry, baptismVisitDate, baptismGuests, baptismExperience, baptismLanguage, baptismPickup, baptismAddOns, baptismNotes, baptismTermsAccepted'
+						description: 'The form field name. ZATCA fields: tin, taxPeriod, amountDue, requestedInstallments, justification, bankName, accountNumber, contactEmail, contactPhone. SASO fields: sasoApplicantName, sasoNationalId, sasoMobile, sasoChassisNumber, sasoCustomsNumber, sasoVehicleType, sasoTermsAccepted. JICO fields: insuranceFullName, insuranceNationalId, insuranceDateOfBirth, insurancePhone, insuranceEmail, insuranceAddress, insurancePlanType, insuranceCoverageClass, insuranceFamilyMembers, insuranceOccupation, insurancePreExisting, insuranceInsuranceTerms. Baptism fields: baptismExperience, baptismVisitDate, baptismVisitTime, baptismGuests, baptismLanguage, baptismPickup, baptismFullName, baptismEmail, baptismPhone, baptismNationality, baptismDateOfBirth, baptismAccessibilityNeeds, baptismWantsClubCar, baptismAddOns, baptismNotes, baptismTermsAccepted, baptismConsentPolicy, baptismConsentPayment, baptismCardNumber, baptismCardName, baptismCardExpiry, baptismCardCvv'
 					},
 					value: {
 						type: 'string',
@@ -188,7 +188,7 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function', function: {
 			name: 'goToFormStep',
-			description: 'Navigate to a specific step in the active multi-step form. Baptism uses steps 1-4; most other demos use 1-3.',
+			description: 'Navigate to a specific step in the active multi-step form. Baptism uses steps 1-5; most other demos use 1-3.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -645,9 +645,10 @@ Tool policy:
 
 Booking form fields:
 - Step one: baptismExperience.
-- Step two: baptismVisitDate, baptismGuests, baptismLanguage, baptismPickup, optional baptismAddOns.
-- Step three: baptismFullName, baptismCountry, baptismEmail, baptismPhone, optional baptismNotes.
-- Step four: baptismTermsAccepted.
+- Step two: baptismVisitDate, baptismVisitTime, baptismGuests, baptismLanguage, baptismPickup, optional baptismAddOns.
+- Step three: baptismFullName, baptismEmail, baptismPhone, baptismNationality, baptismDateOfBirth, optional baptismAccessibilityNeeds, optional baptismWantsClubCar, optional baptismNotes.
+- Step four: baptismTermsAccepted, baptismConsentPolicy, baptismConsentPayment.
+- Step five: baptismCardNumber, baptismCardName, baptismCardExpiry, baptismCardCvv.
 
 Guided booking flow:
 - Do not stop after opening /baptism. The form must become active and the booking journey must continue.
@@ -662,14 +663,18 @@ Guided booking flow:
 - Avoid long summaries during the flow. Acknowledge tool actions briefly, then ask only for the next missing detail.
 - If the user gives clear information, fill it immediately with fillFormField before replying.
 - After completing a step, call clickNext.
-- Before final submission, summarize the captured trip details briefly and ask for explicit confirmation.
-- Call submitForm only after the user confirms.
+- Before moving from review to payment, summarize the captured trip details briefly and ask for explicit confirmation.
+- Use clickNext to move to payment after the three consent checkboxes are accepted.
+- Call submitForm only after payment fields are filled and the user confirms completion.
 
 Useful planning details:
 - The site is open daily from 8:00 AM to 4:00 PM.
+- Entry time slots are hourly from 08:00-09:00 through 15:00-16:00.
 - It is about forty-five minutes from Amman.
 - Suggested stops include the Visitor Center, Elijah's Hill, John's Spring, ancient pools, the Jordan River, and the pilgrim chapel.
 - Pickup options in the demo are own transport, Amman hotel, Dead Sea hotel, and airport transfer request.
+- Nationality and date of birth are required because the real site prices tickets by visitor category.
+- Club Car is an optional add-on for internal site transport.
 
 Safety:
 - Do not provide formal religious, legal, or travel-entry advice.
