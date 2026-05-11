@@ -64,6 +64,8 @@ const BaptismBook = React.lazy(() => import('./pages/BaptismBook'))
 const BaptismGeneralVisitsTours = React.lazy(() => import('./pages/BaptismGeneralVisitsTours'))
 const BaptismTripPlanner = React.lazy(() => import('./pages/BaptismTripPlanner'))
 const BaptismGuidedTours = React.lazy(() => import('./pages/BaptismGuidedTours'))
+const BaptismGuidedTourDetail = React.lazy(() => import('./pages/BaptismGuidedTourDetail'))
+const BaptismGuidedTourRequest = React.lazy(() => import('./pages/BaptismGuidedTourRequest'))
 const BaptismReligiousService = React.lazy(() => import('./pages/BaptismReligiousService'))
 
 export default function App() {
@@ -161,7 +163,8 @@ export default function App() {
 					<Route path="/baptism/book/general" element={<BaptismGeneralVisitsTours />} />
 					<Route path="/baptism/book/general/visit" element={<BaptismTripPlanner />} />
 					<Route path="/baptism/guided-tours" element={<BaptismGuidedTours />} />
-					<Route path="/baptism/guided-tours/:id/request" element={<BaptismTripPlanner />} />
+					<Route path="/baptism/guided-tours/:id/request" element={<BaptismGuidedTourRequest />} />
+					<Route path="/baptism/guided-tours/:id" element={<BaptismGuidedTourDetail />} />
 					<Route path="/baptism/book/religious" element={<BaptismReligiousService />} />
 					<Route path="/baptism/religious-service" element={<BaptismReligiousService />} />
 

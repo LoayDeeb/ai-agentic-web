@@ -1328,7 +1328,8 @@ html, body, #root {
 	}
 
 	.baptism-home-two-col,
-	.baptism-guided-card {
+	.baptism-guided-card,
+	.baptism-guided-detail-grid {
 		grid-template-columns: 1fr;
 	}
 
@@ -1353,7 +1354,8 @@ html, body, #root {
 	.baptism-book-card-grid,
 	.form-grid,
 	.baptism-payment-grid,
-	.baptism-step-grid {
+	.baptism-step-grid,
+	.baptism-guided-request-visitor-grid {
 		grid-template-columns: 1fr;
 	}
 

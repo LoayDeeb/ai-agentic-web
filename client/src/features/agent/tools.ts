@@ -141,14 +141,6 @@ export function onToolEvent(callback: (tool: string, args: any) => void) {
 	return () => window.removeEventListener('agentTool', handler)
 }
 
-function hardNavigateTo(path: string) {
-	if (typeof window !== 'undefined') {
-		window.location.assign(path)
-		return
-	}
-	navigateTo(path)
-}
-
 function smartNavigateTo(path: string) {
 	if (typeof window === 'undefined') {
 		navigateTo(path)
@@ -169,6 +161,8 @@ function smartNavigateTo(path: string) {
 
 function shouldUseHardNavigation(path: string) {
 	return (
+		path.startsWith('http://') ||
+		path.startsWith('https://') ||
 		path === '/eshop' ||
 		path.startsWith('/eshop/checkout') ||
 		path.startsWith('/eshop/product/')
@@ -231,6 +225,22 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 		case 'openBaptismGuidedTours':
 			navigateTo('/baptism/guided-tours')
 			return { success: true, navigatedTo: '/baptism/guided-tours' }
+
+		case 'openBaptismFourDayJordanItinerary':
+			navigateTo('/baptism/guided-tours/4')
+			window.setTimeout(() => {
+				document.querySelector('[data-itinerary-detail="4"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+				highlight('[data-itinerary-detail="4"]', 4)
+			}, 180)
+			return { success: true, navigatedTo: '/baptism/guided-tours/4', itineraryId: 4 }
+
+		case 'openBaptismFourDayTourRequest':
+			navigateTo('/baptism/guided-tours/4/request')
+			window.setTimeout(() => {
+				document.querySelector('[data-guided-request="4"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+				highlight('[data-guided-request="4"]', 4)
+			}, 180)
+			return { success: true, navigatedTo: '/baptism/guided-tours/4/request', itineraryId: 4 }
 
 		case 'openBaptismReligiousService':
 			navigateTo('/baptism/religious-service')

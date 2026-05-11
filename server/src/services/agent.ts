@@ -77,6 +77,30 @@ const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
 	{
 		type: 'function',
 		function: {
+			name: 'openBaptismFourDayJordanItinerary',
+			description: 'Open the recommended 4-day Jordan guided-tour itinerary detail page at /baptism/guided-tours/4',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: []
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'openBaptismFourDayTourRequest',
+			description: 'Open the no-sign-in guided-tour operator request page for itinerary 4 after the user confirms',
+			parameters: {
+				type: 'object',
+				properties: {},
+				required: []
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
 			name: 'openBaptismReligiousService',
 			description: 'Open the Baptism Site Mass and Christian Events request page',
 			parameters: {
@@ -660,7 +684,7 @@ Role and behavior:
 - Be conversational, proactive, warm, and practical.
 - Keep spoken replies short: usually one sentence, maximum two short sentences.
 - Do not explain the full process unless the user asks. Move the booking forward instead.
-- Focus only on the Baptism Site demo routes: /baptism, /baptism/book, /baptism/book/general, /baptism/book/general/visit, /baptism/guided-tours, /baptism/guided-tours/:id/request, /baptism/book/religious, and /baptism/religious-service.
+- Focus only on the Baptism Site demo routes: /baptism, /baptism/book, /baptism/book/general, /baptism/book/general/visit, /baptism/guided-tours, /baptism/guided-tours/4, /baptism/guided-tours/4/request, /baptism/book/religious, and /baptism/religious-service.
 - Help tourists plan and book a meaningful visit to Bethany Beyond the Jordan.
 - Prefer UI actions using tools when they help the user complete the booking journey.
 - Do not invent confirmed availability, clergy confirmations, or payment completion. This demo submits a booking request for coordinator follow-up.
@@ -673,10 +697,12 @@ Experience options:
 Tool policy:
 - Navigation is the priority. Use a navigation tool before giving a text answer whenever the user asks about package, experience, visit, tour, plan, booking, reservation, Jordan River, Baptism Site, baptism renewal, price, or itinerary.
 - Do not answer package or planning questions as text-only. First move the user into the right demo UI, then continue with one short sentence.
+- If the user says they want to come to Jordan and stay for four days, or otherwise gives a 4-day Jordan trip intent, call openBaptismFourDayJordanItinerary first. Then say exactly one short recommendation: "I recommend Biblical Jordan I - 4 Days because it fits your stay: Amman arrival, Madaba, Mount Nebo, the Baptism Site, Dead Sea, Petra, and departure. I can check with tour operators for offers; do you confirm?"
+- Do not call openBaptismFourDayTourRequest until the user explicitly confirms after that recommendation. If they confirm with yes, sure, confirm, go ahead, or similar, call openBaptismFourDayTourRequest. This opens /baptism/guided-tours/4/request directly and skips any sign-in step.
 - For broad visit intent like "I want to come visit", "I want to visit", "plan a visit", "show me options", or "what can I book", call openBaptismBook first so the user sees the two top-level choices: General Visits & Tours and Mass & Christian Events.
 - If the user chooses General Visits & Tours but has not chosen between General Visit and Biblical Packages, navigate to /baptism/book/general using navigateTo so they see those two options.
 - For explicit General Visit, tickets, reservation, or "start booking the general visit", call openBaptismTripPlanner. It opens the active General Visit form directly at date and visitor details; do not ask the user to choose General Visit again.
-- For packages, Biblical Packages, guided tours, itinerary, price comparisons, or tour options, call openBaptismGuidedTours first. If the user chooses a guided package or asks to book it, call openBaptismTripPlanner, then selectBaptismExperience with biblical-package.
+- For packages, Biblical Packages, guided tours, itinerary, price comparisons, or tour options, call openBaptismGuidedTours first. If the user specifically wants the 4-day Jordan itinerary, call openBaptismFourDayJordanItinerary. If they confirm operator offers for that itinerary, call openBaptismFourDayTourRequest.
 - For Mass, Christian Events, church group, worship visit, clergy, prayer time, or baptism renewal, call openBaptismReligiousService first. If the user wants to request/book it, call openBaptismTripPlanner, then selectBaptismExperience with baptism-renewal.
 - For a user on /baptism who asks to plan, book, compare packages, or choose an experience, navigate to the correct route instead of only talking.
 - Use selectBaptismExperience when the user chooses or implies one of the three experiences.
