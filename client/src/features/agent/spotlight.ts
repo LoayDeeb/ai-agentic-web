@@ -20,11 +20,11 @@ export function highlight(selector: string, seconds = 3, attempt = 0) {
 	if (!spotlightEl) {
 		spotlightEl = document.createElement('div')
 		spotlightEl.style.position = 'absolute'
-		spotlightEl.style.border = '2px solid #FFD700' // Gold/Yellow border
-		spotlightEl.style.backgroundColor = 'rgba(255, 215, 0, 0.2)' // Yellow tint
-		spotlightEl.style.borderRadius = '12px'
+		spotlightEl.style.border = '1px solid rgba(8, 59, 80, 0.35)'
+		spotlightEl.style.backgroundColor = 'rgba(8, 59, 80, 0.06)'
+		spotlightEl.style.borderRadius = '8px'
 		spotlightEl.style.pointerEvents = 'none'
-		spotlightEl.style.boxShadow = '0 0 0 4px rgba(255, 215, 0, 0.2)' // Yellow glow
+		spotlightEl.style.boxShadow = '0 0 0 3px rgba(8, 59, 80, 0.08)'
 		spotlightEl.style.transition = 'opacity 0.2s ease-out'
 		spotlightEl.style.zIndex = '9999'
 		document.body.appendChild(spotlightEl)
@@ -44,5 +44,4 @@ export function highlight(selector: string, seconds = 3, attempt = 0) {
 		if (spotlightEl) spotlightEl.style.opacity = '0'
 	}, seconds * 1000)
 }
-
 
