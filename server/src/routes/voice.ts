@@ -29,6 +29,15 @@ type VoiceSessionState = {
 
 const voiceSessions = new Map<string, VoiceSessionState>()
 
+function normalizeUrlPath(url: string | undefined) {
+	if (!url) return ''
+	try {
+		return new URL(url, 'http://local').pathname.toLowerCase()
+	} catch {
+		return url.toLowerCase()
+	}
+}
+
 function createVoiceSessionState(): VoiceSessionState {
 	return {
 		conversationHistory: [],
@@ -42,36 +51,36 @@ function createVoiceSessionState(): VoiceSessionState {
 
 // Helper to select the appropriate agent based on current URL
 function selectAgentStream(url: string | undefined) {
-	const normalizedUrl = url?.toLowerCase()
-	if (normalizedUrl?.startsWith('/moin')) {
+	const normalizedUrl = normalizeUrlPath(url)
+	if (normalizedUrl.startsWith('/moin')) {
 		logger.info({ url }, 'Using MOIN Agent')
 		return streamMoinAgentResponse
 	}
-	if (normalizedUrl?.startsWith('/mawhiba')) {
+	if (normalizedUrl.startsWith('/mawhiba')) {
 		logger.info({ url }, 'Using Mawhiba Agent')
 		return streamMawhibaAgentResponse
 	}
-	if (normalizedUrl?.startsWith('/zain')) {
+	if (normalizedUrl.startsWith('/zain')) {
 		logger.info({ url }, 'Using Zain Jordan Agent')
 		return streamZainAgentResponse
 	}
-	if (normalizedUrl?.startsWith('/eshop')) {
+	if (normalizedUrl.startsWith('/eshop')) {
 		logger.info({ url }, 'Using Zain Jordan eShop Agent')
 		return streamZainAgentResponse
 	}
-	if (normalizedUrl?.startsWith('/gig')) {
+	if (normalizedUrl.startsWith('/gig')) {
 		logger.info({ url }, 'Using GIG Jordan Agent')
 		return streamGigAgentResponse
 	}
-	if (normalizedUrl?.startsWith('/bahraincredit') || normalizedUrl?.startsWith('/tamkeenbahrain')) {
+	if (normalizedUrl.startsWith('/bahraincredit') || normalizedUrl.startsWith('/tamkeenbahrain')) {
 		logger.info({ url }, 'Using Tamkeen Bahrain Agent')
 		return streamTamkeenBahrainAgentResponse
 	}
-	if (normalizedUrl?.startsWith('/ef-ar')) {
+	if (normalizedUrl.startsWith('/ef-ar')) {
 		logger.info({ url }, 'Using EF Arabic Agent')
 		return streamEFAgentArResponse
 	}
-	if (normalizedUrl?.startsWith('/ef')) {
+	if (normalizedUrl.startsWith('/ef')) {
 		logger.info({ url }, 'Using EF Agent')
 		return streamEFAgentResponse
 	}
@@ -81,14 +90,12 @@ function selectAgentStream(url: string | undefined) {
 }
 
 function isSasoUrl(url: string | undefined) {
-	return url?.toLowerCase().startsWith('/saso') ?? false
+	return normalizeUrlPath(url).startsWith('/saso')
 }
 
 function isBahrainCreditUrl(url: string | undefined) {
-	return (
-		url?.toLowerCase().startsWith('/bahraincredit') ||
-		url?.toLowerCase().startsWith('/tamkeenbahrain')
-	) ?? false
+	const normalizedUrl = normalizeUrlPath(url)
+	return normalizedUrl.startsWith('/bahraincredit') || normalizedUrl.startsWith('/tamkeenbahrain')
 }
 
 function resolveTtsConfigForUrl(url: string | undefined): TTSConfig {

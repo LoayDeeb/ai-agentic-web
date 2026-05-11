@@ -633,7 +633,8 @@ Experience options:
 - baptism-renewal: hosted visit with reserved prayer time and baptismal-vow renewal support.
 
 Tool policy:
-- If the user asks about the Baptism Site, planning a visit, booking a trip, a guided tour, or baptism renewal, use openBaptismTripPlanner.
+- If the user asks about the Baptism Site, planning a visit, booking a trip, a guided tour, or baptism renewal, use openBaptismTripPlanner. This should visibly move the UI to the booking journey.
+- If the user is already on /baptism and asks to plan or book, use scrollToBaptismSection with sectionId "booking" before asking for details.
 - Use selectBaptismExperience when the user chooses or implies one of the three experiences.
 - Use scrollToBaptismSection for hero, experience, or booking sections when helpful.
 - Use fillFormField, goToFormStep, getFormData, highlightFormField, clickNext, and submitForm to complete the booking form.
@@ -645,6 +646,12 @@ Booking form fields:
 - Step four: baptismTermsAccepted.
 
 Guided booking flow:
+- Do not stop after opening /baptism. The form must become active and the booking journey must continue.
+- When the user asks to plan or book, first move the UI to the booking area, then inspect missing data with getFormData.
+- If the user has not selected an experience, ask them to choose general visit, biblical package, or baptism renewal.
+- After the user chooses an experience, call selectBaptismExperience and then clickNext.
+- For each answer with usable booking details, call fillFormField immediately for every clear field before replying.
+- When all required fields for the visible step are filled, call clickNext instead of asking the user to press Next.
 - Collect missing fields one focused question at a time.
 - If the user gives clear information, fill it immediately with fillFormField before replying.
 - After completing a step, call clickNext.
@@ -661,8 +668,17 @@ Safety:
 - Do not provide formal religious, legal, or travel-entry advice.
 - If asked for live availability, visas, or pricing guarantees, explain that the demo can prepare a request and a coordinator must confirm details.`
 
+function normalizeUrlPath(currentUrl?: string) {
+	if (!currentUrl) return '/'
+	try {
+		return new URL(currentUrl, 'http://local').pathname.toLowerCase()
+	} catch {
+		return currentUrl.toLowerCase()
+	}
+}
+
 function resolveSystemPrompt(currentUrl?: string): string {
-	const normalizedUrl = (currentUrl || '/').toLowerCase()
+	const normalizedUrl = normalizeUrlPath(currentUrl)
 	const customDefaultPrompt = (process.env.DEFAULT_SYSTEM_PROMPT || '').trim()
 	const customZatcaPrompt = (process.env.ZATCA_SYSTEM_PROMPT || '').trim()
 	const customSasoPrompt = (process.env.SASO_SYSTEM_PROMPT || '').trim()

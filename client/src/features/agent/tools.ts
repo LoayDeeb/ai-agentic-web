@@ -202,8 +202,13 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: true, navigatedTo: `/services/${args.slug}` }
 
 		case 'openBaptismTripPlanner':
-			navigateTo('/baptism')
-			return { success: true, navigatedTo: '/baptism' }
+			useFormStore.getState().setCurrentStep(1)
+			navigateTo('/baptism#baptism-booking')
+			window.setTimeout(() => {
+				emitToolEvent('goToFormStep', { step: 1 })
+				emitToolEvent('scrollToBaptismSection', { sectionId: 'booking' })
+			}, 160)
+			return { success: true, navigatedTo: '/baptism#baptism-booking', currentStep: 1 }
 
 		case 'selectBaptismExperience': {
 			const experienceId = String(args.experienceId || '')
