@@ -46,6 +46,34 @@ export default function BaptismGuidedTourRequest() {
 	const [submitted, setSubmitted] = useState(false)
 
 	useEffect(() => {
+		const handler = (event: Event) => {
+			const { tool, args } = (event as CustomEvent).detail || {}
+			if (tool === 'fillFormField') {
+				const fieldName = String(args?.fieldName || '')
+				const value = args?.value
+				if (fieldName === 'baptismVisitDate' || fieldName === 'guidedTourPreferredDate') {
+					setPreferredDate(String(value || ''))
+				}
+				if (fieldName === 'baptismGuests' || fieldName === 'guidedTourVisitors') {
+					const nextSize = Number(value || 1)
+					if (Number.isFinite(nextSize)) setGroupSize(Math.max(1, Math.min(100, nextSize)))
+				}
+				if (fieldName === 'baptismAccessibilityNeeds' || fieldName === 'guidedTourAccessibility') {
+					const normalized = String(value ?? '').trim().toLowerCase()
+					setAccessibility(Boolean(value) && !['false', 'no', 'none', 'not needed', 'no need'].includes(normalized))
+				}
+			}
+			if (tool === 'submitForm') {
+				const fakeEvent = { preventDefault() {} } as React.FormEvent
+				void handleSubmit(fakeEvent)
+			}
+		}
+
+		window.addEventListener('agentTool', handler)
+		return () => window.removeEventListener('agentTool', handler)
+	})
+
+	useEffect(() => {
 		setVisitors((prev) => {
 			if (groupSize > prev.length) {
 				return [...prev, ...Array(groupSize - prev.length).fill(null).map(emptyVisitor)]
@@ -132,7 +160,7 @@ export default function BaptismGuidedTourRequest() {
 								<label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#083B50', marginBottom: 7 }}>
 									Preferred date <span style={{ color: '#EF4444' }}>*</span>
 								</label>
-								<input type="date" value={preferredDate} min={new Date().toISOString().slice(0, 10)} onChange={(e) => setPreferredDate(e.target.value)} style={inputStyle} onFocus={focus} onBlur={blur} />
+								<input name="baptismVisitDate" type="date" value={preferredDate} min={new Date().toISOString().slice(0, 10)} onChange={(e) => setPreferredDate(e.target.value)} style={inputStyle} onFocus={focus} onBlur={blur} />
 							</div>
 
 							<div style={{ marginBottom: 28 }}>
