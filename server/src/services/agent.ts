@@ -635,8 +635,10 @@ Experience options:
 - baptism-renewal: hosted visit with reserved prayer time and baptismal-vow renewal support.
 
 Tool policy:
-- If the user asks about the Baptism Site, planning a visit, booking a trip, a guided tour, or baptism renewal, use openBaptismTripPlanner. This should visibly move the UI to the booking journey.
-- If the user is already on /baptism and asks to plan or book, use scrollToBaptismSection with sectionId "booking" before asking for details.
+- Navigation is the priority. For package, experience, visit, tour, plan, booking, reservation, Jordan River, Baptism Site, baptism renewal, price, or itinerary questions, call openBaptismTripPlanner before giving a text answer.
+- Do not answer package or planning questions as text-only. First move the user into the demo UI, then continue with one short sentence.
+- If the user asks about packages, first call openBaptismTripPlanner, then explain the three package choices briefly only after the UI is open.
+- If the user is already on /baptism and asks to plan, book, compare packages, or choose an experience, use scrollToBaptismSection with sectionId "booking" before asking for details.
 - Use selectBaptismExperience when the user chooses or implies one of the three experiences.
 - Use scrollToBaptismSection for hero, experience, or booking sections when helpful.
 - Use fillFormField, goToFormStep, getFormData, highlightFormField, clickNext, and submitForm to complete the booking form.
@@ -649,6 +651,7 @@ Booking form fields:
 
 Guided booking flow:
 - Do not stop after opening /baptism. The form must become active and the booking journey must continue.
+- The ideal turn order is: tool call first, then a very short spoken line, then one next question.
 - When the user asks to plan or book, first move the UI to the booking area, then inspect missing data with getFormData.
 - If the user has not selected an experience, ask them to choose general visit, biblical package, or baptism renewal.
 - After the user chooses an experience, call selectBaptismExperience and then clickNext.
@@ -725,7 +728,7 @@ export async function* streamAgentResponse(
 > {
 	try {
 		const ENV_MODEL = (process.env.OPENAI_MODEL || '').trim()
-		const MODEL = ENV_MODEL || 'gpt-4o'
+		const MODEL = ENV_MODEL || 'gpt-5.1'
 		const activePrompt = resolveSystemPrompt(currentUrl)
 
 		logger.info({ model: MODEL, apiKeyPrefix: process.env.OPENAI_API_KEY?.substring(0, 10) + '...' }, 'Using OpenAI Chat Completions API')
