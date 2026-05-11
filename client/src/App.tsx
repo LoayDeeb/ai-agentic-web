@@ -61,6 +61,7 @@ const TamkeenBahrainLoanApply = React.lazy(() => import('./pages/TamkeenBahrainL
 const TamkeenBahrainCardApply = React.lazy(() => import('./pages/TamkeenBahrainCardApply'))
 const BaptismHome = React.lazy(() => import('./pages/BaptismHome'))
 const BaptismBook = React.lazy(() => import('./pages/BaptismBook'))
+const BaptismGeneralVisitsTours = React.lazy(() => import('./pages/BaptismGeneralVisitsTours'))
 const BaptismTripPlanner = React.lazy(() => import('./pages/BaptismTripPlanner'))
 const BaptismGuidedTours = React.lazy(() => import('./pages/BaptismGuidedTours'))
 const BaptismReligiousService = React.lazy(() => import('./pages/BaptismReligiousService'))
@@ -157,9 +158,11 @@ export default function App() {
 					<Route path="/eshop/product/:slug" element={<EshopProductDetail />} />
 					<Route path="/baptism" element={<BaptismHome />} />
 					<Route path="/baptism/book" element={<BaptismBook />} />
-					<Route path="/baptism/book/general" element={<BaptismTripPlanner />} />
+					<Route path="/baptism/book/general" element={<BaptismGeneralVisitsTours />} />
+					<Route path="/baptism/book/general/visit" element={<BaptismTripPlanner />} />
 					<Route path="/baptism/guided-tours" element={<BaptismGuidedTours />} />
 					<Route path="/baptism/guided-tours/:id/request" element={<BaptismTripPlanner />} />
+					<Route path="/baptism/book/religious" element={<BaptismReligiousService />} />
 					<Route path="/baptism/religious-service" element={<BaptismReligiousService />} />
 
 					{/* SASO Routes */}

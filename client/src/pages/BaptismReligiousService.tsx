@@ -46,7 +46,7 @@ export default function BaptismReligiousService() {
 							<h2>Continue to the booking form</h2>
 							<span>The assistant will select Mass & Christian Events, then collect the date, group size, visitor details, confirmations, and demo payment information.</span>
 						</div>
-						<a className="cbtn1" href="/baptism/book/general#baptism-booking">Start Religious Service Request</a>
+						<a className="cbtn1" href="/baptism/book/general/visit#baptism-booking">Start Religious Service Request</a>
 					</div>
 				</div>
 			</section>

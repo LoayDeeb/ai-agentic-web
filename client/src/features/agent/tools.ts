@@ -239,12 +239,12 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 		case 'openBaptismTripPlanner':
 			useFormStore.getState().setField('baptismExperience', 'general-visit' as any)
 			useFormStore.getState().setCurrentStep(2)
-			navigateTo('/baptism/book/general#baptism-booking')
+			navigateTo('/baptism/book/general/visit#baptism-booking')
 			window.setTimeout(() => {
 				emitToolEvent('goToFormStep', { step: 2 })
 				emitToolEvent('scrollToBaptismSection', { sectionId: 'booking' })
 			}, 160)
-			return { success: true, navigatedTo: '/baptism/book/general#baptism-booking', currentStep: 2, selectedExperience: 'general-visit' }
+			return { success: true, navigatedTo: '/baptism/book/general/visit#baptism-booking', currentStep: 2, selectedExperience: 'general-visit' }
 
 		case 'selectBaptismExperience': {
 			const experienceId = String(args.experienceId || '')

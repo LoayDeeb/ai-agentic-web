@@ -2,24 +2,17 @@ import { Footer, Header } from './BaptismTripPlanner'
 
 const bookCards = [
 	{
-		title: 'General Visits',
-		copy: 'Reserve entry tickets for tourists, families, and small groups visiting the Baptism Site and Jordan River path.',
+		title: 'General Visits & Tours',
+		copy: 'Choose between regular site entry tickets or Biblical Packages with guided tours and itineraries.',
 		image: '/booktrip-img1.webp',
 		href: '/baptism/book/general',
-		cta: 'Book General Visit',
-	},
-	{
-		title: 'Biblical Packages',
-		copy: 'Compare guided pilgrim itineraries through Elijah Hill, John the Baptist Spring, ancient pools, churches, and the riverbank.',
-		image: '/exp-img2.webp',
-		href: '/baptism/guided-tours',
-		cta: 'View Packages',
+		cta: 'Choose Visit Type',
 	},
 	{
 		title: 'Mass & Christian Events',
 		copy: 'Request coordinated support for church groups, prayer visits, clergy-led worship, and baptism-renewal arrangements.',
 		image: '/booktrip-img2.webp',
-		href: '/baptism/religious-service',
+		href: '/baptism/book/religious',
 		cta: 'Request Event',
 	},
 ]
@@ -48,7 +41,7 @@ export default function BaptismBook() {
 
 			<section id="baptism-experience" className="baptism-book-options">
 				<div className="container-mid">
-					<div className="baptism-book-card-grid baptism-book-card-grid-three">
+					<div className="baptism-book-card-grid">
 						{bookCards.map((card) => (
 							<a key={card.title} href={card.href} className="booktripimg">
 								<img src={card.image} alt={card.title} />

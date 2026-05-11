@@ -66,7 +66,7 @@ export function Header() {
 
 					<div className="baptism-actions">
 						<ShoppingBag size={22} />
-						<a className="baptism-profile" href="/baptism/book/general#baptism-booking" aria-label="Sign in">
+						<a className="baptism-profile" href="/baptism/book/general/visit#baptism-booking" aria-label="Sign in">
 							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
 								<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
 								<circle cx="12" cy="7" r="4" />
@@ -189,7 +189,7 @@ export default function BaptismTripPlanner() {
 	const [submitted, setSubmitted] = useState(false)
 	const [errors, setErrors] = useState<Record<string, string>>({})
 	const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
-	const isDirectBookingRoute = pathname.startsWith('/baptism/book/general') || pathname.startsWith('/baptism/guided-tours/')
+	const isDirectBookingRoute = pathname.startsWith('/baptism/book/general/visit') || pathname.startsWith('/baptism/guided-tours/')
 	const minStep = isDirectBookingRoute ? 2 : 1
 	const activeStep = Math.max(currentStep, minStep)
 	const indicatorItems = isDirectBookingRoute ? stepItems.slice(1) : stepItems

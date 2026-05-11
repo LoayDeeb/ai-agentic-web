@@ -57,7 +57,7 @@ export default function BaptismHome() {
 					</div>
 					<div className="experience-grid">
 						{experiences.map((experience) => (
-							<a key={experience.id} className="expinner" href={experience.id === 'biblical-package' ? '/baptism/guided-tours' : experience.id === 'baptism-renewal' ? '/baptism/religious-service' : '/baptism/book/general'}>
+							<a key={experience.id} className="expinner" href={experience.id === 'biblical-package' ? '/baptism/guided-tours' : experience.id === 'baptism-renewal' ? '/baptism/religious-service' : '/baptism/book/general/visit'}>
 								<div className="imgcol"><img src={experience.image} alt={experience.title} /></div>
 								<div className="ctextinfo2">
 									<h3 className="font30">{experience.title}</h3>
