@@ -45,6 +45,12 @@ export default function Home() {
 					>
 						Open BahrainCredit Demo
 					</Link>
+					<Link
+						to="/muscat-university"
+						className="inline-block rounded bg-[#0B2D42] px-4 py-2 text-white hover:bg-[#123d58]"
+					>
+						Open Muscat University Demo
+					</Link>
 				</div>
 			</div>
 		</div>

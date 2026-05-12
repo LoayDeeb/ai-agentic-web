@@ -14,6 +14,7 @@ import {
 	getRecommendedUpsells,
 	getEshopSectionForProduct,
 } from '../../components/eshop/catalog'
+import { getMuProgramme, inferMuStudyLevel } from '../../components/muscatuniversity/content'
 
 export type AgentTool = {
 	tool: string
@@ -355,6 +356,70 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			return { success: false, error: `Unknown section: ${sectionId}` }
 		}
 
+		// Muscat University Tools
+		case 'openMuscatUniversityHome':
+			navigateTo('/muscat-university')
+			return { success: true, navigatedTo: '/muscat-university' }
+
+		case 'openMuscatUniversityStudy':
+			navigateTo('/muscat-university/study')
+			return { success: true, navigatedTo: '/muscat-university/study' }
+
+		case 'openMuscatUniversityAdmissions':
+			navigateTo('/muscat-university/admissions')
+			return { success: true, navigatedTo: '/muscat-university/admissions' }
+
+		case 'openMuscatUniversityEnquiry': {
+			const programmeId = String(args.programmeId || '')
+			const level = String(args.level || '')
+			const params = new URLSearchParams()
+			if (programmeId && getMuProgramme(programmeId)) params.set('programme', programmeId)
+			if (!params.has('programme') && level) params.set('level', level)
+			const query = params.toString()
+			const path = query ? `/muscat-university/enquire?${query}` : '/muscat-university/enquire'
+			navigateTo(path)
+			return { success: true, navigatedTo: path, programmeId: programmeId || undefined, level: level || undefined }
+		}
+
+		case 'selectMuscatProgramme': {
+			const programmeId = String(args.programmeId || '')
+			const programme = getMuProgramme(programmeId)
+			if (!programme) {
+				return { success: false, error: `Unknown Muscat University programme: ${programmeId}` }
+			}
+			useFormStore.getState().setField('muProgramme', programmeId as any)
+			useFormStore.getState().setField('muStudyLevel', inferMuStudyLevel(programmeId) as any)
+			emitToolEvent('selectMuscatProgramme', { programmeId })
+			window.setTimeout(() => {
+				const element = document.getElementById(`mu-programme-${programmeId}`)
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+					highlight(`#mu-programme-${programmeId}`, 3)
+				}
+			}, 120)
+			return {
+				success: true,
+				programmeId,
+				programmeTitle: programme.title,
+				level: programme.level,
+			}
+		}
+
+		case 'scrollToMuscatSection': {
+			const sectionId = String(args.sectionId || '')
+			emitToolEvent('scrollToMuscatSection', { sectionId })
+			const element =
+				document.getElementById(`mu-${sectionId}`) ||
+				document.getElementById(sectionId) ||
+				document.getElementById(`mu-programme-${sectionId}`)
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+				highlight(`#${element.id}`, 3)
+				return { success: true, scrolledTo: sectionId }
+			}
+			return { success: true, queuedScrollTo: sectionId }
+		}
+
 		case 'highlight':
 			highlight(args.selector, args.seconds)
 			return { success: true, highlighted: args.selector }
@@ -451,6 +516,7 @@ export async function executeAgentTool(tool: string, args: any): Promise<any> {
 			let maxStep = 3
 			if (path.startsWith('/gig/advisor-request')) maxStep = 2
 			if (path.startsWith('/baptism')) maxStep = 5
+			if (path.startsWith('/muscat-university/enquire')) maxStep = 3
 			const nextStep = Math.min(currentStep + 1, maxStep)
 			store.setCurrentStep(nextStep)
 			emitToolEvent('goToFormStep', { step: nextStep })

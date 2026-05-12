@@ -151,6 +151,19 @@ export type FormData = {
 	baptismCardName: string
 	baptismCardExpiry: string
 	baptismCardCvv: string
+	// Muscat University Enquiry Fields
+	muApplicantFullName: string
+	muEmail: string
+	muIsdCode: string
+	muMobile: string
+	muNationality: string
+	muStudyLevel: string
+	muProgramme: string
+	muHowHeard: string
+	muPreferredContact: string
+	muSchool: string
+	muNotes: string
+	muTermsAccepted: boolean
 }
 
 type FormStore = {
@@ -314,7 +327,20 @@ const initialFormData: FormData = {
 	baptismCardNumber: '',
 	baptismCardName: '',
 	baptismCardExpiry: '',
-	baptismCardCvv: ''
+	baptismCardCvv: '',
+	// Muscat University Enquiry Fields
+	muApplicantFullName: '',
+	muEmail: '',
+	muIsdCode: '+968',
+	muMobile: '',
+	muNationality: 'Oman',
+	muStudyLevel: '',
+	muProgramme: '',
+	muHowHeard: '',
+	muPreferredContact: 'phone',
+	muSchool: '',
+	muNotes: '',
+	muTermsAccepted: false
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({
@@ -440,6 +466,19 @@ export const useFormStore = create<FormStore>((set, get) => ({
 				'baptismCardName',
 				'baptismCardExpiry',
 				'baptismCardCvv'
+			]
+		}
+		if (normalizedPath.startsWith('/muscat-university/enquire')) {
+			required = [
+				'muApplicantFullName',
+				'muEmail',
+				'muIsdCode',
+				'muMobile',
+				'muNationality',
+				'muStudyLevel',
+				'muProgramme',
+				'muHowHeard',
+				'muTermsAccepted'
 			]
 		}
 		return required.filter((field) => !data[field as keyof FormData])

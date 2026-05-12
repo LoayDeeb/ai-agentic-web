@@ -67,6 +67,10 @@ const BaptismGuidedTours = React.lazy(() => import('./pages/BaptismGuidedTours')
 const BaptismGuidedTourDetail = React.lazy(() => import('./pages/BaptismGuidedTourDetail'))
 const BaptismGuidedTourRequest = React.lazy(() => import('./pages/BaptismGuidedTourRequest'))
 const BaptismReligiousService = React.lazy(() => import('./pages/BaptismReligiousService'))
+const MuscatUniversityHome = React.lazy(() => import('./pages/MuscatUniversityHome'))
+const MuscatUniversityStudy = React.lazy(() => import('./pages/MuscatUniversityStudy'))
+const MuscatUniversityAdmissions = React.lazy(() => import('./pages/MuscatUniversityAdmissions'))
+const MuscatUniversityEnquiry = React.lazy(() => import('./pages/MuscatUniversityEnquiry'))
 
 export default function App() {
 	const NavSetter = () => {
@@ -167,6 +171,10 @@ export default function App() {
 					<Route path="/baptism/guided-tours/:id" element={<BaptismGuidedTourDetail />} />
 					<Route path="/baptism/book/religious" element={<BaptismReligiousService />} />
 					<Route path="/baptism/religious-service" element={<BaptismReligiousService />} />
+					<Route path="/muscat-university" element={<MuscatUniversityHome />} />
+					<Route path="/muscat-university/study" element={<MuscatUniversityStudy />} />
+					<Route path="/muscat-university/admissions" element={<MuscatUniversityAdmissions />} />
+					<Route path="/muscat-university/enquire" element={<MuscatUniversityEnquiry />} />
 
 					{/* SASO Routes */}
 					<Route path="/saso" element={<SasoHome />} />

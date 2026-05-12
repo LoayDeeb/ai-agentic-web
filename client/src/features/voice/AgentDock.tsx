@@ -11,6 +11,7 @@ const ENV_SPEECH_LANG = String(import.meta.env.VITE_VOICE_INPUT_LANG || '').trim
 function resolveSpeechLang(pathname?: string): 'ar-SA' | 'en-US' {
 	const normalizedPath = (pathname || '').toLowerCase()
 	if (normalizedPath.startsWith('/saso')) return 'ar-SA'
+	if (normalizedPath.startsWith('/muscat-university')) return 'ar-SA'
 	if (ENV_SPEECH_LANG === 'ar' || ENV_SPEECH_LANG === 'ar-sa') return 'ar-SA'
 	if (ENV_SPEECH_LANG === 'en' || ENV_SPEECH_LANG === 'en-us') return 'en-US'
 	if (typeof window !== 'undefined' && window.navigator.language?.toLowerCase().startsWith('ar')) {
@@ -36,6 +37,10 @@ function resolveAssistantHint(pathname: string, speechLang: 'ar-SA' | 'en-US') {
 
 	if (normalizedPath.startsWith('/eshop')) {
 		return `Try asking to compare products or checkout. Mic language: ${micLanguage}.`
+	}
+
+	if (normalizedPath.startsWith('/muscat-university')) {
+		return `جرّب تسأل عن تخصص مناسب أو اطلب تعبئة نموذج الاستفسار. Mic language: ${micLanguage}.`
 	}
 
 	return `Try asking for help with this page. Mic language: ${micLanguage}.`
@@ -116,6 +121,7 @@ export function AgentDock() {
 		[currentPath, speechLang]
 	)
 	const isBaptismRoute = currentPath.toLowerCase().startsWith('/baptism')
+	const isMuscatRoute = currentPath.toLowerCase().startsWith('/muscat-university')
 
 	const getCurrentPageContext = React.useCallback(() => ({
 		url: window.location.pathname,
@@ -449,7 +455,9 @@ export function AgentDock() {
 					}`}
 				>
 					<div className="mb-2 flex items-center justify-between">
-						<h3 className="text-base font-semibold">{isBaptismRoute ? 'Trip Assistant' : 'Voice Assistant'}</h3>
+						<h3 className="text-base font-semibold">
+							{isBaptismRoute ? 'Trip Assistant' : isMuscatRoute ? 'مرشد القبول' : 'Voice Assistant'}
+						</h3>
 						<button className="rounded p-1.5 hover:bg-gray-100" onClick={() => setOpen(false)}>
 							<X className="w-5 h-5" />
 						</button>

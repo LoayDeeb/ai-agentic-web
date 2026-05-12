@@ -9,6 +9,7 @@ import { streamMawhibaAgentResponse } from '../services/mawhibaAgent.js'
 import { streamMoinAgentResponse } from '../services/moinAgent.js'
 import { streamGigAgentResponse } from '../services/gigAgent.js'
 import { streamTamkeenBahrainAgentResponse } from '../services/tamkeenBahrainAgent.js'
+import { streamMuscatUniversityAgentResponse } from '../services/muscatUniversityAgent.js'
 import { streamTTS } from '../services/tts.js'
 import type { TTSConfig } from '../services/tts.js'
 
@@ -75,6 +76,10 @@ function selectAgentStream(url: string | undefined) {
 	if (normalizedUrl.startsWith('/bahraincredit') || normalizedUrl.startsWith('/tamkeenbahrain')) {
 		logger.info({ url }, 'Using Tamkeen Bahrain Agent')
 		return streamTamkeenBahrainAgentResponse
+	}
+	if (normalizedUrl.startsWith('/muscat-university')) {
+		logger.info({ url }, 'Using Muscat University Agent')
+		return streamMuscatUniversityAgentResponse
 	}
 	if (normalizedUrl.startsWith('/ef-ar')) {
 		logger.info({ url }, 'Using EF Arabic Agent')
