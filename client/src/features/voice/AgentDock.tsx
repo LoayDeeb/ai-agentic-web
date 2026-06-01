@@ -11,6 +11,7 @@ const ENV_SPEECH_LANG = String(import.meta.env.VITE_VOICE_INPUT_LANG || '').trim
 function resolveSpeechLang(pathname?: string): 'ar-SA' | 'en-US' {
 	const normalizedPath = (pathname || '').toLowerCase()
 	if (normalizedPath.startsWith('/saso')) return 'ar-SA'
+	if (normalizedPath.startsWith('/moin')) return 'ar-SA'
 	if (normalizedPath.startsWith('/muscat-university')) return 'ar-SA'
 	if (ENV_SPEECH_LANG === 'ar' || ENV_SPEECH_LANG === 'ar-sa') return 'ar-SA'
 	if (ENV_SPEECH_LANG === 'en' || ENV_SPEECH_LANG === 'en-us') return 'en-US'
